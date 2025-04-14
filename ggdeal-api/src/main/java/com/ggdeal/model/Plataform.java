@@ -1,21 +1,18 @@
 package com.ggdeal.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Plataform {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
     private String plataform;
 

@@ -1,20 +1,17 @@
 package com.ggdeal.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class GameMedia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     private String path;
