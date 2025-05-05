@@ -37,7 +37,7 @@ export default function FeatureMain() {
         </div>
       </div>
       <div className="flex space-x-2">
-        {featuresGames.map((card, index) => (
+        {featuresGames.map((card) => (
           <div className="w-[33.33%]">
             <CardPrimary
               src={card.src}

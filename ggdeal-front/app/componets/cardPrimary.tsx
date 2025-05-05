@@ -20,7 +20,7 @@ export default function CardPrimary(card: {
 
       <p className="font-sofia text-lg p-2">{card.description}</p>
       <div className="flex w-full">
-        <div className="flex-[1] bg-primary flex space-x-2 items-center justify-center py-2 rounded-bl-lg">
+        <div className="flex-[1] bg-primary flex space-x-2 items-center justify-center py-2 rounded-bl-lg cursor-pointer">
           <svg
             width="22"
             height="21"
