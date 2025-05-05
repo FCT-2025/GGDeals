@@ -7,7 +7,7 @@ export default function Charity() {
         <h2 className="text-2xl font-bold font-epilogue mb-3">
           Dedicated to Supporting Charity
         </h2>
-        <p className="w-1/2 text-lg font-ekMukta opacity-70 tracking-wide">
+        <p className="w-1/2 text-lg font-ekMukta tracking-wide">
           OUR BEST DISCOUNTS ON SUMMER’S OUR BEST DISCOUNTS ON SUMMER’S HOTTEST
           GAMES GAMES
         </p>
