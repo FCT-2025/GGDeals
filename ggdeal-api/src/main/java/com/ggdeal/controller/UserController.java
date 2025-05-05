@@ -56,10 +56,18 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
+    public ResponseEntity<User> register(@RequestBody User user, HttpServletResponse response) {
         String hasshedPassword = passwordEncoder().encode(user.getPassword());
         user.setPassword(hasshedPassword);
         User createdUser = userService.save(user);
+
+        Cookie cookie = new Cookie("tklogin", jwtProvider.generateToken(user));
+        cookie.setMaxAge(jwtProvider.getExpirationtime());
+        cookie.setSecure(true);
+        cookie.setPath("/");
+
+        response.addCookie(cookie);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 }
