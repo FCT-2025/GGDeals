@@ -52,6 +52,9 @@ export default function Nav() {
           <li>
             <Link to="/new-releases">New Release</Link>
           </li>
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
         </ul>
 
         <div
