@@ -92,7 +92,7 @@ export default function Nav() {
         </div>
 
         <div className="flex gap-x-5">
-          <Link to="/cart" className="flex justify-center items-center">
+          <Link to="/shoppingcart" className="flex justify-center items-center">
             <img src="/img/cart.png" alt="Cart's Sale" />
           </Link>
           <Link to="/favourite" className="flex justify-center items-center">
