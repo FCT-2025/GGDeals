@@ -1,6 +1,7 @@
 package com.ggdeal.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;
@@ -15,8 +16,11 @@ public class Replica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
+    @NotBlank(message = "The activation key is Mandatory")
     private String activation_key;
-    private boolean is_sold;
+
+    private Boolean is_sold;
 
     @ManyToOne
     @JoinColumn(name = "game_id")
@@ -33,4 +37,11 @@ public class Replica {
 
     @OneToOne(mappedBy = "replica")
     private Sale sale;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.is_sold == null) {
+            this.is_sold = false;
+        }
+    }
 }

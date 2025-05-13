@@ -1,6 +1,8 @@
 package com.ggdeal.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.List;
@@ -15,7 +17,11 @@ public class Feature {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
+    @NotBlank
+    @Size(min = 2 , max = 15, message = "Feature must be between 2 and 15 characters")
     private String name;
+
     @ManyToMany(mappedBy = "features")
     private List<Game> games;
 }

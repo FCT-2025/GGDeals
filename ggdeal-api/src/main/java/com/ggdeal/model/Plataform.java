@@ -1,6 +1,7 @@
 package com.ggdeal.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public class Plataform {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
+    @NotBlank(message = "Plataform is mandatory.")
     private String plataform;
 
     @OneToMany(mappedBy = "plataform")

@@ -1,6 +1,7 @@
 package com.ggdeal.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,7 +15,11 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
+    @NotNull(message = "Purchase date is required.")
     private LocalDate purcharse_date;
+
+    @NotNull(message = "Purchase amount is required.")
     private Integer purcharse_amount;
 
     @ManyToOne
