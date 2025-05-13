@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ggdeal.model.Role;
 import com.ggdeal.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -33,6 +34,7 @@ public class JwtProvider {
                 .withClaim("id", user.getId())
                 .withClaim("email", user.getEmail())
                 .withClaim("username", user.getUsername())
+                .withClaim("role", user.getRole().toString())
                 .withExpiresAt(expirationDate)
                 .sign(Algorithm.HMAC384(secretKey));
     }
@@ -47,6 +49,7 @@ public class JwtProvider {
                     .id(decodedJWT.getClaims().get("id").asLong())
                     .username(decodedJWT.getClaims().get("email").asString())
                     .email(decodedJWT.getClaims().get("username").asString())
+                    .role(Role.valueOf(decodedJWT.getClaims().get("role").asString()))
                     .build();
 
         } catch (JWTVerificationException exception) {
