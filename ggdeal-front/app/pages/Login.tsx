@@ -1,3 +1,12 @@
+import type { Route } from "../+types/root";
+
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "GGDeal - Login" },
+    { name: "description", content: "Login in GGdeal" },
+  ];
+}
+
 export default function Login() {
     return (
         <section className="flex h-screen">
@@ -10,7 +19,8 @@ export default function Login() {
                         <div className="mb-4">
                             <input 
                                 type="email" 
-                                placeholder="email" 
+                                placeholder="Email"
+                                name="email" 
                                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
@@ -18,6 +28,7 @@ export default function Login() {
                             <input 
                                 type="password" 
                                 placeholder="********" 
+                                name="password"
                                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>

@@ -1,5 +1,4 @@
 import {
-  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
@@ -9,8 +8,10 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import Nav from "./componets/nav";
-import Footer from "./componets/footer";
+import Nav from "./componets/Nav";
+import Footer from "./componets/Footer";
+import PageError from "./pages/PageError";
+
 
 export const links: Route.LinksFunction = () => [
   {
@@ -20,7 +21,7 @@ export const links: Route.LinksFunction = () => [
   {
     rel: "preconnect",
     href: "https://fonts.gstatic.com",
-    crossorigin: true,
+  
   },
   {
     rel: "stylesheet",
@@ -41,7 +42,7 @@ export const links: Route.LinksFunction = () => [
   {
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap"
-  }
+  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -69,30 +70,5 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
-  let details = "An unexpected error occurred.";
-  let stack: string | undefined;
-
-  if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
-    details = error.message;
-    stack = error.stack;
-  }
-
-  return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
-    </main>
-  );
+  return <PageError error={error} />;
 }

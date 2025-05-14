@@ -1,5 +1,10 @@
-import { Link, useNavigate, useLocation } from "react-router";
+import { NavLink, Link, useNavigate, useLocation } from "react-router";
 import { useState, useEffect, useRef } from "react";
+import IconSearch from "../assets/icons/icon-search.svg?react";
+import IconCart from "../assets/icons/icon-cart.svg?react";
+import IconFavourite from "../assets/icons/icon-favourite.svg?react";
+import IconUser from "../assets/icons/icon-user.svg?react";
+import IconGGD from "../assets/icons/GGD.svg?react";
 
 export default function Nav() {
   const [isHovered, setHover] = useState(false);
@@ -32,28 +37,105 @@ export default function Nav() {
   };
 
   return (
-    <header className="flex items-center justify-between sticky top-0 w-full max-w-[1440px] mx-auto z-10 pt-10 px-4">
+    <header className="flex items-center justify-between sticky top-0 w-full z-10 pt-10 z-100">
       <Link to="/">
-        <div className="flex items-center justify-center">
-          <img src="/img/GGD.svg" alt="Logo GGDEAL" />
+        <div className="group relative flex items-center justify-center">
+          <IconGGD  className="z-50"/>
+          <div
+            className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 
+             animate-neon-glow pointer-events-none transform scale-130 transition-all duration-300"
+          ></div>
+                    <div
+            className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 
+             animate-neon-glow-inset pointer-events-none transform scale-130 transition-all duration-300"
+          ></div>
         </div>
       </Link>
       <nav className="flex items-center justify-between">
         <ul className="flex gap-x-8">
           <li>
-            <Link to="/">Home</Link>
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                `
+              trasition-all duration-300 hover:text-primary
+              ${
+                isActive
+                  ? "text-primary font-bold underline underline-offset-3"
+                  : ""
+              }
+              `
+              }
+            >
+              Home
+            </NavLink>
           </li>
           <li>
-            <Link to="/categories">Categories</Link>
+            <NavLink
+              to="/categories"
+              className={({ isActive }) =>
+                `
+              trasition-all duration-300 hover:text-primary
+              ${
+                isActive
+                  ? "text-primary font-bold underline underline-offset-3"
+                  : ""
+              }
+              `
+              }
+            >
+              Categories
+            </NavLink>
           </li>
           <li>
-            <Link to="/upcoming">Upcoming Games</Link>
+            <NavLink
+              to="/upcoming"
+              className={({ isActive }) =>
+                `
+              trasition-all duration-300 hover:text-primary
+              ${
+                isActive
+                  ? "text-primary font-bold underline underline-offset-3"
+                  : ""
+              }
+              `
+              }
+            >
+              Upcoming Games
+            </NavLink>
           </li>
           <li>
-            <Link to="/new-releases">New Release</Link>
+            <NavLink
+              to="/new-releases"
+              className={({ isActive }) =>
+                `
+              trasition-all duration-300 hover:text-primary
+              ${
+                isActive
+                  ? "text-primary font-bold underline underline-offset-3"
+                  : ""
+              }
+              `
+              }
+            >
+              New Release
+            </NavLink>
           </li>
           <li>
-            <Link to="/contact">Contact</Link>
+            <NavLink
+              to="/contact"
+              className={({ isActive }) => `
+              trasition-all duration-300 hover:text-primary
+              ${
+                isActive
+                  ? "text-primary font-bold underline underline-offset-3"
+                  : ""
+              }
+              `}
+            >
+              Contact
+            </NavLink>
           </li>
         </ul>
 
@@ -62,20 +144,20 @@ export default function Nav() {
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          <img
+          <IconSearch
             className={`cursor-pointer object-contain transition-all duration-300 ${
               isHovered ? "scale-120" : ""
             }`}
-            src="/img/search.png"
             alt="Search Sale"
             onClick={handleSearchClick}
           />
+
           <input
             type="text"
             ref={inputRef}
             value={query}
             placeholder="Search for games..."
-            className={`border border-gray-300 rounded-lg py-2 px-4 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            className={`border border-gray-300 rounded-lg py-2 px-4 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-secondary ${
               isHovered || onFocus || !isInputIsEmpty()
                 ? "w-60 opacity-100"
                 : "w-0 opacity-0"
@@ -93,15 +175,18 @@ export default function Nav() {
 
         <div className="flex gap-x-5">
           <Link to="/shoppingcart" className="flex justify-center items-center">
-            <img src="/img/cart.png" alt="Cart's Sale" />
+            <IconCart />
           </Link>
           <Link to="/favourite" className="flex justify-center items-center">
-            <img src="/img/favourite.png" alt="Favourite Sale" />
+            <IconFavourite />
           </Link>
 
           <div className="flex items-center gap-x-2">
-            <Link to="/login" className="flex gap-x-2 justify-center items-center">
-              <img src="/img/user.png" alt="Logo User" />
+            <Link
+              to="/login"
+              className="flex gap-x-2 justify-center items-center"
+            >
+              <IconUser />
               <span>Login</span>
             </Link>
             <span>|</span>
