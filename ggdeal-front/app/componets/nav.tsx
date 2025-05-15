@@ -124,6 +124,23 @@ export default function Nav() {
           </li>
           <li>
             <NavLink
+              to="/game/death-stranding"
+              className={({ isActive }) =>
+                `
+              trasition-all duration-300 hover:text-primary
+              ${
+                isActive
+                  ? "text-primary font-bold underline underline-offset-3"
+                  : ""
+              }
+              `
+              }
+            >
+              Game Demo
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
               to="/contact"
               className={({ isActive }) => `
               trasition-all duration-300 hover:text-primary
