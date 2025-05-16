@@ -5,11 +5,11 @@ import CardSecondary from "~/componets/cards/CardSecondary";
 import IconConsole from "../../assets/icons/icon-console.svg?react";
 import IconPCMobile from "../../assets/icons/icon-pc-mobile.svg?react";
 
-export default function GameShowcase() {
+export default function GameShowcase({ className }: { className?: string }) {
   let [currentCategorieIndex, setCategorieIndex] = useState(0);
 
   return (
-    <section>
+    <section className={className}>
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-epilogue text-2xl font-light  text-gray-100">
           Newest physical listings

@@ -1,5 +1,5 @@
 import type { Route } from "../+types/root";
-import InputPhoneNumber from "~/util/InputPhoneNumber";
+import InputPhoneNumber from "~/utils/InputPhoneNumber";
 
 export function meta({}: Route.MetaArgs) {
   return [

@@ -169,6 +169,11 @@ body {
   .iti__search-input {
     @apply p-2;
   }
+
+
+  .yarl__thumbnails_container {
+    @apply bg-black;
+  }
 }
 
 @keyframes neon-glow {

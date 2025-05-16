@@ -1,4 +1,5 @@
 import { useLocation, Link } from "react-router";
+import  formatSlugName  from "~/utils/formatSlugName";
 
 export default function Breadcrumbs({ className }: { className?: string }) {
   const location = useLocation();
@@ -13,7 +14,7 @@ export default function Breadcrumbs({ className }: { className?: string }) {
         <div key={crumb}>
           &gt; &nbsp;
           <Link className={`${array.length === index + 1 ? "text-primary" : ""}`} to={currentPath}>
-            {formatCrumbName(crumb)}
+            {formatSlugName(crumb)}
           </Link>
         </div>
       );
@@ -29,9 +30,4 @@ export default function Breadcrumbs({ className }: { className?: string }) {
   );
 }
 
-function formatCrumbName(crumb: string) {
-  return crumb
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
+

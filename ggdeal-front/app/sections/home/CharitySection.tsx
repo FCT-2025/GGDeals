@@ -1,8 +1,8 @@
 import { Link } from "react-router";
 
-export default function Charity() {
+export default function Charity({ style }: { style?: React.CSSProperties }) {
   return (
-    <section className="bg-[url('/img/charity-bg.png')] bg-cover bg-no-repeat bg-center w-full rounded-lg p-10" style={{marginBottom: "160px"}}>
+    <section className="bg-[url('/img/charity-bg.png')] bg-cover bg-no-repeat bg-center w-full rounded-lg p-10" style={style}>
       <div className="pl-10">
         <h2 className="text-2xl font-bold font-epilogue mb-3">
           Dedicated to Supporting Charity

@@ -10,6 +10,7 @@ export default function Nav() {
   const [isHovered, setHover] = useState(false);
   const [onFocus, setFocus] = useState(false);
   const [query, setQuery] = useState("");
+  const [isScrolling, setScrolling] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,16 +37,28 @@ export default function Nav() {
     return query.trim() === "";
   };
 
+  let lastScrollY = useRef(0);
+
+  const handleScroll = () => {
+    console.log(lastScrollY.current + " " + window.scrollY);
+    const deltaY = Math.abs(window.scrollY - lastScrollY.current);
+
+    if (deltaY > 600) {
+      setScrolling(true);
+      window.removeEventListener("scroll", handleScroll);
+    }
+  };
+
   return (
     <header className="flex items-center justify-between sticky top-0 w-full z-10 pt-10 z-100">
       <Link to="/">
         <div className="group relative flex items-center justify-center">
-          <IconGGD  className="z-50"/>
+          <IconGGD className="z-50" />
           <div
             className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 
              animate-neon-glow pointer-events-none transform scale-130 transition-all duration-300"
           ></div>
-                    <div
+          <div
             className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 
              animate-neon-glow-inset pointer-events-none transform scale-130 transition-all duration-300"
           ></div>
@@ -158,7 +171,12 @@ export default function Nav() {
 
         <div
           className="flex items-center px-10 space-x-4"
-          onMouseEnter={() => setHover(true)}
+          onMouseEnter={() => {
+            setHover(true);
+            setScrolling(false);
+            lastScrollY.current = window.scrollY;
+            window.addEventListener("scroll", handleScroll);
+          }}
           onMouseLeave={() => setHover(false)}
         >
           <IconSearch
@@ -174,13 +192,17 @@ export default function Nav() {
             ref={inputRef}
             value={query}
             placeholder="Search for games..."
-            className={`border border-gray-300 rounded-lg py-2 px-4 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-secondary ${
-              isHovered || onFocus || !isInputIsEmpty()
+            className={`border border-gray-300 rounded-lg py-2 px-4 transition-all duration-300 focus:outline-none focus:ring-2 ${
+              isInputIsEmpty() ? "focus:ring-secondary" : "focus:ring-blue-500"
+            } ${
+              (isHovered || onFocus || !isInputIsEmpty()) && !isScrolling
                 ? "w-60 opacity-100"
                 : "w-0 opacity-0"
             }`}
             onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => setFocus(true)}
+            onFocus={() => {
+              setFocus(true);
+            }}
             onBlur={() => setFocus(false)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !isInputIsEmpty()) {
