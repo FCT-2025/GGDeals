@@ -13,12 +13,12 @@ public class SecurityConf {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // <- Esto es clave
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/ggdeal/**").permitAll()
-                        .anyRequest().authenticated()
-                );
+                .csrf(csrf -> csrf.disable());  // <- Esto es clave
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/auth/**").permitAll()
+//                        .requestMatchers("/api/ggdeal/**").permitAll()
+//                        .anyRequest().authenticated()
+//                );
 
         return http.build();
     }

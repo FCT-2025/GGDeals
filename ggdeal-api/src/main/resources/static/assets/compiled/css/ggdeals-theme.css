@@ -1,0 +1,235 @@
+/* Tema claro personalizado de GGDeals basado en los colores del logo */
+
+:root {
+    --ggdeals-primary: #FF9800;
+    --ggdeals-primary-hover: #F57C00;
+    --ggdeals-primary-light: #FFE0B2;
+    --ggdeals-secondary: #435ebe;
+    --ggdeals-secondary-hover: #394db1;
+    --ggdeals-secondary-light: #d2d7f8;
+    --ggdeals-background: #f2f7ff;
+    --ggdeals-card-bg: #ffffff;
+    --ggdeals-text: #25396f;
+    --ggdeals-text-light: #7c8db5;
+}
+
+/* Estilos generales en tema claro */
+body {
+    background-color: var(--ggdeals-background);
+    color: var(--ggdeals-text);
+}
+
+.card {
+    background-color: var(--ggdeals-card-bg);
+    box-shadow: 0 2px 6px rgba(67, 94, 190, 0.1);
+}
+
+/* Botones primarios en color naranja */
+.btn-primary {
+    background-color: var(--ggdeals-primary) !important;
+    border-color: var(--ggdeals-primary) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--ggdeals-primary-hover) !important;
+    border-color: var(--ggdeals-primary-hover) !important;
+}
+
+.btn-outline-primary {
+    color: var(--ggdeals-primary) !important;
+    border-color: var(--ggdeals-primary) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--ggdeals-primary) !important;
+    color: white !important;
+}
+
+/* Textos con enlaces en color naranja */
+a {
+    color: var(--ggdeals-primary);
+}
+
+a:hover {
+    color: var(--ggdeals-primary-hover);
+}
+
+/* Barra de navegación en azul (para mantener contraste) */
+.navbar-dark, .bg-primary, .sidebar-wrapper {
+    background-color: var(--ggdeals-secondary) !important;
+}
+
+/* Colores para los badges */
+.badge.bg-primary {
+    background-color: var(--ggdeals-primary) !important;
+}
+
+.badge.bg-secondary {
+    background-color: var(--ggdeals-secondary) !important;
+}
+
+.badge.bg-light-secondary {
+    background-color: var(--ggdeals-secondary-light) !important;
+    color: var(--ggdeals-secondary) !important;
+}
+
+.badge.bg-light-primary {
+    background-color: var(--ggdeals-primary-light) !important;
+    color: var(--ggdeals-primary) !important;
+}
+
+/* Input focus con borde naranja */
+.form-control:focus, .form-select:focus {
+    border-color: var(--ggdeals-primary);
+    box-shadow: 0 0 0 0.25rem rgba(255, 152, 0, 0.25);
+}
+
+/* Iconos y elementos destacados */
+.text-primary {
+    color: var(--ggdeals-primary) !important;
+}
+
+.text-secondary {
+    color: var(--ggdeals-secondary) !important;
+}
+
+/* Progress bars y otros indicadores */
+.progress-bar {
+    background-color: var(--ggdeals-primary);
+}
+
+/* Stats icons */
+.stats-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.stats-icon.purple {
+    background-color: #9694ff;
+}
+
+.stats-icon.blue {
+    background-color: var(--ggdeals-secondary);
+}
+
+.stats-icon.green {
+    background-color: #5ddab4;
+}
+
+.stats-icon.red {
+    background-color: #ff7976;
+}
+
+.stats-icon.orange {
+    background-color: var(--ggdeals-primary);
+}
+
+/* Estilos para el sidebar activo */
+.sidebar-item.active {
+    background-color: var(--ggdeals-primary-light);
+}
+
+.sidebar-item.active > .sidebar-link {
+    color: var(--ggdeals-primary);
+}
+
+/* Menu horizontal */
+.layout-horizontal .main-navbar {
+    background-color: var(--ggdeals-secondary);
+}
+
+.layout-horizontal .menu-item.active {
+    color: var(--ggdeals-primary) !important;
+}
+
+.layout-horizontal .menu-item.active::after {
+    background-color: var(--ggdeals-primary) !important;
+}
+
+.layout-horizontal .submenu-item.active {
+    color: var(--ggdeals-primary) !important;
+}
+
+/* Cards con highlight naranja */
+.card.bordered-primary {
+    border-top: 3px solid var(--ggdeals-primary);
+}
+
+.card.bordered-secondary {
+    border-top: 3px solid var(--ggdeals-secondary);
+}
+
+/* Otros elementos UI */
+.page-item.active .page-link {
+    background-color: var(--ggdeals-primary);
+    border-color: var(--ggdeals-primary);
+}
+
+.form-check-input:checked {
+    background-color: var(--ggdeals-primary);
+    border-color: var(--ggdeals-primary);
+}
+
+/* Personalizaciones para tablas */
+.table-primary {
+    background-color: var(--ggdeals-primary-light);
+}
+
+.dropdown-item:active, .dropdown-item.active {
+    background-color: var(--ggdeals-primary);
+}
+
+/* Estilos para la página de autenticación */
+#auth {
+    background-color: var(--ggdeals-background);
+}
+
+#auth-left {
+    background-color: var(--ggdeals-card-bg);
+}
+
+#auth h1 {
+    color: var(--ggdeals-primary);
+}
+
+/* DataTables personalización */
+div.dataTables_wrapper div.dataTables_info {
+    color: var(--ggdeals-primary);
+}
+
+/* Forzar tema claro por defecto */
+body:not(.theme-dark) {
+    background-color: var(--ggdeals-background) !important;
+}
+
+/* Override estilos oscuros si se activan */
+body.theme-dark {
+    background-color: #151521 !important;
+}
+
+body.theme-dark .btn-primary {
+    background-color: var(--ggdeals-primary) !important;
+    border-color: var(--ggdeals-primary) !important;
+}
+
+body.theme-dark a:not(.btn, .dropdown-item) {
+    color: var(--ggdeals-primary);
+}
+
+body.theme-dark .text-primary {
+    color: var(--ggdeals-primary) !important;
+}
+
+/* Botón de hamburguesa */
+.burger-btn .burger-icon {
+    background-color: white;
+}
+
+.burger-btn:hover .burger-icon {
+    background-color: var(--ggdeals-primary) !important;
+}
