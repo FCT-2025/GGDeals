@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Data
 @Builder
@@ -32,7 +30,7 @@ public class Replica {
 
     @ManyToOne
     @JoinColumn(name = "plataform_id")
-    private Plataform plataform;
+    private PlatformType plataform;
 
 
     @OneToOne(mappedBy = "replica")

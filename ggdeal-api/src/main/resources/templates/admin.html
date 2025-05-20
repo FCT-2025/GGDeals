@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Administrativo - GGDeals</title>
-
     <!-- Enlaces CSS -->
     <link rel="shortcut icon" th:href="@{/assets/compiled/svg/logo-copy.svg}" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/assets/compiled/css/app.css}">
@@ -15,360 +14,319 @@
 </head>
 
 <body>
-    <script th:src="@{/assets/static/js/initTheme.js}"></script>
-    <div id="app">
-        <div id="main" class="layout-horizontal">
-            <header class="mb-5">
-                <div class="header-top">
-                    <div class="container">
-                        <div class="logo">
-                            <a href="admin.html"><img th:src="@{/assets/compiled/svg/logo.svg}" alt="Logo"> </a>
-                        </div>
-                        <div class="header-top-right">
-                            <div class="dropdown">
-                                <a href="#" id="topbarUserDropdown"
-                                    class="user-dropdown d-flex align-items-center dropend dropdown-toggle "
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="avatar avatar-md2">
-                                        <img th:src="@{/assets/compiled/jpg/1.jpg}" alt="Avatar">
-                                    </div>
-                                    <div class="text">
-                                        <h6 class="user-dropdown-name">Administrador</h6>
-                                        <p class="user-dropdown-status text-sm text-muted">Administrador</p>
-                                    </div>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-lg"
-                                    aria-labelledby="topbarUserDropdown">
-                                    <li><a class="dropdown-item" href="admin-profile.html">Mi Perfil</a></li>
-                                    <li><a class="dropdown-item" href="admin-password.html">Cambiar Contraseña</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="login.html">Cerrar Sesión</a></li>
-                                </ul>
-                            </div>
-
-                            <!-- Burger button responsive -->
-                            <a href="#" class="burger-btn d-block d-xl-none">
-                                <i class="bi bi-justify fs-3"></i>
+<script th:src="@{/assets/static/js/initTheme.js}"></script>
+<div id="app">
+    <div id="main" class="layout-horizontal">
+        <header class="mb-5">
+            <div class="header-top">
+                <div class="container">
+                    <div class="logo">
+                        <a href="admin.html"><img th:src="@{/assets/compiled/svg/logo.svg}" alt="Logo"> </a>
+                    </div>
+                    <div class="header-top-right">
+                        <div class="dropdown">
+                            <a href="#" id="topbarUserDropdown"
+                               class="user-dropdown d-flex align-items-center dropend dropdown-toggle "
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="avatar avatar-md2">
+                                    <img th:src="@{/assets/compiled/jpg/1.jpg}" alt="Avatar">
+                                </div>
+                                <div class="text">
+                                    <h6 class="user-dropdown-name">Administrador</h6>
+                                    <p class="user-dropdown-status text-sm text-muted">Administrador</p>
+                                </div>
                             </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg"
+                                aria-labelledby="topbarUserDropdown">
+                                <li><a class="dropdown-item" href="admin-profile.html">Mi Perfil</a></li>
+                                <li><a class="dropdown-item" href="admin-password.html">Cambiar Contraseña</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="login.html">Cerrar Sesión</a></li>
+                            </ul>
                         </div>
+
+                        <!-- Burger button responsive -->
+                        <a href="#" class="burger-btn d-block d-xl-none">
+                            <i class="bi bi-justify fs-3"></i>
+                        </a>
                     </div>
-                </div>
-                <nav class="main-navbar">
-                    <div class="container">
-                        <ul>
-                            <li class="menu-item active">
-                                <a href="admin.html" class='menu-link'>
-                                    <span><i class="bi bi-grid-fill"></i> Dashboard</span>
-                                </a>
-                            </li>
-
-                            <li class="menu-item">
-                                <a href="admin-users.html" class='menu-link'>
-                                    <span><i class="bi bi-people-fill"></i> Usuarios</span>
-                                </a>
-                            </li>
-
-                            <li class="menu-item">
-                                <a href="admin-games.html" class='menu-link'>
-                                    <span><i class="bi bi-joystick"></i> Videojuegos</span>
-                                </a>
-                            </li>
-
-                            <li class="menu-item">
-                                <a href="admin-keys.html" class='menu-link'>
-                                    <span><i class="bi bi-key-fill"></i> Réplicas</span>
-                                </a>
-                            </li>
-
-                            <li class="menu-item">
-                                <a href="admin-sales.html" class='menu-link'>
-                                    <span><i class="bi bi-cart-fill"></i> Ventas</span>
-                                </a>
-                            </li>
-
-                            <li class="menu-item">
-                                <a href="admin-reservations.html" class='menu-link'>
-                                    <span><i class="bi bi-bookmark-fill"></i> Reservas</span>
-                                </a>
-                            </li>
-
-                            <li class="menu-item has-sub">
-                                <a href="#" class='menu-link'>
-                                    <span><i class="bi bi-list-check"></i> Catálogos</span>
-                                </a>
-                                <div class="submenu">
-                                    <div class="submenu-group-wrapper">
-                                        <ul class="submenu-group">
-                                            <li class="submenu-item">
-                                                <a href="admin-platforms.html" class='submenu-link'>Plataformas</a>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <a href="admin-editions.html" class='submenu-link'>Ediciones</a>
-                                            </li>
-                                            <li class="submenu-item">
-                                                <a href="admin-features.html" class='submenu-link'>Características</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-
-            <div class="content-wrapper container">
-                <div class="page-heading">
-                    <h3>Dashboard Administrativo</h3>
-                </div>
-                <div class="page-content">
-                    <!-- Estadísticas principales -->
-                    <section class="row">
-                        <div class="col-12 col-lg-9">
-                            <div class="row">
-                                <div class="col-6 col-lg-3 col-md-6">
-                                    <div class="card">
-                                        <div class="card-body px-4 py-4-5">
-                                            <div class="row">
-                                                <div
-                                                    class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                                    <div class="stats-icon purple mb-2">
-                                                        <i class="bi bi-people-fill"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                                    <h6 class="text-muted font-semibold">Usuarios</h6>
-                                                    <h6 class="font-extrabold mb-0 " th:text="${countUsers}">-1</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-lg-3 col-md-6">
-                                    <div class="card">
-                                        <div class="card-body px-4 py-4-5">
-                                            <div class="row">
-                                                <div
-                                                    class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                                    <div class="stats-icon blue mb-2">
-                                                        <i class="bi bi-joystick"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                                    <h6 class="text-muted font-semibold">Juegos</h6>
-                                                    <h6 class="font-extrabold mb-0">184</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-lg-3 col-md-6">
-                                    <div class="card">
-                                        <div class="card-body px-4 py-4-5">
-                                            <div class="row">
-                                                <div
-                                                    class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                                    <div class="stats-icon green mb-2">
-                                                        <i class="bi bi-cart-fill"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                                    <h6 class="text-muted font-semibold">Ventas</h6>
-                                                    <h6 class="font-extrabold mb-0">4,523</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-lg-3 col-md-6">
-                                    <div class="card">
-                                        <div class="card-body px-4 py-4-5">
-                                            <div class="row">
-                                                <div
-                                                    class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
-                                                    <div class="stats-icon red mb-2">
-                                                        <i class="bi bi-bookmark-fill"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                                    <h6 class="text-muted font-semibold">Reservas</h6>
-                                                    <h6 class="font-extrabold mb-0">238</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4>Ventas Mensuales</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <div id="monthlySalesChart"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-3">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Distribución de Plataformas</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div id="platformDistributionChart"></div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Nuevos Registros</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div id="newRegistrationsChart"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Últimas ventas y actividad -->
-                    <section class="row">
-                        <div class="col-12 col-xl-8">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Ventas Recientes</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-lg">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Cliente</th>
-                                                    <th>Juego</th>
-                                                    <th>Fecha</th>
-                                                    <th>Importe</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>#84253</td>
-                                                    <td>Miguel Ángel</td>
-                                                    <td>The Last of Us Part II</td>
-                                                    <td>14/05/2025</td>
-                                                    <td>€59.99</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#84252</td>
-                                                    <td>Laura Martínez</td>
-                                                    <td>FIFA 25</td>
-                                                    <td>14/05/2025</td>
-                                                    <td>€69.99</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#84251</td>
-                                                    <td>Carlos Sánchez</td>
-                                                    <td>Hogwarts Legacy</td>
-                                                    <td>13/05/2025</td>
-                                                    <td>€49.99</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#84250</td>
-                                                    <td>Elena Gómez</td>
-                                                    <td>Elden Ring</td>
-                                                    <td>13/05/2025</td>
-                                                    <td>€59.99</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#84249</td>
-                                                    <td>Javier López</td>
-                                                    <td>Cyberpunk 2077</td>
-                                                    <td>13/05/2025</td>
-                                                    <td>€39.99</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="card-footer d-flex justify-content-end">
-                                    <a href="admin-sales.html" class="btn btn-sm btn-outline-primary">Ver Todos</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xl-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Juegos Populares</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-lg">
-                                            <thead>
-                                                <tr>
-                                                    <th>Juego</th>
-                                                    <th>Ventas</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>FIFA 25</td>
-                                                    <td>289</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Call of Duty: Modern Warfare</td>
-                                                    <td>244</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Grand Theft Auto VI</td>
-                                                    <td>189</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Cyberpunk 2077</td>
-                                                    <td>172</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>The Last of Us Part II</td>
-                                                    <td>156</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="card-footer d-flex justify-content-end">
-                                    <a href="admin-games.html" class="btn btn-sm btn-outline-primary">Ver Todos</a>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
                 </div>
             </div>
-
-            <footer>
+            <nav class="main-navbar">
                 <div class="container">
-                    <div class="footer clearfix mb-0 text-muted">
-                        <div class="float-start">
-                            <p>2025 &copy; GGDeals Admin</p>
+                    <ul>
+                        <li class="menu-item active">
+                            <a href="admin.html" class='menu-link'>
+                                <span><i class="bi bi-grid-fill"></i>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="admin-users.html" class='menu-link'>
+                                <span><i class="bi bi-people-fill"></i> Usuarios</span>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="admin-games.html" class='menu-link'>
+                                <span><i class="bi bi-joystick"></i> Videojuegos</span>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="admin-keys.html" class='menu-link'>
+                                <span><i class="bi bi-key-fill"></i> Réplicas</span>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="admin-sales.html" class='menu-link'>
+                                <span><i class="bi bi-cart-fill"></i> Ventas</span>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="admin-reservations.html" class='menu-link'>
+                                <span><i class="bi bi-bookmark-fill"></i> Reservas</span>
+                            </a>
+                        </li>
+
+                        <li class="menu-item has-sub">
+                            <a href="#" class='menu-link'>
+                                <span><i class="bi bi-list-check"></i> Catálogos</span>
+                            </a>
+                            <div class="submenu">
+                                <div class="submenu-group-wrapper">
+                                    <ul class="submenu-group">
+                                        <li class="submenu-item">
+                                            <a href="admin-platforms.html" class='submenu-link'>Plataformas</a>
+                                        </li>
+                                        <li class="submenu-item">
+                                            <a href="admin-editions.html" class='submenu-link'>Ediciones</a>
+                                        </li>
+                                        <li class="submenu-item">
+                                            <a href="admin-features.html" class='submenu-link'>Características</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <div class="content-wrapper container">
+            <div class="page-heading">
+                <h3>Dashboard Administrativo</h3>
+            </div>
+            <div class="page-content">
+                <!-- Estadísticas principales -->
+                <section class="row">
+                    <div class="col-12 col-lg-9">
+                        <div class="row">
+                            <div class="col-6 col-lg-3 col-md-6">
+                                <div class="card">
+                                    <div class="card-body px-4 py-4-5">
+                                        <div class="row">
+                                            <div
+                                                    class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                <div class="stats-icon purple mb-2">
+                                                    <i class="bi bi-people-fill"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                <h6 class="text-muted font-semibold">Usuarios</h6>
+                                                <h6 class="font-extrabold mb-0 " th:text="${countUsers}">0</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-3 col-md-6">
+                                <div class="card">
+                                    <div class="card-body px-4 py-4-5">
+                                        <div class="row">
+                                            <div
+                                                    class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                <div class="stats-icon blue mb-2">
+                                                    <i class="bi bi-joystick"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                <h6 class="text-muted font-semibold">Juegos</h6>
+                                                <h6 class="font-extrabold mb-0" th:text="${countGames}">0</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-3 col-md-6">
+                                <div class="card">
+                                    <div class="card-body px-4 py-4-5">
+                                        <div class="row">
+                                            <div
+                                                    class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                <div class="stats-icon green mb-2">
+                                                    <i class="bi bi-cart-fill"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                <h6 class="text-muted font-semibold">Ventas</h6>
+                                                <h6 class="font-extrabold mb-0" th:text="${countSales}">0</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-3 col-md-6">
+                                <div class="card">
+                                    <div class="card-body px-4 py-4-5">
+                                        <div class="row">
+                                            <div
+                                                    class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                <div class="stats-icon red mb-2">
+                                                    <i class="bi bi-bookmark-fill"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                <h6 class="text-muted font-semibold">Reservas</h6>
+                                                <h6 class="font-extrabold mb-0" th:text="${countReservation}">0</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Ventas Mensuales</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="monthlySalesChart"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </footer>
-        </div>
-    </div>
+                    <div class="col-12 col-lg-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Distribución de Plataformas</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="platformDistributionChart"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Nuevos Registros</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="newRegistrationsChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-    <script th:src="@{/assets/static/js/components/dark.js}"></script>
-    <script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
-    <script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
-    <script th:src="@{/assets/compiled/js/app.js}"></script>
-    <script th:src="@{/assets/extensions/apexcharts/apexcharts.min.js}"></script>
-    <script>
+                <!-- Últimas ventas y actividad -->
+                <section class="row">
+                    <div class="col-12 col-xl-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Ventas Recientes</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-lg">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Cliente</th>
+                                            <th>Juego</th>
+                                            <th>Fecha</th>
+                                            <th>Importe</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="sale : ${lastSales}">
+                                                <td th:text="${sale.id}"></td>
+                                                <td th:text="${sale.user.username}"></td>
+                                                <td th:text="${sale.replica.game.title}"></td>
+                                                <td th:text="${sale.purcharseDate}"></td>
+                                                <td th:text="${sale.purcharseAmount}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-end">
+                                <a href="admin-sales.html" class="btn btn-sm btn-outline-primary">Ver Todos</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Juegos Populares</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-lg">
+                                        <thead>
+                                        <tr>
+                                            <th>Juego</th>
+                                            <th>Ventas</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="sale : ${popularSales}">
+                                            <td th:text="${sale.title}"></td>
+                                            <td th:text="${sale.totalSales}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-end">
+                                <a href="admin-games.html" class="btn btn-sm btn-outline-primary">Ver Todos</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2025 &copy; GGDeals Admin</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script th:src="@{/assets/static/js/components/dark.js}"></script>
+<script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
+<script th:src="@{/assets/compiled/js/app.js}"></script>
+<script th:src="@{/assets/extensions/apexcharts/apexcharts.min.js}"></script>
+<script th:inline="javascript">
+        const platformDataDistribution = [[${popularPlatform}]];
+        const salesDataPerMonth = [[${salesPerMonth}]];
+
         // Gráfica de ventas mensuales
         var monthlySalesOptions = {
             series: [{
                 name: 'Ventas',
-                data: [540, 615, 498, 720, 635, 589, 642, 590, 384, 621, 756, 932]
+                data: salesDataPerMonth.map(salesPerMonth => salesPerMonth.total)
             }],
             chart: {
                 height: 350,
@@ -398,13 +356,13 @@
 
         // Gráfica de distribución de plataformas
         var platformDistributionOptions = {
-            series: [45, 30, 15, 10],
+            series: platformDataDistribution.map(plataform => plataform.platformDistribution),
+            labels: platformDataDistribution.map(plataform => plataform.platformName),
             chart: {
                 type: 'donut',
                 width: '100%',
                 height: '350px'
             },
-            labels: ['PC', 'PlayStation', 'Xbox', 'Nintendo'],
             colors: ['#435ebe', '#55c6e8', '#fe7f9c', '#4acf92'],
             legend: {
                 position: 'bottom'
@@ -450,7 +408,8 @@
         };
         var newRegistrationsChart = new ApexCharts(document.querySelector("#newRegistrationsChart"), newRegistrationsOptions);
         newRegistrationsChart.render();
-    </script>
+
+</script>
 </body>
 
 </html>

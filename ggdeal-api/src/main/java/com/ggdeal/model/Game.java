@@ -1,7 +1,7 @@
 package com.ggdeal.model;
 
+import com.ggdeal.model.util.ModelUtils;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
@@ -51,7 +51,7 @@ public class Game {
             joinColumns = @JoinColumn(name = "game_id"),
             inverseJoinColumns = @JoinColumn(name = "plataform_id")
     )
-    private List<Plataform> plataforms;
+    private List<PlatformType> plataforms;
 
 
     @ManyToMany
@@ -84,5 +84,7 @@ public class Game {
         if(this.releaseDate == null) {
             this.releaseDate = LocalDate.now();
         }
+
+        this.nameSlug = ModelUtils.parseSlug(getTitle());
     }
 }

@@ -1,28 +1,34 @@
 package com.ggdeal.model;
 
+
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Data
-@Builder
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Plataform {
+public class PlatformType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank(message = "Plataform is mandatory.")
-    private String plataform;
+    @Column(unique = true, nullable = false)
+    private String name;
+    private String pathLogo;
+
 
     @OneToMany(mappedBy = "plataform")
     private List<Replica> replicas;
 
     @ManyToMany(mappedBy = "plataforms")
-    private List<Game> game;
+    private List<Game> games;
 
 }

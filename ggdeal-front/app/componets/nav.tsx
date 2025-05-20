@@ -43,7 +43,7 @@ export default function Nav() {
     console.log(lastScrollY.current + " " + window.scrollY);
     const deltaY = Math.abs(window.scrollY - lastScrollY.current);
 
-    if (deltaY > 600) {
+    if (deltaY > 600 ) {
       setScrolling(true);
       window.removeEventListener("scroll", handleScroll);
     }
