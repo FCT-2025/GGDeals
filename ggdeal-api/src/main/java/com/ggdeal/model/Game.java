@@ -21,8 +21,6 @@ public class Game {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @NotNull(message = "The game name is required.")
-    @Size(min = 3, max = 50, message = "The game name must be between 3 and 50 characters.")
     private String nameSlug;
 
     @NotNull(message = "The game title is required.")

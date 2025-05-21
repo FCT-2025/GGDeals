@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="fragment/head :: commonHead('Dashboard Administrativo - GGDeals')"></head>
+
+<head th:replace="layout/head :: head('Dashboard')"></head>
 
 <body>
 <script th:src="@{/assets/static/js/initTheme.js}"></script>
 <div id="app">
     <div id="main" class="layout-horizontal">
-        <header th:replace="fragment/navbar"></header>
+        <header th:replace="layout/navbar"></header>
 
         <div class="content-wrapper container">
             <div class="page-heading">
@@ -192,7 +193,7 @@
             </div>
         </div>
 
-        <footer th:replace="fragment/footer"></footer>
+        <footer th:replace="layout/footer"></footer>
     </div>
 </div>
 
