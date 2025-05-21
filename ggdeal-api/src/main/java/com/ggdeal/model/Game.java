@@ -14,13 +14,15 @@ import java.util.List;
 @Data
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
-
+    private String thumbnail;
     private String nameSlug;
 
     @NotNull(message = "The game title is required.")

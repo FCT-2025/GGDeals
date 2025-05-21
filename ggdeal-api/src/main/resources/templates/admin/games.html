@@ -140,32 +140,31 @@
                                    placeholder="Desarrollo del juego">
                         </div>
                     </div>
-                    <div class="row"></div>
-                    <div class="col-md-6 mb-3">
-                        <label for="gameName" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="gameName" name="name"
-                               placeholder="Nombre del juego">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="gameName" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="gameName" name="name"
+                                   placeholder="Nombre del juego">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="gameReleaseDate" class="form-label">Fecha de Lanzamiento</label>
+                            <input type="text" class="form-control flatpickr" id="gameReleaseDate" name="release_date"
+                                   placeholder="Seleccionar fecha">
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="gameReleaseDate" class="form-label">Fecha de Lanzamiento</label>
-                        <input type="text" class="form-control flatpickr" id="gameReleaseDate" name="release_date"
-                               placeholder="Seleccionar fecha">
+                    <div class="mb-3">
+                        <label for="gameIsPublished" class="form-label">Fecha de Publicación</label>
+                        <input type="text" class="form-control flatpickr" id="gameIsPublished" name="is_published"
+                               placeholder="Seleccionar fecha de publicación">
                     </div>
                 </form>
             </div>
-            <div class="mb-3">
-                <label for="gameIsPublished" class="form-label">Fecha de Publicación</label>
-                <input type="text" class="form-control flatpickr" id="gameIsPublished" name="is_published"
-                       placeholder="Seleccionar fecha de publicación">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Guardar Juego</button>
             </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary">Guardar Juego</button>
         </div>
     </div>
-</div>
 </div>
 
 <!-- Modal Editar Juego -->
@@ -191,42 +190,51 @@
                                    placeholder="Desarrollo del juego">
                         </div>
                     </div>
-                    <div class="row"></div>
-                    <div class="col-md-6 mb-3">
-                        <label for="editGameName" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="editGameName" name="name"
-                               placeholder="Nombre del juego">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editGameName" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="editGameName" name="name"
+                                   placeholder="Nombre del juego">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editGameReleaseDate" class="form-label">Fecha de Lanzamiento</label>
+                            <input type="text" class="form-control flatpickr" id="editGameReleaseDate" name="release_date"
+                                   placeholder="Seleccionar fecha">
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="editGameReleaseDate" class="form-label">Fecha de Lanzamiento</label>
-                        <input type="text" class="form-control flatpickr" id="editGameReleaseDate" name="release_date"
-                               placeholder="Seleccionar fecha">
+                    <div class="mb-3">
+                        <label for="editGameIsPublished" class="form-label">Fecha de Publicación</label>
+                        <input type="text" class="form-control flatpickr" id="editGameIsPublished" name="is_published"
+                               placeholder="Seleccionar fecha de publicación">
+                    </div>
+                    <div class="mb-5">
+                        <label for="editGameThumbnail" class="form-label">Imagen Principal</label>
+                        <div class="d-flex align-items-center mb-2">
+                            <img src="./assets/compiled/jpg/1.jpg" width="100" height="100" class="rounded me-3"
+                                 alt="Current Thumbnail">
+                            <span class="text-muted">Imagen actual - Cargar una nueva para reemplazar</span>
+                        </div>
+                        <input type="file" class="filepond" id="editGameThumbnail">
+                    </div>
+                    <div class="form-group">
+                        <label for="editGameGenre">Género</label>
+                        <input type="text" class="form-control" id="editGameGenre" name="genre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editGameDescription">Descripción</label>
+                        <textarea class="form-control" id="editGameDescription" name="description" rows="3" required></textarea>
                     </div>
                 </form>
             </div>
-            <div class="mb-3">
-                <label for="editGameIsPublished" class="form-label">Fecha de Publicación</label>
-                <input type="text" class="form-control flatpickr" id="editGameIsPublished" name="is_published"
-                       placeholder="Seleccionar fecha de publicación">
+            <div class="modal-footer mt-4">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Guardar Cambios</button>
             </div>
-            <div class="mb-3">
-                <label for="editGameThumbnail" class="form-label">Imagen Principal</label>
-                <div class="d-flex align-items-center mb-2">
-                    <img src="./assets/compiled/jpg/1.jpg" width="100" height="100" class="rounded me-3"
-                         alt="Current Thumbnail">
-                    <span class="text-muted">Imagen actual - Cargar una nueva para reemplazar</span>
-                </div>
-                <input type="file" class="filepond" id="editGameThumbnail">
-            </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary">Guardar Cambios</button>
         </div>
     </div>
 </div>
-</div>
+
 
 <!-- Modal Gestionar Imágenes -->
 <div class="modal fade" id="manageGameMediaModal" tabindex="-1" aria-labelledby="manageGameMediaModalLabel"
@@ -635,9 +643,9 @@
                     <div class="mb-3">
                         <label class="form-label">Imagen Actual</label>
                         <div class="text-center mb-2">
-                            <img id="editMediaPreview" src="./assets/compiled/jpg/1.jpg" class="img-fluid rounded" style="max-height: 200px;" alt="Media Preview">
+                            <img id="editMediaPreview" src="./assets/compiled/jpg/1.jpg" class="img-fluid rounded"
+                                 style="max-height: 200px;" alt="Media Preview">
                         </div>
-                    </div>
                     </div>
                     <div class="mb-3">
                         <label for="editMediaFile" class="form-label">Reemplazar Imagen (opcional)</label>
@@ -1000,7 +1008,9 @@ document.querySelector('#editGameModal .btn-primary').addEventListener('click', 
         development: document.getElementById('editGameDesarrollo').value,
         nameSlug: document.getElementById('editGameName').value,
         releaseDate: parseFlatpickrDate(document.getElementById('editGameReleaseDate').value),
-        isPublished: document.getElementById('editGameIsPublished').value !== ''
+        isPublished: document.getElementById('editGameIsPublished').value !== '',
+        genre: document.getElementById('editGameGenre').value,
+        description: document.getElementById('editGameDescription').value,
     };
 
     gameApi.update(id, game)
@@ -1042,6 +1052,8 @@ document.querySelectorAll('a[data-bs-target="#editGameModal"]').forEach(btn => {
                 document.getElementById('editGameTitle').value = game.title;
                 document.getElementById('editGameDesarrollo').value = game.development;
                 document.getElementById('editGameName').value = game.nameSlug;
+                document.getElementById('editGameGenre').value = game.genre || '';
+                document.getElementById('editGameDescription').value = game.description || '';
 
                 // Configurar flatpickr con la fecha
                 if (game.releaseDate) {
