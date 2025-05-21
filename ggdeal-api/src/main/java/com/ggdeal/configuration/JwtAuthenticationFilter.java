@@ -31,25 +31,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String token = jwtProvider.getTokenFromCookie(request);
+        try {
+            String token = jwtProvider.getTokenFromCookie(request);
 
-        if (token != null) {
-            User user = jwtProvider.validateToken(token);
+            if (token != null) {
+                User user = jwtProvider.validateToken(token);
 
-            if (user != null) {
-                List<GrantedAuthority> authorities = List.of(
-                        new SimpleGrantedAuthority("ROLE_" + user.getRole())
-                );
+                if (user != null) {
+                    List<GrantedAuthority> authorities = List.of(
+                            new SimpleGrantedAuthority("ROLE_" + user.getRole().toString())
+                    );
 
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(user, null, authorities);
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(
+                                    user,
+                                    null,
+                                    authorities);
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
             }
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+            return;
         }
 
         filterChain.doFilter(request, response);
     }
-
-
 }

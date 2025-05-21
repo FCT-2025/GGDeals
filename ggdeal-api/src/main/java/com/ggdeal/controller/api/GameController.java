@@ -1,6 +1,6 @@
 package com.ggdeal.controller.api;
 
-import com.ggdeal.exception.ErrorResponse;
+import com.ggdeal.exception.ErrorResponseDTO;
 import com.ggdeal.model.Game;
 import com.ggdeal.repository.GameRepository;
 import com.ggdeal.specification.GameSpecification;
@@ -37,7 +37,7 @@ public class GameController {
         if (game.isPresent()) {
             return ResponseEntity.ok(game.get());
         } else {
-            ErrorResponse errorResponse = ErrorResponse.builder().status(HttpStatus.NOT_FOUND.value()).message("Game not found with id: " + id).build();
+            ErrorResponseDTO errorResponse = ErrorResponseDTO.builder().status(HttpStatus.NOT_FOUND.value()).message("Game not found with id: " + id).build();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
@@ -49,7 +49,7 @@ public class GameController {
         if (game.isPresent()) {
             return ResponseEntity.ok(game.get());
         } else {
-            ErrorResponse errorResponse = ErrorResponse.builder().status(HttpStatus.NOT_FOUND.value()).message("Game not found with name slug: " + nameSlug).build();
+            ErrorResponseDTO errorResponse = ErrorResponseDTO.builder().status(HttpStatus.NOT_FOUND.value()).message("Game not found with name slug: " + nameSlug).build();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }

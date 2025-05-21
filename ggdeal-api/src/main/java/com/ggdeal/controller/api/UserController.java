@@ -1,10 +1,13 @@
 package com.ggdeal.controller.api;
 
 import com.ggdeal.configuration.JwtProvider;
+import com.ggdeal.model.Role;
 import com.ggdeal.model.User;
 import com.ggdeal.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -17,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserRepository userService;
+    private UserRepository userRepository;
 
     @Autowired
     private JwtProvider jwtProvider;
@@ -31,7 +34,7 @@ public class UserController {
 
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginRequest, HttpServletResponse response) {
-        User user = userService.findByEmail(loginRequest.getEmail());
+        User user = userRepository.findByEmail(loginRequest.getEmail());
         if(user ==  null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username or Passsword incorrect");
         }
@@ -41,33 +44,31 @@ public class UserController {
         if(!passWordMatches) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("sername or Passsword incorrect");
         }
+        jwtProvider.setTokenCookie(response, jwtProvider.generateToken(user));
 
-
-        Cookie cookie = new Cookie("tklogin", jwtProvider.generateToken(user));
-        cookie.setMaxAge(jwtProvider.getExpirationtime());
-        cookie.setSecure(true);
-        cookie.setPath("/");
-
-        response.addCookie(cookie);
-
-        return ResponseEntity.ok("Usuario authorized");
+        return ResponseEntity.ok("User authorized");
     }
 
 
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user, HttpServletResponse response) {
+    public ResponseEntity<?> register(@Valid @RequestBody User user, HttpServletResponse response) {
         String hasshedPassword = passwordEncoder().encode(user.getPassword());
         user.setPassword(hasshedPassword);
-        User createdUser = userService.save(user);
+        user.setRole(Role.USER);
 
-        Cookie cookie = new Cookie("tklogin", jwtProvider.generateToken(user));
-        cookie.setMaxAge(jwtProvider.getExpirationtime());
-        cookie.setSecure(true);
-        cookie.setPath("/");
+        User createdUser = userRepository.save(user);
 
-        response.addCookie(cookie);
+        jwtProvider.setTokenCookie(response, jwtProvider.generateToken(user));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
+
+    @GetMapping("/token")
+    public User getToken(HttpServletRequest request) {
+        String token = jwtProvider.getTokenFromCookie(request);
+        User user = jwtProvider.validateToken(token);
+        return user;
+    }
+
 }
