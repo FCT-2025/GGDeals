@@ -1,122 +1,14 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Administrativo - GGDeals</title>
-    <!-- Enlaces CSS -->
-    <link rel="shortcut icon" th:href="@{/assets/compiled/svg/logo-copy.svg}" type="image/x-icon">
-    <link rel="stylesheet" th:href="@{/assets/compiled/css/app.css}">
-    <link rel="stylesheet" th:href="@{/assets/compiled/css/app-dark.css}">
-    <link rel="stylesheet" th:href="@{/assets/compiled/css/iconly.css}">
-    <link rel="stylesheet" th:href="@{/assets/extensions/bootstrap-icons/font/bootstrap-icons.css}">
-</head>
+
+<head th:replace="layout/head :: head('Dashboard')"></head>
 
 <body>
 <script th:src="@{/assets/static/js/initTheme.js}"></script>
 <div id="app">
     <div id="main" class="layout-horizontal">
-        <header class="mb-5">
-            <div class="header-top">
-                <div class="container">
-                    <div class="logo">
-                        <a href="admin.html"><img th:src="@{/assets/compiled/svg/logo.svg}" alt="Logo"> </a>
-                    </div>
-                    <div class="header-top-right">
-                        <div class="dropdown">
-                            <a href="#" id="topbarUserDropdown"
-                               class="user-dropdown d-flex align-items-center dropend dropdown-toggle "
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="avatar avatar-md2">
-                                    <img th:src="@{/assets/compiled/jpg/1.jpg}" alt="Avatar">
-                                </div>
-                                <div class="text">
-                                    <h6 class="user-dropdown-name">Administrador</h6>
-                                    <p class="user-dropdown-status text-sm text-muted">Administrador</p>
-                                </div>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-lg"
-                                aria-labelledby="topbarUserDropdown">
-                                <li><a class="dropdown-item" href="admin-profile.html">Mi Perfil</a></li>
-                                <li><a class="dropdown-item" href="admin-password.html">Cambiar Contraseña</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" th:href="@{/api/admin/logout}">Cerrar Sesión</a></li>
-                            </ul>
-                        </div>
-
-                        <!-- Burger button responsive -->
-                        <a href="#" class="burger-btn d-block d-xl-none">
-                            <i class="bi bi-justify fs-3"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <nav class="main-navbar">
-                <div class="container">
-                    <ul>
-                        <li class="menu-item active">
-                            <a href="admin.html" class='menu-link'>
-                                <span><i class="bi bi-grid-fill"></i>Dashboard</span>
-                            </a>
-                        </li>
-
-                        <li class="menu-item">
-                            <a href="admin-users.html" class='menu-link'>
-                                <span><i class="bi bi-people-fill"></i> Usuarios</span>
-                            </a>
-                        </li>
-
-                        <li class="menu-item">
-                            <a href="admin-games.html" class='menu-link'>
-                                <span><i class="bi bi-joystick"></i> Videojuegos</span>
-                            </a>
-                        </li>
-
-                        <li class="menu-item">
-                            <a href="admin-keys.html" class='menu-link'>
-                                <span><i class="bi bi-key-fill"></i> Réplicas</span>
-                            </a>
-                        </li>
-
-                        <li class="menu-item">
-                            <a href="admin-sales.html" class='menu-link'>
-                                <span><i class="bi bi-cart-fill"></i> Ventas</span>
-                            </a>
-                        </li>
-
-                        <li class="menu-item">
-                            <a href="admin-reservations.html" class='menu-link'>
-                                <span><i class="bi bi-bookmark-fill"></i> Reservas</span>
-                            </a>
-                        </li>
-
-                        <li class="menu-item has-sub">
-                            <a href="#" class='menu-link'>
-                                <span><i class="bi bi-list-check"></i> Catálogos</span>
-                            </a>
-                            <div class="submenu">
-                                <div class="submenu-group-wrapper">
-                                    <ul class="submenu-group">
-                                        <li class="submenu-item">
-                                            <a href="admin-platforms.html" class='submenu-link'>Plataformas</a>
-                                        </li>
-                                        <li class="submenu-item">
-                                            <a href="admin-editions.html" class='submenu-link'>Ediciones</a>
-                                        </li>
-                                        <li class="submenu-item">
-                                            <a href="admin-features.html" class='submenu-link'>Características</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
+        <header th:replace="layout/navbar"></header>
 
         <div class="content-wrapper container">
             <div class="page-heading">
@@ -253,13 +145,13 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="sale : ${lastSales}">
-                                                <td th:text="${sale.id}"></td>
-                                                <td th:text="${sale.user.username}"></td>
-                                                <td th:text="${sale.replica.game.title}"></td>
-                                                <td th:text="${sale.purcharseDate}"></td>
-                                                <td th:text="${sale.purcharseAmount}"></td>
-                                            </tr>
+                                        <tr th:each="sale : ${lastSales}">
+                                            <td th:text="${sale.id}"></td>
+                                            <td th:text="${sale.user.username}"></td>
+                                            <td th:text="${sale.replica.game.title}"></td>
+                                            <td th:text="${sale.purcharseDate}"></td>
+                                            <td th:text="${sale.purcharseAmount}"></td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -301,15 +193,7 @@
             </div>
         </div>
 
-        <footer>
-            <div class="container">
-                <div class="footer clearfix mb-0 text-muted">
-                    <div class="float-start">
-                        <p>2025 &copy; GGDeals Admin</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <footer th:replace="layout/footer"></footer>
     </div>
 </div>
 
@@ -319,97 +203,96 @@
 <script th:src="@{/assets/compiled/js/app.js}"></script>
 <script th:src="@{/assets/extensions/apexcharts/apexcharts.min.js}"></script>
 <script th:inline="javascript">
-        const platformDataDistribution = [[${popularPlatform}]];
-        const salesDataPerMonth = [[${salesPerMonth}]];
+    const platformDataDistribution = [[${popularPlatform}]];
+    const salesDataPerMonth = [[${salesPerMonth}]];
 
-        // Gráfica de ventas mensuales
-        var monthlySalesOptions = {
-            series: [{
-                name: 'Ventas',
-                data: salesDataPerMonth.map(salesPerMonth => salesPerMonth.total)
-            }],
-            chart: {
-                height: 350,
-                type: 'area',
-                toolbar: {
-                    show: false
-                }
-            },
-            colors: ['#435ebe'],
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth'
-            },
-            xaxis: {
-                categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
-            },
-            tooltip: {
-                x: {
-                    format: 'MM'
+    // Gráfica de ventas mensuales
+    var monthlySalesOptions = {
+        series: [{
+            name: 'Ventas',
+            data: salesDataPerMonth.map(salesPerMonth => salesPerMonth.total)
+        }],
+        chart: {
+            height: 350,
+            type: 'area',
+            toolbar: {
+                show: false
+            }
+        },
+        colors: ['#435ebe'],
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        xaxis: {
+            categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+        },
+        tooltip: {
+            x: {
+                format: 'MM'
+            }
+        }
+    };
+    var monthlySalesChart = new ApexCharts(document.querySelector("#monthlySalesChart"), monthlySalesOptions);
+    monthlySalesChart.render();
+
+    // Gráfica de distribución de plataformas
+    var platformDistributionOptions = {
+        series: platformDataDistribution.map(plataform => plataform.platformDistribution),
+        labels: platformDataDistribution.map(plataform => plataform.platformName),
+        chart: {
+            type: 'donut',
+            width: '100%',
+            height: '350px'
+        },
+        colors: ['#435ebe', '#55c6e8', '#fe7f9c', '#4acf92'],
+        legend: {
+            position: 'bottom'
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    size: '30%'
                 }
             }
-        };
-        var monthlySalesChart = new ApexCharts(document.querySelector("#monthlySalesChart"), monthlySalesOptions);
-        monthlySalesChart.render();
+        }
+    };
+    var platformDistributionChart = new ApexCharts(document.querySelector("#platformDistributionChart"), platformDistributionOptions);
+    platformDistributionChart.render();
 
-        // Gráfica de distribución de plataformas
-        var platformDistributionOptions = {
-            series: platformDataDistribution.map(plataform => plataform.platformDistribution),
-            labels: platformDataDistribution.map(plataform => plataform.platformName),
-            chart: {
-                type: 'donut',
-                width: '100%',
-                height: '350px'
-            },
-            colors: ['#435ebe', '#55c6e8', '#fe7f9c', '#4acf92'],
-            legend: {
-                position: 'bottom'
-            },
-            plotOptions: {
-                pie: {
-                    donut: {
-                        size: '30%'
-                    }
-                }
+    // Gráfica de nuevos registros
+    var newRegistrationsOptions = {
+        series: [{
+            name: 'Nuevos usuarios',
+            data: [34, 28, 41, 39, 26, 37, 32]
+        }],
+        chart: {
+            type: 'bar',
+            height: 250,
+            toolbar: {
+                show: false
             }
-        };
-        var platformDistributionChart = new ApexCharts(document.querySelector("#platformDistributionChart"), platformDistributionOptions);
-        platformDistributionChart.render();
-
-        // Gráfica de nuevos registros
-        var newRegistrationsOptions = {
-            series: [{
-                name: 'Nuevos usuarios',
-                data: [34, 28, 41, 39, 26, 37, 32]
-            }],
-            chart: {
-                type: 'bar',
-                height: 250,
-                toolbar: {
-                    show: false
-                }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
             },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '55%',
-                    endingShape: 'rounded'
-                },
-            },
-            colors: ['#ff7976'],
-            dataLabels: {
-                enabled: false
-            },
-            xaxis: {
-                categories: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
-            }
-        };
-        var newRegistrationsChart = new ApexCharts(document.querySelector("#newRegistrationsChart"), newRegistrationsOptions);
-        newRegistrationsChart.render();
+        },
+        colors: ['#ff7976'],
+        dataLabels: {
+            enabled: false
+        },
+        xaxis: {
+            categories: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        }
+    };
+    var newRegistrationsChart = new ApexCharts(document.querySelector("#newRegistrationsChart"), newRegistrationsOptions);
+    newRegistrationsChart.render();
 
 </script>
 </body>
-
 </html>

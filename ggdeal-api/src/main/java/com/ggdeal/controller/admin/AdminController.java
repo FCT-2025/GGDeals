@@ -48,12 +48,12 @@ public class AdminController {
         model.addAttribute("popularPlatform", plataformTypeRepository.findWithDistributionOfReplica());
         model.addAttribute("salesPerMonth", salesRepostiory.findNumberSalesPerMonth());
 
-        return "admin";
+        return "admin/dashboard";
     }
 
     @GetMapping("/login")
     public String login(Model model) throws JsonProcessingException {
-        return "login";
+        return "admin/login";
     }
 
     @PostMapping("/login")
@@ -61,7 +61,7 @@ public class AdminController {
         User user = userRepository.findByEmail(emailUsername);
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             model.addAttribute("error", "Usuario o contraseña incorrectos");
-            return "login";
+            return "admin/login";
         }
 
         jwtProvider.setTokenCookie(response, jwtProvider.generateToken(user));
@@ -73,5 +73,10 @@ public class AdminController {
     public String logout(HttpServletResponse response) {
         jwtProvider.deleteTokenCookie(response);
         return "redirect:/api/admin/login";
+    }
+
+    @GetMapping("/profile")
+    public String profile() {
+        return "admin/profile";
     }
 }

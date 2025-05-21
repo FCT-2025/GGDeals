@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Administrador - GGDeals</title>
+
+    <!-- Enlaces CSS -->
+    <link rel="shortcut icon" th:href="@{/assets/compiled/svg/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/assets/compiled/css/app.css}">
+    <link rel="stylesheet" th:href="@{/assets/compiled/css/app-dark.css}">
+    <link rel="stylesheet" th:href="@{/assets/compiled/css/iconly.css}">
+    <link rel="stylesheet" th:href="@{/assets/extensions/bootstrap-icons/font/bootstrap-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/extensions/filepond/filepond.css}">
+    <link rel="stylesheet" th:href="@{/assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css}">
+</head>
+
+<body>
+<script th:src="@{/assets/static/js/initTheme.js}"></script>
+<div id="app">
+    <div id="main" class="layout-horizontal">
+        <header class="mb-5">
+            <div class="header-top">
+                <div class="container">
+                    <div class="logo">
+                        <a th:href="@{/admin}">
+                            <img th:src="@{/assets/compiled/svg/logo.svg}" alt="Logo">
+                        </a>
+                    </div>
+                    <div class="header-top-right">
+                        <div class="dropdown">
+                            <a href="#" id="topbarUserDropdown"
+                               class="user-dropdown d-flex align-items-center dropend dropdown-toggle"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="avatar avatar-md2">
+                                    <img th:src="@{/assets/compiled/jpg/1.jpg}" alt="Avatar">
+                                </div>
+                                <div class="text">
+                                    <h6 class="user-dropdown-name" th:text="${user.name}">Administrador</h6>
+                                    <p class="user-dropdown-status text-sm text-muted" th:text="${user.role}">Administrador</p>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="topbarUserDropdown">
+                                <li><a class="dropdown-item" th:href="@{/profile}">Mi Perfil</a></li>
+                                <li><a class="dropdown-item" th:href="@{/admin-password}">Cambiar Contraseña</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" th:href="@{/logout}">Cerrar Sesión</a></li>
+                            </ul>
+                        </div>
+                        <a href="#" class="burger-btn d-block d-xl-none">
+                            <i class="bi bi-justify fs-3"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navbar -->
+            <nav class="main-navbar">
+                <div class="container">
+                    <ul>
+                        <li class="menu-item"><a th:href="@{/admin}" class="menu-link"><span><i class="bi bi-grid-fill"></i> Dashboard</span></a></li>
+                        <li class="menu-item"><a th:href="@{/admin-users}" class="menu-link"><span><i class="bi bi-people-fill"></i> Usuarios</span></a></li>
+                        <li class="menu-item"><a th:href="@{/admin-games}" class="menu-link"><span><i class="bi bi-joystick"></i> Videojuegos</span></a></li>
+                        <li class="menu-item"><a th:href="@{/admin-keys}" class="menu-link"><span><i class="bi bi-key-fill"></i> Réplicas</span></a></li>
+                        <li class="menu-item"><a th:href="@{/admin-sales}" class="menu-link"><span><i class="bi bi-cart-fill"></i> Ventas</span></a></li>
+                        <li class="menu-item"><a th:href="@{/admin-reservations}" class="menu-link"><span><i class="bi bi-bookmark-fill"></i> Reservas</span></a></li>
+                        <li class="menu-item has-sub">
+                            <a href="#" class="menu-link"><span><i class="bi bi-list-check"></i> Catálogos</span></a>
+                            <div class="submenu">
+                                <div class="submenu-group-wrapper">
+                                    <ul class="submenu-group">
+                                        <li class="submenu-item"><a th:href="@{/admin-platforms}" class="submenu-link">Plataformas</a></li>
+                                        <li class="submenu-item"><a th:href="@{/admin-editions}" class="submenu-link">Ediciones</a></li>
+                                        <li class="submenu-item"><a th:href="@{/admin-features}" class="submenu-link">Características</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <div class="content-wrapper container">
+            <div class="page-heading">
+                <h3>Mi Perfil</h3>
+            </div>
+            <div class="page-content">
+                <section class="row">
+                    <div class="col-12 col-lg-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="avatar avatar-xl mb-3">
+                                    <img th:src="@{/assets/compiled/jpg/1.jpg}" alt="Avatar">
+                                </div>
+                                <h4 th:text="${user.name}">Administrador GGDeals</h4>
+                                <p class="text-small" th:text="${user.role}">Administrador del Sistema</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><h4>Información Adicional</h4></div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h6>Fecha de Registro</h6>
+                                    <p class="text-muted" th:text="${user.registrationDate}">1 de Enero, 2025</p>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h6>Última Sesión</h6>
+                                    <p class="text-muted" th:text="${user.lastLogin}">Hoy</p>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6>Estado</h6>
+                                    <span th:classappend="${user.active} ? 'bg-success' : 'bg-danger'" class="badge">Activo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-8">
+                        <div class="card">
+                            <div class="card-header"><h4>Editar Perfil</h4></div>
+                            <div class="card-body">
+                                <form id="profileForm" th:action="@{/profile/save}" method="post" enctype="multipart/form-data" th:object="${user}">
+                                    <div class="form-group">
+                                        <label for="name">Nombre Completo</label>
+                                        <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="phone">Teléfono</label>
+                                        <input type="tel" class="form-control" id="phone" th:field="*{phone}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="avatarUpload">Cambiar Avatar</label>
+                                        <input type="file" class="profile-file-pond" id="avatarUpload" name="avatar">
+                                    </div>
+
+                                    <div class="form-group mt-4">
+                                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2025 &copy; GGDeals Admin</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<!-- Modal de éxito -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <h5 class="modal-title text-white" id="successModalLabel">¡Éxito!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>El perfil ha sido actualizado correctamente.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS -->
+<script th:src="@{/assets/static/js/components/dark.js}"></script>
+<script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
+<script th:src="@{/assets/compiled/js/app.js}"></script>
+<script th:src="@{/assets/extensions/filepond/filepond.js}"></script>
+<script th:src="@{/assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.js}"></script>
+<script th:src="@{/assets/extensions/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.js}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        FilePond.registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType);
+
+        FilePond.create(document.querySelector('.profile-file-pond'), {
+            credits: null,
+            allowImagePreview: true,
+            allowFileTypeValidation: true,
+            acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
+            labelFileTypeNotAllowed: 'Solo se permiten archivos de imagen',
+            fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
+                resolve(type);
+            }),
+            storeAsFile: true,
+            labelIdle: `Arrastra y suelta tu imagen o <span class="filepond--label-action">Buscar</span>`
+        });
+
+        const profileForm = document.getElementById('profileForm');
+        profileForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        });
+    });
+</script>
+</body>
+</html>
