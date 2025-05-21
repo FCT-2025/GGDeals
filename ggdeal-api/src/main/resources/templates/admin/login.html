@@ -1,22 +1,11 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión - GGDeals</title>
-
-    <!-- Enlaces CSS con Thymeleaf -->
-    <link rel="shortcut icon" th:href="@{/assets/compiled/svg/favicon.svg}" type="image/x-icon">
-    <link rel="stylesheet" th:href="@{/assets/compiled/css/app.css}">
-    <link rel="stylesheet" th:href="@{/assets/compiled/css/app-dark.css}">
-    <link rel="stylesheet" th:href="@{/assets/compiled/css/auth.css}">
-    <link rel="stylesheet" th:href="@{/assets/extensions/bootstrap-icons/font/bootstrap-icons.css}">
-</head>
+<head th:replace="fragment/head :: commonHead('Login - GGDeals')"></head>
+<link rel="stylesheet" th:href="@{/assets/compiled/css/auth.css}">
 
 <body>
 <script th:src="@{/assets/static/js/initTheme.js}"></script>
-
 <div id="auth">
     <div class="row h-100">
         <div class="col-lg-5 col-12">

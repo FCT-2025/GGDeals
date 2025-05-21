@@ -40,13 +40,13 @@ public class SecurityConf {
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
                             if (!request.getRequestURI().startsWith("/api/ggdeal")) {
-                                response.sendRedirect("/api/admin/login");
+                                response.sendRedirect("/api/admin/404");
                             }
 
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             if (!request.getRequestURI().startsWith("/api/ggdeal")) {
-                                response.sendRedirect("/api/admin/login?denied");
+                                response.sendRedirect("/api/admin/login");
                             }
                         })
                 )

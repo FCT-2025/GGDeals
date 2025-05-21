@@ -79,4 +79,9 @@ public class AdminController {
     public String profile() {
         return "admin/profile";
     }
+
+    @GetMapping("/404")
+    public String error404() {
+        return "admin/404";
+    }
 }
