@@ -14,7 +14,7 @@ export default function UserInterface() {
     { name: "Deutsch", flag: "🇩🇪" },
     { name: "Português", flag: "🇵🇹" },
     { name: "українська", flag: "🇺🇦" },
-    
+  
   ];
 
   const currencies = [
