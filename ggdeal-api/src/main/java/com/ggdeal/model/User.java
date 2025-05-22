@@ -5,6 +5,7 @@ import com.ggdeal.validation.UniqueUsername;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
@@ -43,8 +45,15 @@ public class User {
     @Size(max = 200, message = "Password must'n overpass 200 characteres")
     private String password;
 
+    @Pattern(regexp = "^\\+?[0-9]{7,15}$", message = "The number phone is invalid")
+    private String numberPhone;
+
+    private String avatarPath;
+
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private LocalDate created_at;
 
     @Column(nullable = true)
     private LocalDate isUserVerified;
@@ -59,6 +68,9 @@ public class User {
     public void prePersist() {
         if(role==null) {
             role = Role.USER;
+        }
+        if(created_at==null) {
+            created_at = LocalDate.now();
         }
     }
 }

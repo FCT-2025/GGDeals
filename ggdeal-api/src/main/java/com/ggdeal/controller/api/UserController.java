@@ -26,10 +26,8 @@ public class UserController {
     private JwtProvider jwtProvider;
 
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 
     @GetMapping("/login")
@@ -39,7 +37,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Username or Passsword incorrect");
         }
 
-        boolean passWordMatches = passwordEncoder().matches(loginRequest.getPassword(),user.getPassword());
+        boolean passWordMatches = passwordEncoder.matches(loginRequest.getPassword(),user.getPassword());
 
         if(!passWordMatches) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("sername or Passsword incorrect");
@@ -53,7 +51,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody User user, HttpServletResponse response) {
-        String hasshedPassword = passwordEncoder().encode(user.getPassword());
+        String hasshedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hasshedPassword);
         user.setRole(Role.USER);
 

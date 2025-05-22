@@ -38,6 +38,8 @@ public class JwtProvider {
                 .withClaim("email", user.getEmail())
                 .withClaim("username", user.getUsername())
                 .withClaim("role", user.getRole().toString())
+                .withClaim("numberPhone", user.getNumberPhone())
+                .withClaim("avatarPath", user.getAvatarPath())
                 .withExpiresAt(expirationDate)
                 .sign(Algorithm.HMAC384(secretKey));
     }
@@ -53,6 +55,8 @@ public class JwtProvider {
                     .email(decodedJWT.getClaim("email").asString())
                     .username(decodedJWT.getClaim("username").asString())
                     .role(Role.valueOf(decodedJWT.getClaims().get("role").asString()))
+                    .numberPhone(decodedJWT.getClaim("numberPhone").asString())
+                    .avatarPath(decodedJWT.getClaim("avatarPath").asString())
                     .build();
 
         } catch (JWTVerificationException exception) {

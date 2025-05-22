@@ -1,6 +1,5 @@
-const Config = {
-    API_URL: process.env.API_URL || 'http://localhost:3000/api',
-
-}
-
-export default Config;
+// src/config/config.ts
+export const Config = {
+  API_URL: import.meta.env.VITE_API_URL || "http://localhost:5050/api/ggdeal/",
+  API_AUTH_URL:  import.meta.env.VITE_API_URL || "http://localhost:5050/api/auth/",
+};

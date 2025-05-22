@@ -7,13 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UniqueUserNameValidator implements ConstraintValidator<UniqueUsername, String> {
+public class UniqueUsernameValidator  implements ConstraintValidator<UniqueUsername, String> {
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
-        return userRepository.existsByUsername(username);
+        if(userRepository == null) return true;
+        if(username == null) return true;
+        return !userRepository.existsByUsername(username);
     }
 }

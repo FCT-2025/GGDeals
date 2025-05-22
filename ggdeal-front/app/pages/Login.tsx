@@ -1,5 +1,5 @@
 import type { Route } from "../+types/root";
-import Config from "~/config/config";
+import {Config} from "../config/config";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -16,7 +16,7 @@ export default function Login() {
                     <h1 className="text-3xl md:text-4xl text-center mb-4">LOG IN</h1>
                     <div className="w-full h-[1px] bg-gray-400 mb-6"></div>
                     
-                    <form className="w-full" action={`${Config.API_URL}/api/auth/login`} method="POST">
+                    <form className="w-full" action={`${Config.API_AUTH_URL}/login`} method="POST">
                         <div className="mb-4">
                             <input 
                                 type="email" 
