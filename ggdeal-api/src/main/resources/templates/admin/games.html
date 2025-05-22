@@ -157,6 +157,34 @@
                         <input type="text" class="form-control flatpickr" id="gameIsPublished" name="is_published"
                                placeholder="Seleccionar fecha de publicación">
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="gameGenre" class="form-label">Género</label>
+                            <select class="form-select" id="gameGenre" name="genre" required>
+                                <option value="" disabled selected>Seleccionar género</option>
+                                <option value="Acción">Acción</option>
+                                <option value="Aventura">Aventura</option>
+                                <option value="RPG">RPG</option>
+                                <option value="Estrategia">Estrategia</option>
+                                <option value="Deportes">Deportes</option>
+                                <option value="Simulación">Simulación</option>
+                                <option value="Puzzle">Puzzle</option>
+                                <option value="Plataformas">Plataformas</option>
+                                <option value="Shooter">Shooter</option>
+                                <option value="Horror">Horror</option>
+                                <option value="Mundo Abierto">Mundo Abierto</option>
+                                <option value="Carreras">Carreras</option>
+                                <option value="Lucha">Lucha</option>
+                                <option value="Música/Ritmo">Música/Ritmo</option>
+                                <option value="Indie">Indie</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gameDescription" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="gameDescription" name="description" rows="3" required
+                                  placeholder="Descripción del juego (10-500 caracteres)"></textarea>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -198,7 +226,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="editGameReleaseDate" class="form-label">Fecha de Lanzamiento</label>
-                            <input type="text" class="form-control flatpickr" id="editGameReleaseDate" name="release_date"
+                            <input type="text" class="form-control flatpickr" id="editGameReleaseDate"
+                                   name="release_date"
                                    placeholder="Seleccionar fecha">
                         </div>
                     </div>
@@ -218,12 +247,29 @@
                     </div>
                     <div class="form-group">
                         <label for="editGameGenre">Género</label>
-                        <input type="text" class="form-control" id="editGameGenre" name="genre" required>
+                        <select class="form-select" id="editGameGenre" name="genre" required>
+                            <option value="" disabled>Seleccionar género</option>
+                            <option value="Acción">Acción</option>
+                            <option value="Aventura">Aventura</option>
+                            <option value="RPG">RPG</option>
+                            <option value="Estrategia">Estrategia</option>
+                            <option value="Deportes">Deportes</option>
+                            <option value="Simulación">Simulación</option>
+                            <option value="Puzzle">Puzzle</option>
+                            <option value="Plataformas">Plataformas</option>
+                            <option value="Shooter">Shooter</option>
+                            <option value="Horror">Horror</option>
+                            <option value="Mundo Abierto">Mundo Abierto</option>
+                            <option value="Carreras">Carreras</option>
+                            <option value="Lucha">Lucha</option>
+                            <option value="Música/Ritmo">Música/Ritmo</option>
+                            <option value="Indie">Indie</option>
+                        </select>
                     </div>
-
                     <div class="form-group">
                         <label for="editGameDescription">Descripción</label>
-                        <textarea class="form-control" id="editGameDescription" name="description" rows="3" required></textarea>
+                        <textarea class="form-control" id="editGameDescription" name="description" rows="3"
+                                  required></textarea>
                     </div>
                 </form>
             </div>
@@ -978,19 +1024,15 @@ document.querySelector('#addGameModal .btn-primary').addEventListener('click', f
         nameSlug: document.getElementById('gameName').value,
         releaseDate: parseFlatpickrDate(document.getElementById('gameReleaseDate').value),
         isPublished: document.getElementById('gameIsPublished').value !== '',
-        genre: "Acción", // Valor por defecto
-        description: "Descripción pendiente" // Valor por defecto
+        genre: document.getElementById('gameGenre').value,
+        description: document.getElementById('gameDescription').value
     };
 
     gameApi.create(game)
         .then(savedGame => {
             // Cerrar modal
             bootstrap.Modal.getInstance(document.getElementById('addGameModal')).hide();
-
-            // Añadir a la tabla o recargar
             location.reload();
-
-            // Mostrar mensaje de éxito
             showToast('Juego creado correctamente', 'success');
         })
         .catch(error => {
@@ -1052,7 +1094,16 @@ document.querySelectorAll('a[data-bs-target="#editGameModal"]').forEach(btn => {
                 document.getElementById('editGameTitle').value = game.title;
                 document.getElementById('editGameDesarrollo').value = game.development;
                 document.getElementById('editGameName').value = game.nameSlug;
-                document.getElementById('editGameGenre').value = game.genre || '';
+
+                // Seleccionar el género correcto en el select
+                const genreSelect = document.getElementById('editGameGenre');
+                for(let i = 0; i < genreSelect.options.length; i++) {
+                    if(genreSelect.options[i].value === game.genre) {
+                        genreSelect.options[i].selected = true;
+                        break;
+                    }
+                }
+
                 document.getElementById('editGameDescription').value = game.description || '';
 
                 // Configurar flatpickr con la fecha
