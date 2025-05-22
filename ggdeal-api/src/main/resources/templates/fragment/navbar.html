@@ -1,0 +1,87 @@
+<header class="mb-5" th:fragment="navbar">
+  <div class="header-top">
+    <div class="container">
+      <div class="logo">
+      </div>
+      <div class="header-top-right">
+        <div class="dropdown">
+          <a href="#" id="topbarUserDropdown"
+             class="user-dropdown d-flex align-items-center dropend dropdown-toggle "
+             data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="avatar avatar-md2">
+              <img th:src="@{/assets/compiled/jpg/1.jpg}" alt="Avatar">
+            </div>
+            <div class="text">
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg"
+              aria-labelledby="topbarUserDropdown">
+            <li><a class="dropdown-item" href="admin-password.html">Cambiar Contraseña</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" th:href="@{/api/admin/logout}">Cerrar Sesión</a></li>
+          </ul>
+        </div>
+
+        <!-- Burger button responsive -->
+        <a href="#" class="burger-btn d-block d-xl-none">
+          <i class="bi bi-justify fs-3"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <nav class="main-navbar">
+    <div class="container">
+      <ul>
+        <li class="menu-item active">
+            <span><i class="bi bi-grid-fill"></i>Dashboard</span>
+          </a>
+        </li>
+
+        <li class="menu-item">
+            <span><i class="bi bi-people-fill"></i> Usuarios</span>
+          </a>
+        </li>
+
+        <li class="menu-item">
+            <span><i class="bi bi-joystick"></i> Videojuegos</span>
+          </a>
+        </li>
+
+        <li class="menu-item">
+            <span><i class="bi bi-key-fill"></i> Réplicas</span>
+          </a>
+        </li>
+
+        <li class="menu-item">
+            <span><i class="bi bi-cart-fill"></i> Ventas</span>
+          </a>
+        </li>
+
+        <li class="menu-item">
+            <span><i class="bi bi-bookmark-fill"></i> Reservas</span>
+          </a>
+        </li>
+
+        <li class="menu-item has-sub">
+          <a href="#" class='menu-link'>
+            <span><i class="bi bi-list-check"></i> Catálogos</span>
+          </a>
+          <div class="submenu">
+            <div class="submenu-group-wrapper">
+              <ul class="submenu-group">
+                <li class="submenu-item">
+                </li>
+                <li class="submenu-item">
+                </li>
+                <li class="submenu-item">
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

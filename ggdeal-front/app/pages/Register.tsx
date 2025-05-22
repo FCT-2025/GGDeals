@@ -1,5 +1,6 @@
 import type { Route } from "../+types/root";
-import InputPhoneNumber from "~/util/InputPhoneNumber";
+import InputPhoneNumber from "~/utils/InputPhoneNumber";
+import { Config } from "../config/config";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -28,7 +29,11 @@ export default function Register() {
           <h1 className="text-3xl md:text-4xl text-center mb-4">REGISTER</h1>
           <div className="w-full h-[1px] bg-gray-400 mb-6"></div>
 
+<<<<<<< HEAD
           <form className="w-full">
+=======
+          <form className="w-full max-w-md" action={`${Config.API_AUTH_URL}/api/auth/register`} method="POST">
+>>>>>>> 7b50969d3b1f5c74ac04eb5d9176adcb88ec47a7
             <div className="mb-4">
               <input
                 type="email"

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragment/head :: head('404 - Página no encontrada')">
+  <!-- Contenido alternativo del head -->
+  <meta charset="UTF-8">
+  <title>404 - Página no encontrada</title>
+</head>
+
+<body>
+<script th:src="@{/assets/static/js/initTheme.js}"></script>
+<div id="error">
+  <div class="error-page container">
+    <div class="col-md-8 col-12 offset-md-2">
+      <div class="text-center">
+        <img class="img-error" th:src="@{/assets/compiled/svg/error-404.svg}" alt="Not Found">
+        <h1 class="error-title">NO ENCONTRADO</h1>
+        <p class='fs-5 text-gray-600'>La página que estás buscando no existe.</p>
+        <a th:href="@{/api/admin}" class="btn btn-lg btn-outline-primary mt-3">Volver al inicio</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="fragment/footer"></footer>
+
+<!-- Scripts -->
+<script th:src="@{/assets/static/js/components/dark.js}"></script>
+<script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
+<script th:src="@{/assets/compiled/js/app.js}"></script>
+</body>
+
+</html>

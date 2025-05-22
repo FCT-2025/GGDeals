@@ -17,10 +17,10 @@ public class Sale {
     private Long id;
 
     @NotNull(message = "Purchase date is required.")
-    private LocalDate purcharse_date;
+    private LocalDate purcharseDate;
 
     @NotNull(message = "Purchase amount is required.")
-    private Integer purcharse_amount;
+    private Integer purcharseAmount;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

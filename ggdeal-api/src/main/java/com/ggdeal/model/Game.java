@@ -1,7 +1,7 @@
 package com.ggdeal.model;
 
+import com.ggdeal.model.util.ModelUtils;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
@@ -14,15 +14,15 @@ import java.util.List;
 @Data
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
-
-    @NotNull(message = "The game name is required.")
-    @Size(min = 3, max = 50, message = "The game name must be between 3 and 50 characters.")
+    private String thumbnail;
     private String nameSlug;
 
     @NotNull(message = "The game title is required.")
@@ -51,7 +51,7 @@ public class Game {
             joinColumns = @JoinColumn(name = "game_id"),
             inverseJoinColumns = @JoinColumn(name = "plataform_id")
     )
-    private List<Plataform> plataforms;
+    private List<PlatformType> plataforms;
 
 
     @ManyToMany
@@ -84,5 +84,7 @@ public class Game {
         if(this.releaseDate == null) {
             this.releaseDate = LocalDate.now();
         }
+
+        this.nameSlug = ModelUtils.parseSlug(getTitle());
     }
 }

@@ -1,8 +1,8 @@
 import type { Route } from "../+types/root";
-import Hero from "../sections/home/Hero";
-import Charity from "~/sections/home/Charity";
-import GameShowcase from "~/sections/home/GameShowcase";
-import CompanyGames from "~/sections/home/CompanyGames";
+import Hero from "../sections/home/HeroHomeSection";
+import Charity from "~/sections/home/CharitySection";
+import GameShowcase from "~/sections/home/GameShowcaseSection";
+import CompanyGames from "~/sections/home/CompanyGamesSection";
 import Breadcrumbs from "~/componets/Breadcrumbs";
 
 
@@ -17,9 +17,8 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Breadcrumbs className="py-10"/>
-      <GameShowcase />
-      <Charity />
+      <GameShowcase className="mt-15"/>
+      <Charity style={{marginBottom: "160px"}}/>
       <CompanyGames
         companyName="BANDAI NANCOT Entreteniments games"
         isMain={true}

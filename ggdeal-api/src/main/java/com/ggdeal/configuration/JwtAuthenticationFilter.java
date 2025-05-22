@@ -1,62 +1,62 @@
 package com.ggdeal.configuration;
 
-import com.ggdeal.model.Role;
+
 import com.ggdeal.model.User;
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 
 import java.io.IOException;
+import java.util.List;
 
-@WebFilter(filterName = "JWTFilter" , urlPatterns = "/api/ggdeal/*")
-public class JwtAuthenticationFilter implements Filter
-{
-    @Autowired
-    private JwtProvider jwtProvider;
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        Filter.super.init(filterConfig);
+    private final JwtProvider jwtProvider;
+
+    public JwtAuthenticationFilter(JwtProvider jwtProvider) {
+        this.jwtProvider = jwtProvider;
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-            throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-        HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
 
-        if ("POST".equalsIgnoreCase(httpRequest.getMethod())) {
-            String token = httpRequest.getHeader("tklogin");
+        try {
+            String token = jwtProvider.getTokenFromCookie(request);
 
+            if (token != null) {
+                User user = jwtProvider.validateToken(token);
 
-            if (token == null || token.isEmpty()) {
-                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                httpResponse.getWriter().write("Missing or invalid token.");
-                return;
+                if (user != null) {
+                    List<GrantedAuthority> authorities = List.of(
+                            new SimpleGrantedAuthority("ROLE_" + user.getRole().toString())
+                    );
+
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(
+                                    user,
+                                    null,
+                                    authorities);
+
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
             }
-
-            User user = jwtProvider.validateToken(token);
-            if (user == null) {
-                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                httpResponse.getWriter().write("Invalid token.");
-                return;
-            }
-
-            if (user.getRole() != Role.ADMIN) {
-                httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                httpResponse.getWriter().write("Forbidden: You do not have permission to access this resource.");
-                return;
-            }
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+            return;
         }
 
-        filterChain.doFilter(servletRequest, servletResponse);
-    }
-
-    @Override
-    public void destroy() {
-        Filter.super.destroy();
+        filterChain.doFilter(request, response);
     }
 }

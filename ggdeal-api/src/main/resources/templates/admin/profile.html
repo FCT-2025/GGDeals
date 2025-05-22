@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="fragment/head :: head('Perfil de Administrador')"></head>
+
+<link rel="stylesheet" th:href="@{/assets/extensions/filepond/filepond.css}">
+<link rel="stylesheet" th:href="@{/assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css}">
+
+<body>
+<script th:src="@{/assets/static/js/initTheme.js}"></script>
+<div id="app">
+    <div id="main" class="layout-horizontal">
+        <header th:replace="fragment/navbar"></header>
+        <!-- Main Content -->
+        <div class="content-wrapper container">
+
+            <div th:if="${successMessageGlobal} or ${errorMessageGlobal}" class="container mt-2">
+
+                <div th:if="${successMessageGlobal}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${successMessageGlobal}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+
+                <div th:if="${errorMessageGlobal}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span th:text="${errorMessageGlobal}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="page-heading">
+                <h3>Mi Perfil</h3>
+            </div>
+            <div class="page-content">
+                <section class="row">
+                    <div class="col-12 col-lg-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="avatar avatar-xl mb-3">
+                                    <img th:src="@{'/uploads/avatar/' + ${#authentication.principal.avatarPath}}"
+                                         th:if="${#authentication.principal.avatarPath != null}"
+                                         alt="Avatar"
+                                         class="avatar">
+
+                                    <img th:unless="${#authentication.principal.avatarPath != null}"
+                                         th:src="@{/assets/compiled/jpg/1.jpg}"
+                                         alt="Avatar por defecto"
+                                         class="avatar">
+
+                                </div>
+                                <h4 sec:authentication="principal.username">Administrador GGDeals</h4>
+                                <p class="text-small" sec:authentication="principal.role">Administrador del Sistema</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><h4>Información Adicional</h4></div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h6>Fecha de Registro</h6>
+                                    <p class="text-muted">1 de Enero, 2025</p>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h6>Última Sesión</h6>
+                                    <p class="text-muted">Hoy</p>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6>Estado</h6>
+                                    <span class="badge">Activo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-8">
+                        <div class="card">
+                            <div class="card-header"><h4>Editar Perfil</h4></div>
+                            <div class="card-body">
+                                <div th:if="${successMessageSave}" class="alert alert-success" th:text="${successMessageSave}"></div>
+                                <div th:if="${errorMessageSave}" class="alert alert-danger" th:text="${errorMessageSave}"></div>
+
+                                <div th:if="${messageBindingResultSave != null and messageBindingResultSave.hasErrors()}"
+                                     class="alert alert-danger"
+                                     style="border-radius: 5px; padding: 15px; margin-bottom: 20px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+
+                                    <h5 style="margin-top: 0; font-weight: bold;">❌ Errores en la contraseña:</h5>
+                                    <ul style="margin-bottom: 0; padding-left: 20px;">
+                                        <li th:each="error : ${messageBindingResultSave.allErrors}"
+                                            th:text="${error.defaultMessage}"
+                                            style="margin-bottom: 5px;">
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div th:if="${#fields.hasErrors('user.*')}" class="alert alert-danger">
+                                    <ul>
+                                        <li th:each="err : ${#fields.errors('user.*')}" th:text="${err}"></li>
+                                    </ul>
+                                </div>
+                                <form id="profileForm" th:action="@{/api/admin/profile/save}" method="post" enctype="multipart/form-data" th:object="${user}">
+                                    <div class="form-group">
+                                        <label for="name">Nombre Completo</label>
+                                        <input type="text" class="form-control"  th:field="*{username}"  required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" th:field="*{email}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="phone">Teléfono</label>
+                                        <input type="tel" class="form-control"  th:field="*{numberPhone}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="avatarUpload">Cambiar Avatar</label>
+                                        <input type="file" class="profile-file-pond" id="avatarUpload" th:field="*{avatarPath}">
+                                        <span class="text-danger" th:if="${errorAvatar}" th:text="${errorAvatar}"></span>
+                                    </div>
+
+                                    <div class="form-group mt-4 mb-4">
+                                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                    </div>
+                                </form>
+
+                                <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+                                <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+
+                                <div th:if="${messageBindingResultPassword != null and messageBindingResultPassword.hasErrors()}"
+                                     class="alert alert-danger"
+                                     style="border-radius: 5px; padding: 15px; margin-bottom: 20px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+
+                                    <h5 style="margin-top: 0; font-weight: bold;">❌ Errores en la contraseña:</h5>
+                                    <ul style="margin-bottom: 0; padding-left: 20px;">
+                                        <li th:each="error : ${messageBindingResultPassword.allErrors}"
+                                            th:text="${error.defaultMessage}"
+                                            style="margin-bottom: 5px;">
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <form th:action="@{/api/admin/profile/change-password}" th:object="${passwordChangeDTO}" method="post">
+
+                                    <div class="form-group">
+                                        <label>Nueva contraseña</label>
+                                        <input type="password" th:field="*{newPassword}" class="form-control" >
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Confirmar contraseña</label>
+                                        <input type="password" th:field="*{confirmPassword}" class="form-control" >
+                                        <span class="text-danger" th:if="${errorConfirm}" th:text="${errorConfirm}"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Contraseña actual</label>
+                                        <input type="password" th:field="*{password}" class="form-control" >
+                                        <span class="text-danger" th:if="${errorPassword}" th:text="${errorPassword}"></span>
+                                    </div>
+
+
+                                    <button type="submit" class="btn btn-primary">Cambiar contraseña</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2025 &copy; GGDeals Admin</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+<!-- JS -->
+<script th:src="@{/assets/static/js/components/dark.js}"></script>
+<script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
+<script th:src="@{/assets/compiled/js/app.js}"></script>
+<script th:src="@{/assets/extensions/filepond/filepond.js}"></script>
+<script th:src="@{/assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.js}"></script>
+<script th:src="@{/assets/extensions/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.js}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        FilePond.registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType);
+
+        FilePond.create(document.querySelector('.profile-file-pond'), {
+            credits: null,
+            allowImagePreview: true,
+            allowFileTypeValidation: true,
+            acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
+            labelFileTypeNotAllowed: 'Solo se permiten archivos de imagen',
+            fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
+                resolve(type);
+            }),
+            storeAsFile: true,
+            labelIdle: `Arrastra y suelta tu imagen o <span class="filepond--label-action">Buscar</span>`
+        });
+
+
+    });
+</script>
+</body>
+</html>
