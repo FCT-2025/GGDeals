@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface PlataformTypeRepository extends JpaRepository<PlatformType, Long> {
+public interface PlatformTypeRepository extends JpaRepository<PlatformType, Long> {
     @Query("SELECT new com.ggdeal.dto.DistributionPlataformDTO(p.name, COUNT(r)) " +
             "FROM PlatformType p LEFT JOIN p.replicas r " +
             "GROUP BY p.name")

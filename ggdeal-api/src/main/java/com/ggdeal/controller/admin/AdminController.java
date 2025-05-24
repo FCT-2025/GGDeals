@@ -8,7 +8,6 @@ import com.ggdeal.model.User;
 import com.ggdeal.repository.*;
 import com.ggdeal.service.StorageService;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -42,7 +41,7 @@ public class AdminController {
     private ReservationRepository reservationRepository;
 
     @Autowired
-    private PlataformTypeRepository plataformTypeRepository;
+    private PlatformTypeRepository platformTypeRepository;
 
 
     @Autowired
@@ -68,7 +67,7 @@ public class AdminController {
         model.addAttribute("countReservation", reservationRepository.count());
         model.addAttribute("lastSales", salesRepostiory.findTop5ByOrderByPurcharseDateDesc());
         model.addAttribute("popularSales", salesRepostiory.findTop5PopularGames());
-        model.addAttribute("popularPlatform", plataformTypeRepository.findWithDistributionOfReplica());
+        model.addAttribute("popularPlatform", platformTypeRepository.findWithDistributionOfReplica());
         model.addAttribute("salesPerMonth", salesRepostiory.findNumberSalesPerMonth());
 
         return "admin/dashboard";

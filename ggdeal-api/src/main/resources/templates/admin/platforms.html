@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragment/head :: head('Administración de Plataformas')"></head>
+
+<body>
+<script th:src="@{/assets/static/js/initTheme.js}"></script>
+<div id="app">
+    <div id="main" class="layout-horizontal">
+        <header th:replace="fragment/navbar"></header>
+
+        <div class="content-wrapper container">
+            <div class="page-heading">
+                <h3>Administración de Plataformas</h3>
+            </div>
+
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div class="page-content">
+                <section class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title">Plataformas</h4>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPlatformModal">
+                                        <i class="bi bi-plus"></i> Nueva Plataforma
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-lg" id="platformsTable">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Plataforma</th>
+                                            <th>Tipo</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="platform : ${platforms}">
+                                            <td th:text="${platform.id}">1</td>
+                                            <td th:text="${platform.name}">PlayStation 5</td>
+                                            <td th:text="${platform.platformType != null ? platform.platformType.name : ''}">Consola</td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-primary btn-edit-platform"
+                                                        th:data-id="${platform.id}">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-danger btn-delete-platform"
+                                                        th:data-id="${platform.id}"
+                                                        th:data-name="${platform.name}">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer th:replace="fragment/footer"></footer>
+    </div>
+</div>
+
+<!-- Modal para agregar plataforma -->
+<div class="modal fade" id="addPlatformModal" tabindex="-1" role="dialog" aria-labelledby="addPlatformModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPlatformModalLabel">Nueva Plataforma</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addPlatformForm">
+                    <div class="form-group mb-3">
+                        <label for="platformName">Plataforma</label>
+                        <input type="text" class="form-control" id="platformName" name="name" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="platformType">Tipo de Plataforma</label>
+                        <select class="form-select" id="platformType" name="platformType" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option th:each="type : ${platformTypes}"
+                                    th:value="${type.id}"
+                                    th:text="${type.name}"></option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="savePlatform()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar plataforma -->
+<div class="modal fade" id="editPlatformModal" tabindex="-1" role="dialog" aria-labelledby="editPlatformModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPlatformModalLabel">Editar Plataforma</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editPlatformForm">
+                    <input type="hidden" id="editPlatformId" name="id">
+                    <div class="form-group mb-3">
+                        <label for="editPlatformName">Plataforma</label>
+                        <input type="text" class="form-control" id="editPlatformName" name="name" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="editPlatformType">Tipo de Plataforma</label>
+                        <select class="form-select" id="editPlatformType" name="platformType" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option th:each="type : ${platformTypes}"
+                                    th:value="${type.id}"
+                                    th:text="${type.name}"></option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="updatePlatform()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para eliminar plataforma -->
+<div class="modal fade" id="deletePlatformModal" tabindex="-1" role="dialog" aria-labelledby="deletePlatformModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deletePlatformModalLabel">Eliminar Plataforma</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="deletePlatformForm">
+                    <input type="hidden" id="deletePlatformId" name="id">
+                    <p>¿Estás seguro de que deseas eliminar la plataforma <span id="deletePlatformName" class="fw-bold"></span>?</p>
+                    <p>Esta acción no se puede deshacer.</p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="deletePlatform()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/assets/static/js/components/dark.js}"></script>
+<script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
+<script th:src="@{/assets/compiled/js/app.js}"></script>
+
+<!-- Simple DataTables -->
+<script th:src="@{/assets/extensions/simple-datatables/umd/simple-datatables.js}"></script>
+<script th:src="@{/assets/static/js/pages/simple-datatables.js}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar DataTable
+        new simpleDatatables.DataTable("#platformsTable", {
+            perPage: 10,
+            labels: {
+                placeholder: "Buscar...",
+                perPage: "{select} plataformas por página",
+                noRows: "No se encontraron plataformas",
+                info: "Mostrando {start} a {end} de {rows} plataformas",
+                noResults: "No hay resultados para tu búsqueda"
+            }
+        });
+
+        // Eventos para botones de editar
+        document.querySelectorAll('.btn-edit-platform').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                editPlatform(id);
+            });
+        });
+
+        // Eventos para botones de eliminar
+        document.querySelectorAll('.btn-delete-platform').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                setDeletePlatform(id, name);
+            });
+        });
+    });
+
+    function setDeletePlatform(id, name) {
+        document.getElementById('deletePlatformId').value = id;
+        document.getElementById('deletePlatformName').textContent = name;
+        new bootstrap.Modal(document.getElementById('deletePlatformModal')).show();
+    }
+
+    function savePlatform() {
+        const name = document.getElementById('platformName').value;
+        const platformTypeId = document.getElementById('platformType').value;
+
+        if (!name || !platformTypeId) {
+            alert('Por favor, completa todos los campos requeridos');
+            return;
+        }
+
+        const platformData = {
+            name: name,
+            platformType: {
+                id: platformTypeId
+            }
+        };
+
+        fetch('/api/admin/platforms', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(platformData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al guardar la plataforma');
+            }
+            return response.json();
+        })
+        .then(data => {
+            bootstrap.Modal.getInstance(document.getElementById('addPlatformModal')).hide();
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ha ocurrido un error al guardar la plataforma');
+        });
+    }
+
+    function editPlatform(id) {
+        fetch(`/api/admin/platforms/${id}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cargar datos de la plataforma');
+                }
+                return response.json();
+            })
+            .then(platform => {
+                document.getElementById('editPlatformId').value = platform.id;
+                document.getElementById('editPlatformName').value = platform.name;
+                document.getElementById('editPlatformType').value = platform.platformType.id;
+
+                new bootstrap.Modal(document.getElementById('editPlatformModal')).show();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al cargar los datos de la plataforma');
+            });
+    }
+
+    function updatePlatform() {
+        const id = document.getElementById('editPlatformId').value;
+        const name = document.getElementById('editPlatformName').value;
+        const platformTypeId = document.getElementById('editPlatformType').value;
+
+        if (!name || !platformTypeId) {
+            alert('Por favor, completa todos los campos requeridos');
+            return;
+        }
+
+        const platformData = {
+            name: name,
+            platformType: {
+                id: platformTypeId
+            }
+        };
+
+        fetch(`/api/admin/platforms/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(platformData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al actualizar la plataforma');
+            }
+            return response.json();
+        })
+        .then(data => {
+            bootstrap.Modal.getInstance(document.getElementById('editPlatformModal')).hide();
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ha ocurrido un error al actualizar la plataforma');
+        });
+    }
+
+    function deletePlatform() {
+        const id = document.getElementById('deletePlatformId').value;
+
+        fetch(`/api/admin/platforms/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al eliminar la plataforma');
+            }
+
+            bootstrap.Modal.getInstance(document.getElementById('deletePlatformModal')).hide();
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ha ocurrido un error al eliminar la plataforma');
+        });
+    }
+</script>
+</body>
+
+</html>
