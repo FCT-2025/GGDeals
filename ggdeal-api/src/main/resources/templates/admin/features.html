@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragment/head :: head('Administración de Caracteristicas')"></head>
+
+<body>
+<script th:src="@{/assets/static/js/initTheme.js}"></script>
+<div id="app">
+    <div id="main" class="layout-horizontal">
+
+        <header th:replace="fragment/navbar"></header>
+
+        <div class="content-wrapper container">
+            <div class="page-heading">
+                <div class="d-flex justify-content-between">
+                    <h3>Gestión de Características</h3>
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFeatureModal">
+                        <i class="bi bi-plus"></i> Nueva Característica
+                    </a>
+                </div>
+            </div>
+            <div class="page-content">
+                <section class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4>Lista de Características</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped" id="featuresTable">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="feature : ${features}">
+                                            <td th:text="${feature.id}">1</td>
+                                            <td th:text="${feature.name}">Multijugador</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm dropdown-toggle" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                               data-bs-target="#editFeatureModal"
+                                                               th:data-id="${feature.id}"
+                                                               th:data-name="${feature.name}">
+                                                            <i class="bi bi-pencil"></i> Editar</a>
+                                                        </li>
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li><a class="dropdown-item text-danger" href="#"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#deleteFeatureModal"
+                                                               th:data-id="${feature.id}"
+                                                               th:data-name="${feature.name}">
+                                                            <i class="bi bi-trash"></i> Eliminar</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer th:replace="fragment/footer"></footer>
+    </div>
+</div>
+
+<!-- Modales -->
+<!-- Modal Añadir Característica -->
+<div class="modal fade" id="addFeatureModal" tabindex="-1" aria-labelledby="addFeatureModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addFeatureModalLabel">Añadir Nueva Característica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addFeatureForm" th:action="@{/api/admin/features}" method="post">
+                    <div class="mb-3">
+                        <label for="featureName" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="featureName" name="name" required
+                               placeholder="Ej. Multijugador">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="addFeatureForm" class="btn btn-primary">Guardar Característica</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Característica -->
+<div class="modal fade" id="editFeatureModal" tabindex="-1" aria-labelledby="editFeatureModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editFeatureModalLabel">Editar Característica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editFeatureForm" method="post">
+                    <input type="hidden" id="editFeatureId" name="id">
+                    <div class="mb-3">
+                        <label for="editFeatureName" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="editFeatureName" name="name" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="editFeatureForm" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar Característica -->
+<div class="modal fade" id="deleteFeatureModal" tabindex="-1" aria-labelledby="deleteFeatureModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFeatureModalLabel">Eliminar Característica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">¿Estás seguro?</h4>
+                    <p>¿Realmente deseas eliminar la característica <strong id="deleteFeatureName"></strong>?</p>
+                </div>
+                <div id="deleteFeatureWarning" class="alert alert-danger">
+                    <i class="bi bi-exclamation-circle"></i> Esta característica se eliminará de forma permanente de la
+                    base de datos.
+                </div>
+                <form id="deleteFeatureForm" method="post">
+                    <input type="hidden" id="deleteFeatureId" name="id">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="deleteFeatureForm" class="btn btn-danger">Eliminar Característica</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/assets/static/js/components/dark.js}"></script>
+<script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
+<script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script th:src="@{/assets/compiled/js/app.js}"></script>
+<script th:src="@{/assets/extensions/jquery/jquery.min.js}"></script>
+<script th:src="@{/assets/extensions/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js}"></script>
+
+<script>
+    $(document).ready(function() {
+        // Inicializar DataTable
+        var table = $('#featuresTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+            }
+        });
+
+        // Cargar datos en los modales
+        $('#editFeatureModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var name = button.data('name');
+
+            $('#editFeatureId').val(id);
+            $('#editFeatureName').val(name);
+
+            // Configurar la URL del formulario con el ID
+            $('#editFeatureForm').attr('action', '/api/admin/features/' + id);
+        });
+
+        $('#deleteFeatureModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var name = button.data('name');
+
+            $('#deleteFeatureId').val(id);
+            $('#deleteFeatureName').text(name);
+
+            // Configurar la URL del formulario con el ID
+            $('#deleteFeatureForm').attr('action', '/api/admin/features/' + id);
+        });
+
+        // Fix para asegurar que los modales funcionen correctamente
+        $('.modal').on('shown.bs.modal', function () {
+            $(document.body).addClass('modal-open');
+        });
+
+        $('.modal').on('hidden.bs.modal', function () {
+            if($('.modal:visible').length) {
+                $(document.body).addClass('modal-open');
+            } else {
+                $(document.body).removeClass('modal-open');
+            }
+        });
+
+        // Asegurar que el fondo del modal se muestre correctamente
+        $(document).on('show.bs.modal', '.modal', function () {
+            var zIndex = 1040 + (10 * $('.modal:visible').length);
+            $(this).css('z-index', zIndex);
+            setTimeout(function() {
+                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+            }, 0);
+        });
+
+        // Para formulario de edición, configurar método PUT
+        $('#addFeatureForm').submit(function(event) {
+            event.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify({
+                    "name": $('#featureName').val()
+                }),
+                contentType: "application/json",
+                success: function(data) {
+                    $('#addFeatureModal').modal('hide');
+                    location.reload();
+                },
+                error: function(err) {
+                    console.error("Error al crear:", err);
+                    alert("Error al crear la característica");
+                }
+            });
+        });
+        
+        // Para formulario de edición, configurar método PUT
+        $('#editFeatureForm').submit(function(event) {
+            event.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: JSON.stringify({
+                    "id": $('#editFeatureId').val(),
+                    "name": $('#editFeatureName').val()
+                }),
+                contentType: "application/json",
+                success: function(data) {
+                    $('#editFeatureModal').modal('hide');
+                    location.reload();
+                },
+                error: function(err) {
+                    console.error("Error al editar:", err);
+                    alert("Error al actualizar la característica");
+                }
+            });
+        });
+
+        // Para formulario de eliminación, configurar método DELETE
+        $('#deleteFeatureForm').submit(function(event) {
+            event.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "DELETE",
+                url: url,
+                success: function() {
+                    $('#deleteFeatureModal').modal('hide');
+                    location.reload();
+                },
+                error: function(err) {
+                    console.error("Error al eliminar:", err);
+                    alert("Error al eliminar la característica");
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
