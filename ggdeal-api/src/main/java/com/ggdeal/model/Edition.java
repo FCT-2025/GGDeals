@@ -4,13 +4,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.*;
+
 
 import java.util.List;
 
 @Entity
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Edition {
     @Id
@@ -22,8 +26,8 @@ public class Edition {
     private String name;
     private String feature;
 
-    @Min(value = 5, message = "Price must be at least 5.")
-    private Double price;
+    @DecimalMin(value = "0.0", message = "El precio debe ser mayor o igual a 0")
+    private Double percentageSale;
 
     @OneToMany(mappedBy = "edition")
     private List<Replica> replica;

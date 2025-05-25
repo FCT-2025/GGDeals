@@ -50,6 +50,7 @@
                                             <th>Título</th>
                                             <th>Desarrollo</th>
                                             <th>Nombre</th>
+                                            <th>Precio</th>
                                             <th>Fecha Lanzamiento</th>
                                             <th>Fecha Publicación</th>
                                             <th>Acciones</th>
@@ -63,6 +64,7 @@
                                             <td th:text="${game.title}">The Witcher 3: Wild Hunt</td>
                                             <td th:text="${game.development}">CD Projekt RED</td>
                                             <td th:text="${game.nameSlug}">Witcher 3</td>
+                                            <td th:text="${game.price != null ? game.price + ' €' : 'No disponible'}">29.99 €</td>
                                             <td th:text="${#temporals.format(game.releaseDate, 'dd/MM/yyyy')}">
                                                 19/05/2015
                                             </td>
@@ -110,6 +112,66 @@
                         </div>
                     </div>
                 </section>
+                <!-- Sección Lanzamientos Próximos -->
+                <section class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Calendario de Lanzamientos</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Juego</th>
+                                            <th>Plataformas</th>
+                                            <th>Fecha Lanzamiento</th>
+                                            <th>Días Restantes</th>
+                                            <th>Reservas</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${upcomingGames == null || upcomingGames.empty}">
+                                            <td colspan="6" class="text-center">No hay próximos lanzamientos programados</td>
+                                        </tr>
+                                        <tr th:each="game : ${upcomingGames}">
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar avatar-md me-3">
+                                                        <img th:if="${game.thumbnail != null}" th:src="@{${game.thumbnail}}" alt="Imagen del juego">
+                                                        <img th:if="${game.thumbnail == null}" th:src="@{/assets/compiled/jpg/no-image.jpg}" alt="Sin imagen">
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0" th:text="${game.title}">Título del Juego</h6>
+                                                        <p class="text-muted mb-0" th:text="${game.development}">Desarrollador</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span th:if="${game.plataforms == null || game.plataforms.empty}" class="badge bg-secondary">Sin plataformas</span>
+                                                <span th:each="platform : ${game.plataforms}"
+                                                      th:class="${'badge ' + (platform.name == 'PC' ? 'bg-primary' :
+                                                                (platform.name == 'PlayStation 5' ? 'bg-info' :
+                                                                (platform.name == 'Xbox' ? 'bg-success' : 'bg-secondary')))}"
+                                                      th:text="${platform.name}">Plataforma</span>
+                                            </td>
+                                            <td th:text="${#temporals.format(game.releaseDate, 'dd/MM/yyyy')}">01/01/2025</td>
+                                            <td th:attr="data-release-date=${game.releaseDate}" class="days-remaining">Calculando...</td>
+                                            <td th:text="${game.reservations != null ? game.reservations.size() : '0'}">0</td>
+                                            <td>
+                                                <span th:if="${game.isPublished}" class="badge bg-success">Publicado</span>
+                                                <span th:unless="${game.isPublished}" class="badge bg-warning">Próximamente</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
 
@@ -145,6 +207,10 @@
                             <label for="gameName" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="gameName" name="name"
                                    placeholder="Nombre del juego">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="gamePrice" class="form-label">Precio (€)</label>
+                            <input type="number" class="form-control" id="gamePrice" name="price" min="0" step="0.01" placeholder="Ej. 29.99">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="gameReleaseDate" class="form-label">Fecha de Lanzamiento</label>
@@ -223,6 +289,10 @@
                             <label for="editGameName" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="editGameName" name="name"
                                    placeholder="Nombre del juego">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editGamePrice" class="form-label">Precio (€)</label>
+                            <input type="number" class="form-control" id="editGamePrice" name="price" min="0" step="0.01" placeholder="Ej. 29.99">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="editGameReleaseDate" class="form-label">Fecha de Lanzamiento</label>
@@ -1025,7 +1095,8 @@ document.querySelector('#addGameModal .btn-primary').addEventListener('click', f
         releaseDate: parseFlatpickrDate(document.getElementById('gameReleaseDate').value),
         isPublished: document.getElementById('gameIsPublished').value !== '',
         genre: document.getElementById('gameGenre').value,
-        description: document.getElementById('gameDescription').value
+        description: document.getElementById('gameDescription').value,
+        price: document.getElementById('gamePrice').value ? parseFloat(document.getElementById('gamePrice').value) : null,
     };
 
     gameApi.create(game)
@@ -1053,6 +1124,7 @@ document.querySelector('#editGameModal .btn-primary').addEventListener('click', 
         isPublished: document.getElementById('editGameIsPublished').value !== '',
         genre: document.getElementById('editGameGenre').value,
         description: document.getElementById('editGameDescription').value,
+        price: document.getElementById('editGamePrice').value ? parseFloat(document.getElementById('editGamePrice').value) : null,
     };
 
     gameApi.update(id, game)
@@ -1094,6 +1166,7 @@ document.querySelectorAll('a[data-bs-target="#editGameModal"]').forEach(btn => {
                 document.getElementById('editGameTitle').value = game.title;
                 document.getElementById('editGameDesarrollo').value = game.development;
                 document.getElementById('editGameName').value = game.nameSlug;
+                document.getElementById('editGamePrice').value = game.price || '';
 
                 // Seleccionar el género correcto en el select
                 const genreSelect = document.getElementById('editGameGenre');
@@ -1160,6 +1233,34 @@ function parseFlatpickrDate(dateString) {
 
     return `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 }
+
+// Calcular días restantes para lanzamientos próximos
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalizar a inicio del día
+
+    document.querySelectorAll('.days-remaining').forEach(cell => {
+        const releaseDateStr = cell.getAttribute('data-release-date');
+        if (releaseDateStr) {
+            const [year, month, day] = releaseDateStr.split('-');
+            const releaseDate = new Date(year, month - 1, day); // Meses en JS son 0-11
+
+            const diffTime = releaseDate.getTime() - today.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            cell.textContent = diffDays;
+
+            // Aplicar clases según cercanía
+            if (diffDays <= 30) {
+                cell.classList.add('text-danger', 'fw-bold');
+            } else if (diffDays <= 90) {
+                cell.classList.add('text-warning', 'fw-bold');
+            }
+        } else {
+            cell.textContent = '-';
+        }
+    });
+});
 </script>
 </body>
 

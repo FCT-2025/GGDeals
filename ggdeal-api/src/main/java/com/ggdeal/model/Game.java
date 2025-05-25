@@ -31,8 +31,7 @@ public class Game {
 
     @NotNull(message = "The developer name is required.")
     private String development;
-
-    @Past(message = "The release date must be a past date.")
+        
     private LocalDate releaseDate;
 
     private Boolean isPublished;
@@ -44,6 +43,7 @@ public class Game {
     @Size(min = 10, max = 500, message = "The game description must be between 10 and 500 characters.")
     private String description;
 
+    private Double price;
 
     @ManyToMany
     @JoinTable(
