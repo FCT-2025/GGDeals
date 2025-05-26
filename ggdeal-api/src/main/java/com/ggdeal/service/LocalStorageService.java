@@ -23,7 +23,7 @@ public class LocalStorageService implements StorageService {
 
 
         if (oldAvatarPath != null) {
-            deleteFile(oldAvatarPath);
+            deleteFileAvatar(oldAvatarPath);
         }
 
 
@@ -40,10 +40,27 @@ public class LocalStorageService implements StorageService {
         return filename;
     }
 
+    @Override
+    public String storeAvatar(MultipartFile file) throws IOException {
+        if (file.isEmpty()) return null;
+
+
+        Path uploadPath = Paths.get(uploadDir + "avatar/");
+        Files.createDirectories(uploadPath);
+
+        String filename = UUID.randomUUID() + "." +
+                StringUtils.getFilenameExtension(file.getOriginalFilename());
+
+
+        Path destination = uploadPath.resolve(filename);
+        file.transferTo(destination);
+
+        return filename;
+    }
 
 
     @Override
-    public void deleteFile(String filePath) throws IOException {
+    public void deleteFileAvatar(String filePath) throws IOException {
         if (filePath != null) {
             Path path = Paths.get(uploadDir + "avatar/");
             Path destination = path.resolve(filePath);

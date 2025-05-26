@@ -35,7 +35,7 @@ public class Game {
     @Past(message = "The release date must be a past date.")
     private LocalDate releaseDate;
 
-    private Boolean isPublished;
+    private LocalDate published_date;
 
     @NotNull(message = "The game genre is required.")
     private String genre;
@@ -78,8 +78,8 @@ public class Game {
 
     @PrePersist
     public void prePersist() {
-        if (this.isPublished == null) {
-            this.isPublished = false;
+        if (this.published_date == null) {
+            this.published_date = LocalDate.now();
         }
         if(this.releaseDate == null) {
             this.releaseDate = LocalDate.now();

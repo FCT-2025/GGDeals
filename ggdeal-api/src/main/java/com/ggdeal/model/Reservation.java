@@ -1,10 +1,8 @@
 package com.ggdeal.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
 import lombok.*;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -16,8 +14,8 @@ public class Reservation {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Future(message = "The avaible game day must be a future date.")
-    private LocalDateTime avaibleGameDay;
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
 
     @ManyToOne
     @JoinColumn(name = "game_id")

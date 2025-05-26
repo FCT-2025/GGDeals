@@ -1,17 +1,19 @@
 package com.ggdeal.dto;
 
-
-
+import com.ggdeal.model.Role;
 import jakarta.validation.constraints.*;
-import lombok.Builder;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @Getter
 @Setter
-@Builder
-public class UserProfileDTO {
+public class UserUpdateDTO {
+    @NotNull(message = "El id es obligatorio")
+    @Positive
+    private Long id;
 
     @NotBlank(message = "El nombre completo es obligatorio")
     @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
@@ -22,7 +24,7 @@ public class UserProfileDTO {
     private String email;
 
     private String numberPhone;
+    private Role role;
+    private Boolean isVerified;
 
-
-    private MultipartFile avatarPath;
 }

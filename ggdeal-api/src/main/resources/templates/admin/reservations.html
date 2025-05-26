@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head th:replace="fragment/head :: head('Reservations')"></head>
+
+<link rel="stylesheet" th:href="@{/assets/compiled/css/table-datatable-jquery.css}">
+
+<body>
+<script th:src="@{/assets/static/js/initTheme.js}"></script>
+<div id="app">
+    <div id="main" class="layout-horizontal">
+        <!-- Encabezado con fragmento -->
+        <header th:replace="fragment/navbar :: header"></header>
+
+        <div class="content-wrapper container">
+            <!-- Mensajes de error/success -->
+            <div th:if="${errorBinding != null and errorBinding.hasErrors()}" class="alert alert-danger">
+                <h5>❌ Errores en los parámetros:</h5>
+                <ul>
+                    <li th:each="error : ${errorBinding.allErrors}" th:text="${error.defaultMessage}"></li>
+                </ul>
+            </div>
+
+            <div class="alert text-danger my-2" th:if="${error}" th:text="${error}"></div>
+            <div class="alert alert-success my-2" th:if="${success}" th:text="${success}"></div>
+
+            <div class="page-content">
+                <!-- Filtros y Estadísticas -->
+                <section class="row">
+                    <div class="col-12 col-lg-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Filtros de Reservas</h4>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/api/admin/reservations}" method="get">
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="statusFilter" class="form-label">Estado</label>
+                                            <select class="form-select" id="statusFilter" name="status">
+                                                <option value="">Todos</option>
+                                                <option value="PENDING">Pendiente</option>
+                                                <option value="COMPLETED">Completada</option>
+                                                <option value="CANCELED">Cancelada</option>
+                                                <option value="EXPIRED">Expirada</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="dateFilter" class="form-label">Fecha</label>
+                                            <select class="form-select" id="dateFilter" name="dateRange">
+                                                <option value="all">Todas las fechas</option>
+                                                <option value="upcoming30">Próximos 30 días</option>
+                                                <option value="upcoming60">Próximos 60 días</option>
+                                                <option value="upcoming90">Próximos 90 días</option>
+                                                <option value="custom">Rango personalizado</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3" id="customDateRangeContainer" style="display: none;">
+                                            <label class="form-label">Rango Personalizado</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control flatpickr-range"
+                                                       name="customRange" placeholder="Seleccionar rango de fechas">
+                                                <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="userFilter" class="form-label">Usuario</label>
+                                            <select class="form-select" id="userFilter" name="userId">
+                                                <option value="">Todos los usuarios</option>
+                                                <option th:each="user : ${users}"
+                                                        th:value="${user.id}"
+                                                        th:text="${user.username}"
+                                                        th:selected="${param.userId != null and param.userId.equals(user.id.toString())}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="gameFilter" class="form-label">Juego</label>
+                                            <select class="form-select" id="gameFilter" name="gameId">
+                                                <option value="">Todos los juegos</option>
+                                                <option th:each="game : ${games}"
+                                                        th:value="${game.id}"
+                                                        th:text="${game.title}"
+                                                        th:selected="${param.gameId != null and param.gameId.equals(game.id.toString())}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <a th:href="@{/api/admin/reservations}" class="btn btn-light me-2">Limpiar</a>
+                                        <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Resumen de Reservas</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card border shadow-none mb-3">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar avatar-md">
+                                                        <div class="avatar-initial bg-primary rounded">
+                                                            <i class="bi bi-bookmark-star-fill text-white"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <h5 class="mb-0">Total Reservas</h5>
+                                                        <p class="mb-0 text-muted" th:text="${reservationStats.total}">0</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="card border shadow-none mb-3">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar avatar-md">
+                                                        <div class="avatar-initial bg-success rounded">
+                                                            <i class="bi bi-clock-fill text-white"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <h5 class="mb-0">Activas</h5>
+                                                        <p class="mb-0 text-muted" th:text="${reservationStats.active}">0</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lista de Reservas -->
+                <section class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Lista de Reservas</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped" id="reservationsTable">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Fecha Disponible</th>
+                                            <th>Usuario</th>
+                                            <th>Juego</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="reservation : ${reservations}">
+                                            <td th:text="${reservation.id}">1</td>
+                                            <td th:text="${#temporals.format(reservation.game.published_date, 'dd/MM/yyyy HH:mm')}">15/10/2025</td>
+                                            <td>
+                                                <a th:href="@{/api/admin/users/{id}(id=${reservation.user.id})}">
+                                                    <span th:text="${reservation.user.username}">Usuario</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/api/admin/games/{id}(id=${reservation.game.id})}">
+                                                    <span th:text="${reservation.game.title}">Juego</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                        <span class="badge"
+                                                              th:classappend="${#temporals.isAfter(reservation.avaibleGameDay, #temporals.createNow())} ? 'bg-success' : 'bg-warning'"
+                                                              th:text="${#temporals.isAfter(reservation.avaibleGameDay, #temporals.createNow())} ? 'Activa' : 'Expirada'">
+                                                            Estado
+                                                        </span>
+                                            </td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                               data-bs-target="#viewReservationModal"
+                                                               th:attr="data-id=${reservation.id},
+                                                                               data-username=${reservation.user.username},
+                                                                               data-game=${reservation.game.title},
+                                                                               data-date=${#temporals.format(reservation.avaibleGameDay, 'dd/MM/yyyy HH:mm')}">
+                                                                <i class="bi bi-eye"></i> Ver Detalles
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                               data-bs-target="#editReservationModal"
+                                                               th:attr="data-id=${reservation.id},
+                                                                               data-date=${#temporals.format(reservation.avaibleGameDay, 'yyyy-MM-dd')},
+                                                                               data-userid=${reservation.user.id},
+                                                                               data-gameid=${reservation.game.id}">
+                                                                <i class="bi bi-pencil"></i> Editar
+                                                            </a>
+                                                        </li>
+                                                        <li><hr class="dropdown-divider"></li>
+                                                        <li>
+                                                            <a class="dropdown-item text-danger" href="#"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#cancelReservationModal"
+                                                               th:attr="data-id=${reservation.id}">
+                                                                <i class="bi bi-x-circle"></i> Cancelar
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2025 &copy; GGDeals Admin</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<!-- Modales -->
+<!-- Modal Ver Reserva -->
+<div class="modal fade" id="viewReservationModal" tabindex="-1" aria-labelledby="viewReservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewReservationModalLabel">Detalles de la Reserva</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Información de la Reserva</h6>
+                        <div class="mt-3">
+                            <p class="mb-1"><strong>ID de Reserva:</strong> <span id="viewReservationId"></span></p>
+                            <p class="mb-1"><strong>Fecha Disponible:</strong> <span id="viewReservationDate"></span></p>
+                            <p class="mb-1"><strong>Estado:</strong> <span id="viewReservationStatus"></span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Información del Cliente</h6>
+                        <div class="mt-3">
+                            <p class="mb-1"><strong>Nombre:</strong> <span id="viewReservationUser"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="text-muted">Juego Reservado</h6>
+                        <div class="mt-3">
+                            <p class="mb-1"><strong>Título:</strong> <span id="viewReservationGame"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cancelar Reserva -->
+<div class="modal fade" id="cancelReservationModal" tabindex="-1" aria-labelledby="cancelReservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelReservationModalLabel">Cancelar Reserva</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">¿Estás seguro?</h4>
+                    <p>¿Realmente deseas cancelar esta reserva?</p>
+                </div>
+                <form id="cancelReservationForm" th:action="@{/api/admin/reservations/cancel}" method="post">
+                    <input type="hidden" id="cancelReservationId" name="id">
+                    <div class="mb-3">
+                        <label for="cancelReason" class="form-label">Motivo de Cancelación</label>
+                        <textarea class="form-control" id="cancelReason" name="reason" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
+                <button type="submit" class="btn btn-danger" form="cancelReservationForm">Confirmar Cancelación</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Scripts con Thymeleaf -->
+<script th:src="@{/assets/static/js/components/dark.js}"></script>
+<script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
+<script th:src="@{/assets/compiled/js/app.js}"></script>
+<script th:src="@{/assets/extensions/jquery/jquery.min.js}"></script>
+<script th:src="@{/assets/extensions/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js}"></script>
+<script th:src="@{/assets/extensions/flatpickr/flatpickr.min.js}"></script>
+<script th:src="@{/assets/extensions/flatpickr/l10n/es.js}"></script>
+
+<script>
+    const orderTable = [];
+    orderTable.push([1, 'desc']);
+
+    $(document).ready(function() {
+        // Inicializar DataTable
+        var table = $('#reservationsTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+            },
+            "order": orderTable
+        });
+
+        // Inicializar Flatpickr
+        flatpickr(".flatpickr-range", {
+            mode: "range",
+            dateFormat: "d/m/Y",
+            locale: "es"
+        });
+
+        // Mostrar/ocultar rango de fechas personalizado
+        $('#dateFilter').change(function() {
+            $('#customDateRangeContainer').toggle($(this).val() === 'custom');
+        });
+
+        // Configurar modal de ver detalles
+        $('#viewReservationModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+
+            modal.find('#viewReservationId').text('#' + button.data('id'));
+            modal.find('#viewReservationDate').text(button.data('date'));
+            modal.find('#viewReservationUser').text(button.data('username'));
+            modal.find('#viewReservationGame').text(button.data('game'));
+
+            var isActive = new Date(button.data('date')) > new Date();
+            modal.find('#viewReservationStatus').html(
+                isActive ? '<span class="badge bg-success">Activa</span>' :
+                           '<span class="badge bg-warning">Expirada</span>'
+            );
+        });
+
+        // Configurar modal de edición
+        $('#editReservationModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var modal = $(this);
+
+            modal.find('#editReservationId').val(button.data('id'));
+            modal.find('#editReservationDate').val(button.data('date'));
+            modal.find('#editReservationUserId').val(button.data('userid'));
+            modal.find('#editReservationGameId').val(button.data('gameid'));
+        });
+
+        // Configurar modal de cancelación
+        $('#cancelReservationModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            $(this).find('#cancelReservationId').val(button.data('id'));
+        });
+    });
+</script>
+</body>
+</html>

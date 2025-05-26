@@ -39,7 +39,7 @@ public class SecurityConf {
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
                             if (!request.getRequestURI().startsWith("/api/ggdeal")) {
-                                response.sendRedirect("/api/admin/404");
+                                response.sendRedirect("/api/admin/");
                             }
 
                         })
@@ -48,6 +48,7 @@ public class SecurityConf {
                                 response.sendRedirect("/api/admin/login");
                             }
                         })
+
                 )
                 .addFilterBefore(new TrailingSlashRedirectFilter(), DisableEncodeUrlFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);

@@ -1,6 +1,7 @@
 package com.ggdeal.configuration;
 
 
+import com.ggdeal.dto.UserDTO;
 import com.ggdeal.model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.Cookie;
@@ -35,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = jwtProvider.getTokenFromCookie(request);
 
             if (token != null) {
-                User user = jwtProvider.validateToken(token);
+                UserDTO user = jwtProvider.validateToken(token);
 
                 if (user != null) {
                     List<GrantedAuthority> authorities = List.of(

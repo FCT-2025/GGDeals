@@ -2,6 +2,7 @@
   <div class="header-top">
     <div class="container">
       <div class="logo">
+        <a th:href="@{/api/admin}"><img th:src="@{/assets/compiled/svg/logo.svg}" alt="Logo"> </a>
       </div>
       <div class="header-top-right">
         <div class="dropdown">
@@ -9,13 +10,23 @@
              class="user-dropdown d-flex align-items-center dropend dropdown-toggle "
              data-bs-toggle="dropdown" aria-expanded="false">
             <div class="avatar avatar-md2">
-              <img th:src="@{/assets/compiled/jpg/1.jpg}" alt="Avatar">
+              <img th:src="@{'/uploads/avatar/' + ${#authentication.principal.avatarPath}}"
+                   th:if="${#authentication.principal.avatarPath != null}"
+                   alt="Avatar"
+                   class="avatar">
+              <img th:unless="${#authentication.principal.avatarPath != null}"
+                   th:src="@{/assets/compiled/jpg/1.jpg}"
+                   alt="Avatar por defecto"
+                   class="avatar">
             </div>
             <div class="text">
+              <h6 class="user-dropdown-name" sec:authentication="principal.username">Administrador</h6>
+              <p class="user-dropdown-status text-sm text-muted" sec:authentication="principal.role">Administrador</p>
             </div>
           </a>
           <ul class="dropdown-menu dropdown-menu-end shadow-lg"
               aria-labelledby="topbarUserDropdown">
+            <li><a class="dropdown-item" th:href="@{/api/admin/profile}">Mi Perfil</a></li>
             <li><a class="dropdown-item" href="admin-password.html">Cambiar Contraseña</a></li>
             <li>
               <hr class="dropdown-divider">
@@ -35,31 +46,37 @@
     <div class="container">
       <ul>
         <li class="menu-item active">
+          <a th:href="@{/api/admin}" class='menu-link'>
             <span><i class="bi bi-grid-fill"></i>Dashboard</span>
           </a>
         </li>
 
         <li class="menu-item">
+          <a th:href="@{/api/admin/users}" class='menu-link'>
             <span><i class="bi bi-people-fill"></i> Usuarios</span>
           </a>
         </li>
 
         <li class="menu-item">
+          <a th:href="@{/api/admin/games}" class='menu-link'>
             <span><i class="bi bi-joystick"></i> Videojuegos</span>
           </a>
         </li>
 
         <li class="menu-item">
+          <a th:href="@{/api/admin/keys}" class='menu-link'>
             <span><i class="bi bi-key-fill"></i> Réplicas</span>
           </a>
         </li>
 
         <li class="menu-item">
+          <a th:href="@{/api/admin/sales}" class='menu-link'>
             <span><i class="bi bi-cart-fill"></i> Ventas</span>
           </a>
         </li>
 
         <li class="menu-item">
+          <a th:href="@{/api/admin/reservations}" class='menu-link'>
             <span><i class="bi bi-bookmark-fill"></i> Reservas</span>
           </a>
         </li>
@@ -72,10 +89,13 @@
             <div class="submenu-group-wrapper">
               <ul class="submenu-group">
                 <li class="submenu-item">
+                  <a th:href="@{/api/admin/platforms}" class='submenu-link'>Plataformas</a>
                 </li>
                 <li class="submenu-item">
+                  <a th:href="@{/api/admin/editions}" class='submenu-link'>Ediciones</a>
                 </li>
                 <li class="submenu-item">
+                  <a th:href="@{/api/admin/features}" class='submenu-link'>Características</a>
                 </li>
               </ul>
             </div>
@@ -85,3 +105,5 @@
     </div>
   </nav>
 </header>
+
+
