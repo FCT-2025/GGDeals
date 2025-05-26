@@ -2,6 +2,7 @@ package com.ggdeal.service;
 
 import com.ggdeal.model.Game;
 import com.ggdeal.model.PlatformType;
+import com.ggdeal.model.PlatformModel;
 import com.ggdeal.model.Replica;
 import com.ggdeal.model.Edition;
 import com.ggdeal.repository.ReplicaRepository;
@@ -65,33 +66,38 @@ public class ReplicaService {
 
     /**
      * Guarda un lote de réplicas con los mismos datos de juego, edición y plataforma
+     *
+     * @param game El juego asociado a las réplicas
+     * @param platformModel El modelo de plataforma asociado a las réplicas
+     * @param editionId El ID de la edición asociada a las réplicas
+     * @param activationKeys Lista de claves de activación para cada réplica
+     * @param isSold Estado de venta inicial para las réplicas
+     * @return Lista de réplicas guardadas
      */
     @Transactional
-    public List<Replica> saveBatch(
-            Game game,
-            PlatformType platformType,
-            Long editionId,
-            List<String> activationKeys,
-            boolean isSold
-    ) {
-        List<Replica> savedReplicas = new ArrayList<>();
+    public List<Replica> saveBatch(Game game, PlatformModel platformModel, Long editionId,
+                                   List<String> activationKeys, boolean isSold) {
+        List<Replica> replicas = new ArrayList<>();
+        Optional<Edition> edition = editionService.findById(editionId);
 
         for (String key : activationKeys) {
             Replica replica = new Replica();
-            replica.setActivation_key(key);
             replica.setGame(game);
-            replica.setPlataform(platformType);
+            replica.setPlatformModel(platformModel);
+            replica.setPlatformId(platformModel.getId()); // Asigna explícitamente platform_id
 
-            // Buscar la edición por ID y asignarla directamente
-            Edition edition = editionService.findById(editionId).orElse(null);
-            replica.setEdition(edition);
+            if (platformModel.getPlatformType() != null) {
+                replica.setPlatformType(platformModel.getPlatformType());
+            }
 
-            replica.setIs_sold(isSold);
+            edition.ifPresent(replica::setEdition);
+            replica.setActivation_key(key);
+            replica.setIsSold(isSold);
 
-            savedReplicas.add(replicaRepository.save(replica));
+            replicas.add(replicaRepository.save(replica));
         }
 
-        return savedReplicas;
+        return replicas;
     }
 
     /**

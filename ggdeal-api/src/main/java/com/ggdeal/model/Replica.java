@@ -20,7 +20,8 @@ public class Replica {
     @NotBlank(message = "The activation key is Mandatory")
     private String activation_key;
 
-    private Boolean is_sold;
+    @Column(name = "is_sold")
+    private Boolean isSold;
 
     @ManyToOne
     @JoinColumn(name = "game_id")
@@ -31,17 +32,23 @@ public class Replica {
     private Edition edition;
 
     @ManyToOne
-    @JoinColumn(name = "plataform_id")
-    private PlatformType plataform;
+    @JoinColumn(name = "platform_type")
+    private PlatformType platformType;
 
+    @ManyToOne
+    @JoinColumn(name = "platform_model")
+    private PlatformModel platformModel;
+
+    @Column(name = "platform_id", nullable = false)
+    private Long platformId;
 
     @OneToOne(mappedBy = "replica")
     private Sale sale;
 
     @PrePersist
     public void prePersist() {
-        if (this.is_sold == null) {
-            this.is_sold = false;
+        if (this.isSold == null) {
+            this.isSold = false;
         }
     }
 }

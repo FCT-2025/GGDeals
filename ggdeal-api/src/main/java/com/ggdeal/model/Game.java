@@ -51,7 +51,7 @@ public class Game {
             joinColumns = @JoinColumn(name = "game_id"),
             inverseJoinColumns = @JoinColumn(name = "plataform_id")
     )
-    private List<PlatformType> plataforms;
+    private List<PlatformType> platforms;
 
 
     @ManyToMany
@@ -86,5 +86,9 @@ public class Game {
         }
 
         this.nameSlug = ModelUtils.parseSlug(getTitle());
+    }
+
+    public boolean isPublished() {
+        return this.published_date != null && !this.published_date.isAfter(LocalDate.now());
     }
 }

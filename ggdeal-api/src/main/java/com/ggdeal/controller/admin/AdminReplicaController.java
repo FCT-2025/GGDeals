@@ -3,7 +3,9 @@ package com.ggdeal.controller.admin;
 import com.ggdeal.model.Edition;
 import com.ggdeal.model.Game;
 import com.ggdeal.model.PlatformType;
+import com.ggdeal.model.PlatformModel;
 import com.ggdeal.model.Replica;
+import com.ggdeal.repository.PlatformModelRepository;
 import com.ggdeal.service.EditionService;
 import com.ggdeal.service.GameService;
 import com.ggdeal.service.PlatformTypeService;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,16 +29,19 @@ public class AdminReplicaController {
     private final GameService gameService;
     private final EditionService editionService;
     private final PlatformTypeService platformTypeService;
+    private final PlatformModelRepository platformModelRepository;
 
     @Autowired
     public AdminReplicaController(ReplicaService replicaService,
                                   GameService gameService,
                                   EditionService editionService,
-                                  PlatformTypeService platformTypeService) {
+                                  PlatformTypeService platformTypeService,
+                                  PlatformModelRepository platformModelRepository) {
         this.replicaService = replicaService;
         this.gameService = gameService;
         this.editionService = editionService;
         this.platformTypeService = platformTypeService;
+        this.platformModelRepository = platformModelRepository;
     }
 
     @GetMapping("")
@@ -51,7 +57,7 @@ public class AdminReplicaController {
         model.addAttribute("soldReplicas", soldReplicas);
         model.addAttribute("games", gameService.findAll());
         model.addAttribute("editions", editionService.findAll());
-        model.addAttribute("platforms", platformTypeService.findAll());
+        model.addAttribute("platforms", platformModelRepository.findAll());
 
         return "admin/keys";
     }
@@ -92,16 +98,23 @@ public class AdminReplicaController {
     @ResponseBody
     public ResponseEntity<List<Replica>> createReplicaBatch(
             @RequestBody Map<String, Object> requestBody) {
+        // Verificar campos obligatorios
+        if (requestBody.get("gameId") == null ||
+                requestBody.get("editionId") == null ||
+                requestBody.get("platformId") == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
 
         Long gameId = Long.valueOf(requestBody.get("gameId").toString());
         Long editionId = Long.valueOf(requestBody.get("editionId").toString());
-        Long platformId = Long.valueOf(requestBody.get("platformId").toString());
-        Boolean isSold = Boolean.valueOf(requestBody.get("isSold").toString());
+        Long platformModelId = Long.valueOf(requestBody.get("platformId").toString());
+        Boolean isSold = requestBody.get("isSold") != null ?
+                Boolean.valueOf(requestBody.get("isSold").toString()) : false;
 
         Optional<Game> game = gameService.findById(gameId);
-        Optional<PlatformType> platform = platformTypeService.findById(platformId);
+        Optional<PlatformModel> platformModel = platformModelRepository.findById(platformModelId);
 
-        if (!game.isPresent() || !platform.isPresent()) {
+        if (!game.isPresent() || !platformModel.isPresent()) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -121,20 +134,64 @@ public class AdminReplicaController {
         }
 
         List<Replica> savedReplicas = replicaService.saveBatch(
-                game.get(), platform.get(), editionId, activationKeys, isSold);
+                game.get(), platformModel.get(), editionId, activationKeys, isSold);
 
         return ResponseEntity.ok(savedReplicas);
     }
 
     @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Replica> updateReplica(@PathVariable Long id, @RequestBody Replica replica) {
-        if (!replicaService.findById(id).isPresent()) {
+    public ResponseEntity<Map<String, Object>> updateReplica(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) {
+        Optional<Replica> optionalReplica = replicaService.findById(id);
+        if (!optionalReplica.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
-        replica.setId(id);
-        return ResponseEntity.ok(replicaService.save(replica));
+        Replica replica = optionalReplica.get();
+
+        // Actualizar clave de activación
+        if (requestBody.get("activation_key") != null) {
+            replica.setActivation_key(requestBody.get("activation_key").toString());
+        }
+
+        // Actualizar juego
+        if (requestBody.get("gameId") != null) {
+            Long gameId = Long.valueOf(requestBody.get("gameId").toString());
+            gameService.findById(gameId).ifPresent(replica::setGame);
+        }
+
+        // Actualizar edición
+        if (requestBody.get("editionId") != null) {
+            Long editionId = Long.valueOf(requestBody.get("editionId").toString());
+            editionService.findById(editionId).ifPresent(replica::setEdition);
+        }
+
+        // Actualizar plataforma
+        if (requestBody.get("platformId") != null) {
+            Long platformId = Long.valueOf(requestBody.get("platformId").toString());
+            platformModelRepository.findById(platformId).ifPresent(platformModel -> {
+                replica.setPlatformModel(platformModel);
+                replica.setPlatformId(platformId);
+                if (platformModel.getPlatformType() != null) {
+                    replica.setPlatformType(platformModel.getPlatformType());
+                }
+            });
+        }
+
+        // Actualizar estado de venta
+        if (requestBody.get("isSold") != null) {
+            replica.setIsSold(Boolean.valueOf(requestBody.get("isSold").toString()));
+        }
+
+        Replica savedReplica = replicaService.save(replica);
+
+        // Devolver solo los datos necesarios
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", savedReplica.getId());
+        response.put("activation_key", savedReplica.getActivation_key());
+        response.put("isSold", savedReplica.getIsSold());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
