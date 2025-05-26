@@ -7,5 +7,6 @@ export default [
   route("register", "pages/Register.tsx"),
   route("contact", "pages/Contact.tsx"),
   route("shoppingcart", "pages/Shoppingcart.tsx"),
-  route("game/:slug", "pages/Game.tsx"),
+  route("interfazuser", "pages/InterfazUser.tsx"),
+  route("game/:id", "pages/Game.tsx"),
 ] satisfies RouteConfig;

@@ -30,7 +30,7 @@ public class AdminController {
     private ReservationRepository reservationRepository;
 
     @Autowired
-    private PlataformTypeRepository plataformTypeRepository;
+    private PlatformTypeRepository platformTypeRepository;
 
     @Autowired
     private JwtProvider jwtProvider;
@@ -55,7 +55,7 @@ public class AdminController {
         model.addAttribute("countReservation", reservationRepository.count());
         model.addAttribute("lastSales", salesRepostiory.findTop5ByOrderByPurcharseDateDesc());
         model.addAttribute("popularSales", salesRepostiory.findTop5PopularGames());
-        model.addAttribute("popularPlatform", plataformTypeRepository.findWithDistributionOfReplica());
+        model.addAttribute("popularPlatform", platformTypeRepository.findWithDistributionOfReplica());
         model.addAttribute("salesPerMonth", salesRepostiory.findNumberSalesPerMonth());
 
         return "admin/dashboard";
