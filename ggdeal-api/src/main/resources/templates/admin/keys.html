@@ -7,345 +7,251 @@
 <body>
 <script th:src="@{/assets/static/js/initTheme.js}"></script>
 <div id="app">
-  <div id="main" class="layout-horizontal">
-    <!-- Header -->
-    <header th:replace="fragment/navbar"></header>
+    <div id="main" class="layout-horizontal">
 
-    <div class="content-wrapper container">
-      <div class="page-heading">
-        <div class="d-flex justify-content-between">
-          <h3>Gestión de Réplicas</h3>
-          <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addKeysModal">
-            <i class="bi bi-plus"></i> Nuevo Lote de Réplicas
-          </a>
+        <header th:replace="fragment/navbar"></header>
+
+        <div class="content-wrapper container">
+            <div class="page-heading">
+                <div class="d-flex justify-content-between">
+                    <h3>Gestión de Réplicas</h3>
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addKeysModal">
+                        <i class="bi bi-plus"></i> Nuevo Lote de Réplicas
+                    </a>
+                </div>
+            </div>
+            <div class="page-content">
+                <section class="row">
+                    <div class="col-12 col-lg-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4>Lista de Réplicas</h4>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-sm btn-outline-primary active" id="filter-all-keys">Todas</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" id="filter-available-keys">Disponibles</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" id="filter-sold-keys">Vendidas</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped" id="keysTable">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Clave de Activación</th>
+                                            <th>¿Vendida?</th>
+                                            <th>Juego</th>
+                                            <th>Edición</th>
+                                            <th>Plataforma</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="replica : ${replicas}">
+                                            <td th:text="${replica.id}">1</td>
+                                            <td th:text="${replica.activation_key}">XXXX-XXXX-XXXX-XXXX</td>
+                                            <td>
+                                                <span th:if="${replica.is_sold}" class="badge bg-danger">Sí</span>
+                                                <span th:unless="${replica.is_sold}" class="badge bg-success">No</span>
+                                            </td>
+                                            <td th:text="${replica.game != null ? replica.game.name : ''}">Nombre del juego</td>
+                                            <td th:text="${replica.edition != null ? replica.edition.name : ''}">Nombre de edición</td>
+                                            <td th:text="${replica.plataform != null ? replica.plataform.name : ''}">Nombre de plataforma</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" th:data-bs-target="'#viewKeyModal-' + ${replica.id}"><i class="bi bi-eye"></i> Ver Detalles</a></li>
+                                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" th:data-bs-target="'#editKeyModal-' + ${replica.id}"><i class="bi bi-pencil"></i> Editar</a></li>
+                                                        <li><hr class="dropdown-divider"></li>
+                                                        <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" th:data-bs-target="'#deleteKeyModal-' + ${replica.id}"><i class="bi bi-trash"></i> Eliminar</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Resumen de Inventario</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card border shadow-none mb-3">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar avatar-md">
+                                                        <div class="avatar-initial bg-primary rounded">
+                                                            <i class="bi bi-key-fill text-white"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <h5 class="mb-0">Total Réplicas</h5>
+                                                        <p class="mb-0 text-muted" th:text="${totalReplicas}">125</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="card border shadow-none mb-3">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar avatar-md">
+                                                        <div class="avatar-initial bg-success rounded">
+                                                            <i class="bi bi-check-circle-fill text-white"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <h5 class="mb-0">Disponibles</h5>
+                                                        <p class="mb-0 text-muted" th:text="${availableReplicas}">82</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="card border shadow-none mb-3">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar avatar-md">
+                                                        <div class="avatar-initial bg-danger rounded">
+                                                            <i class="bi bi-cart-check-fill text-white"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <h5 class="mb-0">Vendidas</h5>
+                                                        <p class="mb-0 text-muted" th:text="${soldReplicas}">43</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
-      </div>
-      <div class="page-content">
-        <section class="row">
-          <div class="col-12 col-lg-9">
-            <div class="card">
-              <div class="card-header">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h4>Lista de Réplicas</h4>
-                  <div class="btn-group" role="group">
-                    <button id="filter-all-keys" type="button" class="btn btn-outline-primary active">Todas</button>
-                    <button id="filter-available-keys" type="button" class="btn btn-outline-primary">Disponibles</button>
-                    <button id="filter-sold-keys" type="button" class="btn btn-outline-primary">Vendidas</button>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-striped" id="keysTable">
-                    <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Clave</th>
-                      <th>Vendida</th>
-                      <th>Juego ID</th>
-                      <th>Edición ID</th>
-                      <th>Plataforma ID</th>
-                      <th>Acciones</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- Datos cargados dinámicamente por DataTable -->
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-lg-3">
-            <div class="card">
-              <div class="card-header">
-                <h4>Resumen de Inventario</h4>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="d-flex justify-content-between mb-2">
-                      <h6 class="mb-0">Total Réplicas</h6>
-                      <h6 class="mb-0 text-muted" th:text="${totalKeys != null ? totalKeys : '0'}">0</h6>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="d-flex justify-content-between mb-2">
-                      <h6 class="mb-0">Disponibles</h6>
-                      <h6 class="mb-0 text-muted" th:text="${availableKeys != null ? availableKeys : '0'}">0</h6>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="d-flex justify-content-between mb-2">
-                      <h6 class="mb-0">Vendidas</h6>
-                      <h6 class="mb-0 text-muted" th:text="${soldKeys != null ? soldKeys : '0'}">0</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-header">
-                <h4>Top Juegos</h4>
-              </div>
-              <div class="card-body">
-                <div th:if="${topGames != null}" th:each="game, stat : ${topGames}">
-                  <div class="d-flex justify-content-between mb-3">
-                    <span th:text="${game.title}">Nombre del juego</span>
-                    <span class="text-muted" th:text="${game.keyCount + ' claves'}">0 claves</span>
-                  </div>
-                  <div class="progress mb-4" style="height: 8px">
-                    <div th:class="'progress-bar ' + ${stat.index == 0 ? 'bg-primary' : stat.index == 1 ? 'bg-info' : stat.index == 2 ? 'bg-success' : stat.index == 3 ? 'bg-warning' : 'bg-danger'}"
-                         role="progressbar"
-                         th:style="'width: ' + ${game.percentage} + '%'"
-                         th:attr="aria-valuenow=${game.keyCount}, aria-valuemin=0, aria-valuemax=${totalKeys}"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
 
-    <!-- Footer -->
-    <footer th:replace="fragment/footer"></footer>
-  </div>
+        <footer th:replace="fragment/footer"></footer>
+
+    </div>
 </div>
 
 <!-- Modales -->
-<!-- Modal Ver Réplica -->
-<div class="modal fade" id="viewKeyModal" tabindex="-1" aria-labelledby="viewKeyModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="viewKeyModalLabel">Detalles de la Réplica</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-4 text-center">
-          <h6 class="text-muted">Clave de Activación</h6>
-          <div class="p-3 bg-light rounded">
-            <h4 class="mb-0 font-monospace">XXXX-XXXX-XXXX-XXXX</h4>
-          </div>
+<!-- Modal Ver Réplica (repeat for each replica) -->
+<div th:each="replica : ${replicas}" th:id="'viewKeyModal-' + ${replica.id}" class="modal fade" tabindex="-1" aria-labelledby="viewKeyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewKeyModalLabel">Detalles de la Réplica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4 text-center">
+                    <h6 class="text-muted">Clave de Activación</h6>
+                    <div class="p-3 bg-light rounded">
+                        <h4 class="mb-0 font-monospace" th:text="${replica.activation_key}">XXXX-XXXX-XXXX-XXXX</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-muted">Juego</h6>
+                        <p class="mb-0" th:text="${replica.game != null ? replica.game.name : '-'}">The Witcher 3: Wild Hunt</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-muted">Edición</h6>
+                        <p class="mb-0" th:text="${replica.edition != null ? replica.edition.name : '-'}">Estándar</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-muted">Plataforma</h6>
+                        <p class="mb-0" th:text="${replica.plataform != null ? replica.plataform.name : '-'}">PC</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-muted">Estado</h6>
+                        <p class="mb-0">
+                            <span th:if="${replica.is_sold}" class="badge bg-danger">Vendida</span>
+                            <span th:unless="${replica.is_sold}" class="badge bg-success">Disponible</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" th:data-bs-target="'#editKeyModal-' + ${replica.id}" data-bs-toggle="modal">Editar</button>
+            </div>
         </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <h6 class="text-muted">Juego</h6>
-            <p class="mb-0">The Witcher 3: Wild Hunt</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h6 class="text-muted">Edición</h6>
-            <p class="mb-0">Estándar</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h6 class="text-muted">Plataforma</h6>
-            <p class="mb-0">PC</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h6 class="text-muted">Estado</h6>
-            <p class="mb-0"><span class="badge bg-success">Disponible</span></p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h6 class="text-muted">Fecha de Creación</h6>
-            <p class="mb-0">15/03/2025</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <h6 class="text-muted">Fecha de Venta</h6>
-            <p class="mb-0">-</p>
-          </div>
-          <div class="col-12">
-            <h6 class="text-muted">Notas</h6>
-            <p class="mb-0">Clave generada para la promoción de primavera.</p>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#editKeyModal">Editar</button>
-      </div>
     </div>
-  </div>
-</div>
-
-<!-- Modal Editar Réplica -->
-<div class="modal fade" id="editKeyModal" tabindex="-1" aria-labelledby="editKeyModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editKeyModalLabel">Editar Réplica</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <input type="hidden" id="editKeyId" name="id" value="1">
-          <div class="mb-3">
-            <label for="editKeyActivationKey" class="form-label">Clave de Activación</label>
-            <input type="text" class="form-control font-monospace" id="editKeyActivationKey" name="activation_key">
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="editKeyIdGames" class="form-label">ID Juego</label>
-              <select class="form-select" id="editKeyIdGames" name="id_games">
-                <option value="" disabled>Seleccionar juego</option>
-              </select>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="editKeyIdEdition" class="form-label">ID Edición</label>
-              <select class="form-select" id="editKeyIdEdition" name="id_edition">
-                <option value="" disabled>Seleccionar edición</option>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="editKeyIdPlatform" class="form-label">ID Plataforma</label>
-              <select class="form-select" id="editKeyIdPlatform" name="id_platform">
-                <option value="" disabled>Seleccionar plataforma</option>
-              </select>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="editKeyIsSold" class="form-label">¿Vendida?</label>
-              <select class="form-select" id="editKeyIsSold" name="is_sold">
-                <option value="false">No</option>
-                <option value="true">Sí</option>
-              </select>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary">Guardar Cambios</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Eliminar Réplica -->
-<div class="modal fade" id="deleteKeyModal" tabindex="-1" aria-labelledby="deleteKeyModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteKeyModalLabel">Eliminar Réplica</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="text-center mb-4">
-          <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
-          <h4 class="mt-3">¿Estás seguro?</h4>
-          <p>¿Realmente deseas eliminar la réplica <strong>XXXX-XXXX-XXXX-XXXX</strong>? Esta acción no se puede deshacer.</p>
-        </div>
-        <div class="alert alert-warning">
-          <i class="bi bi-exclamation-circle"></i> Esta acción eliminará permanentemente la clave de activación del sistema. Si la clave está vendida, considera mantenerla en el sistema para fines de registro.
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger">Eliminar Réplica</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Modal Añadir Lote de Réplicas -->
 <div class="modal fade" id="addKeysModal" tabindex="-1" aria-labelledby="addKeysModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addKeysModalLabel">Añadir Lote de Réplicas</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="row mb-3">
-            <div class="col-md-6 mb-3 mb-md-0">
-              <label for="batchGame" class="form-label">ID Juego</label>
-              <select class="form-select" id="batchGame" name="id_games">
-                <option value="" selected disabled>Seleccionar juego</option>
-              </select>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addKeysModalLabel">Añadir Lote de Réplicas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="col-md-6">
-              <label for="batchEdition" class="form-label">ID Edición</label>
-              <select class="form-select" id="batchEdition" name="id_edition">
-                <option value="" selected disabled>Seleccionar edición</option>
-              </select>
+            <div class="modal-body">
+                <form th:action="@{/api/admin/keys/batch}" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="batchGame" class="form-label">Juego</label>
+                            <select class="form-select" id="batchGame" name="gameId" required>
+                                <option value="" selected disabled>Seleccionar juego</option>
+                                <option th:each="game : ${games}" th:value="${game.id}" th:text="${game.name}">The Witcher 3: Wild Hunt</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="batchEdition" class="form-label">Edición</label>
+                            <select class="form-select" id="batchEdition" name="editionId" required>
+                                <option value="" selected disabled>Seleccionar edición</option>
+                                <option th:each="edition : ${editions}" th:value="${edition.id}" th:text="${edition.name}">Estándar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="batchPlatform" class="form-label">Plataforma</label>
+                            <select class="form-select" id="batchPlatform" name="platformId" required>
+                                <option value="" selected disabled>Seleccionar plataforma</option>
+                                <option th:each="platform : ${platforms}" th:value="${platform.id}" th:text="${platform.name}">PC</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="batchIsSold" class="form-label">¿Vendidas?</label>
+                            <select class="form-select" id="batchIsSold" name="isSold">
+                                <option value="false" selected>No</option>
+                                <option value="true">Sí</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Resto del formulario... -->
+
+                </form>
             </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-6 mb-3 mb-md-0">
-              <label for="batchPlatform" class="form-label">ID Plataforma</label>
-              <select class="form-select" id="batchPlatform" name="id_platform">
-                <option value="" selected disabled>Seleccionar plataforma</option>
-              </select>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="submitBatchForm">Crear Lote</button>
             </div>
-            <div class="col-md-6">
-              <label for="batchIsSold" class="form-label">¿Vendidas?</label>
-              <select class="form-select" id="batchIsSold" name="is_sold">
-                <option value="false" selected>No</option>
-                <option value="true">Sí</option>
-              </select>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-12">
-              <label for="batchQuantity" class="form-label">Cantidad de Réplicas</label>
-              <input type="number" min="1" class="form-control" id="batchQuantity" value="10">
-            </div>
-          </div>
-          <div class="card mb-3">
-            <div class="card-header bg-light">
-              <h6 class="mb-0">Claves de Activación</h6>
-            </div>
-            <div class="card-body">
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="keysInputMethod" id="generateKeys" value="generate" checked>
-                <label class="form-check-label" for="generateKeys">
-                  Generar claves automáticamente
-                </label>
-              </div>
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="keysInputMethod" id="importKeys" value="import">
-                <label class="form-check-label" for="importKeys">
-                  Importar claves manualmente
-                </label>
-              </div>
-              <div id="generateKeysOptions" class="mb-3">
-                <div class="row">
-                  <div class="col-md-6 mb-3 mb-md-0">
-                    <label for="keyFormat" class="form-label">Formato de clave</label>
-                    <input type="text" class="form-control font-monospace" id="keyFormat" value="xxxx-xxxx-xxxx-xxxx">
-                    <div class="form-text">Use 'x' para caracteres aleatorios</div>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="keyPrefix" class="form-label">Prefijo (opcional)</label>
-                    <input type="text" class="form-control font-monospace" id="keyPrefix" placeholder="EJ: GGD-">
-                  </div>
-                </div>
-              </div>
-              <div id="importKeysOptions" class="d-none">
-                <label for="keysTextarea" class="form-label">Ingresa una clave por línea</label>
-                <textarea class="form-control font-monospace" id="keysTextarea" name="activation_key" rows="6" placeholder="XXXX-XXXX-XXXX-XXXX
-YYYY-YYYY-YYYY-YYYY
-ZZZZ-ZZZZ-ZZZZ-ZZZZ"></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="batchNotes" class="form-label">Notas</label>
-            <textarea class="form-control" id="batchNotes" rows="3" placeholder="Ingresa notas adicionales sobre este lote..."></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary">Crear Lote</button>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- Scripts -->
+<!-- Incluir scripts JS -->
 <script th:src="@{/assets/static/js/components/dark.js}"></script>
 <script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
 <script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
@@ -353,553 +259,40 @@ ZZZZ-ZZZZ-ZZZZ-ZZZZ"></textarea>
 <script th:src="@{/assets/extensions/jquery/jquery.min.js}"></script>
 <script th:src="@{/assets/extensions/datatables.net/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js}"></script>
-<script th:src="@{/assets/extensions/toastify-js/src/toastify.js}"></script>
-<script th:src="@{/assets/extensions/flatpickr/flatpickr.min.js}"></script>
-<script th:src="@{/assets/extensions/flatpickr/l10n/es.js}"></script>
 
 <script>
-  // API para interactuar con el backend
-  const keyApi = {
-      getAll: function() {
-          return fetch('/api/admin/keys')
-              .then(res => res.json());
-      },
-      getById: function(id) {
-          return fetch(`/api/admin/keys/${id}`)
-              .then(res => res.json());
-      },
-      create: function(keyData) {
-          return fetch('/api/admin/keys', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(keyData)
-          }).then(res => res.json());
-      },
-      createBatch: function(batchData) {
-          return fetch('/api/admin/keys/batch', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(batchData)
-          }).then(res => res.json());
-      },
-      update: function(id, keyData) {
-          return fetch(`/api/admin/keys/${id}`, {
-              method: 'PUT',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(keyData)
-          }).then(res => res.json());
-      },
-      delete: function(id) {
-          return fetch(`/api/admin/keys/${id}`, {
-              method: 'DELETE'
-          });
-      }
-  };
+    $(document).ready(function() {
+        // Inicializar DataTable con opciones en español
+        var table = $('#keysTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+            }
+        });
 
-  // API para cargar datos relacionados
-  const relatedDataApi = {
-      getGames: function() {
-          return fetch('/api/admin/games')
-              .then(res => res.json());
-      },
-      getEditions: function() {
-          return fetch('/api/admin/editions')
-              .then(res => res.json());
-      },
-      getPlatforms: function() {
-          return fetch('/api/admin/platforms')
-              .then(res => res.json());
-      }
-  };
+        // Funcionalidad de filtrado
+        $('#filter-all-keys').click(function() {
+            table.column(2).search('').draw();
+            $('.btn-outline-primary').removeClass('active');
+            $(this).addClass('active');
+        });
 
-  // Cargar datos iniciales
-  document.addEventListener('DOMContentLoaded', function() {
-      // Inicializar tabla con DataTable
-      const keysTable = $('#keysTable').DataTable({
-          "language": {
-              "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
-          },
-          "ajax": {
-              "url": "/api/admin/keys",
-              "dataSrc": "",
-              "error": function(xhr, error, thrown) {
-                  console.error('Error al cargar datos de réplicas:', error);
-                  showToast('Error al cargar los datos de réplicas', 'error');
-              }
-          },
-          "columns": [
-              { "data": "id" },
-              { "data": "activationKey" },
-              {
-                  "data": "isSold",
-                  "render": function(data) {
-                      return data ?
-                          '<span class="badge bg-danger">Sí</span>' :
-                          '<span class="badge bg-success">No</span>';
-                  }
-              },
-              { "data": "gameId" },
-              { "data": "editionId" },
-              { "data": "platformId" },
-              {
-                  "data": null,
-                  "render": function(data) {
-                      return `
-                          <div class="dropdown">
-                              <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                  <i class="bi bi-three-dots-vertical"></i>
-                              </button>
-                              <ul class="dropdown-menu">
-                                  <li><a class="dropdown-item view-key" href="#" data-id="${data.id}" data-bs-toggle="modal" data-bs-target="#viewKeyModal"><i class="bi bi-eye me-2"></i> Ver detalles</a></li>
-                                  <li><a class="dropdown-item edit-key" href="#" data-id="${data.id}" data-bs-toggle="modal" data-bs-target="#editKeyModal"><i class="bi bi-pencil me-2"></i> Editar</a></li>
-                                  <li><hr class="dropdown-divider"></li>
-                                  <li><a class="dropdown-item text-danger delete-key" href="#" data-id="${data.id}" data-key="${data.activationKey}" data-bs-toggle="modal" data-bs-target="#deleteKeyModal"><i class="bi bi-trash me-2"></i> Eliminar</a></li>
-                              </ul>
-                          </div>
-                      `;
-                  }
-              }
-          ]
-      });
+        $('#filter-available-keys').click(function() {
+            table.column(2).search('No').draw();
+            $('.btn-outline-primary').removeClass('active');
+            $(this).addClass('active');
+        });
 
-      // Cargar datos para los selectores de juegos, ediciones y plataformas
-      loadSelectOptions();
+        $('#filter-sold-keys').click(function() {
+            table.column(2).search('Sí').draw();
+            $('.btn-outline-primary').removeClass('active');
+            $(this).addClass('active');
+        });
 
-      // Actualizar los contadores del resumen
-      updateKeySummary();
-
-      // Configurar filtros
-      setupFilters(keysTable);
-
-      // Configurar los métodos de entrada de claves
-      setupKeyInputMethods();
-
-      // Configurar eventos para los modales
-      setupModalEvents();
-  });
-
-  // Función para cargar opciones en los selectores
-  function loadSelectOptions() {
-      // Cargar juegos
-      relatedDataApi.getGames()
-          .then(games => {
-              const gameOptions = games.map(game =>
-                  `<option value="${game.id}">${game.id} - ${game.title}</option>`
-              ).join('');
-
-              // Insertar opciones en todos los selectores de juegos
-              const gameSelectors = ['batchGame', 'editKeyIdGames'];
-              gameSelectors.forEach(selector => {
-                  const element = document.getElementById(selector);
-                  if (element) {
-                      element.innerHTML = `<option value="" disabled>Seleccionar juego</option>${gameOptions}`;
-                  }
-              });
-          })
-          .catch(error => {
-              console.error('Error al cargar juegos:', error);
-              showToast('Error al cargar la lista de juegos', 'error');
-          });
-
-      // Cargar ediciones
-      relatedDataApi.getEditions()
-          .then(editions => {
-              const editionOptions = editions.map(edition =>
-                  `<option value="${edition.id}">${edition.id} - ${edition.name}</option>`
-              ).join('');
-
-              // Insertar opciones en todos los selectores de ediciones
-              const editionSelectors = ['batchEdition', 'editKeyIdEdition'];
-              editionSelectors.forEach(selector => {
-                  const element = document.getElementById(selector);
-                  if (element) {
-                      element.innerHTML = `<option value="" disabled>Seleccionar edición</option>${editionOptions}`;
-                  }
-              });
-          })
-          .catch(error => {
-              console.error('Error al cargar ediciones:', error);
-              showToast('Error al cargar la lista de ediciones', 'error');
-          });
-
-      // Cargar plataformas
-      relatedDataApi.getPlatforms()
-          .then(platforms => {
-              const platformOptions = platforms.map(platform =>
-                  `<option value="${platform.id}">${platform.id} - ${platform.name}</option>`
-              ).join('');
-
-              // Insertar opciones en todos los selectores de plataformas
-              const platformSelectors = ['batchPlatform', 'editKeyIdPlatform'];
-              platformSelectors.forEach(selector => {
-                  const element = document.getElementById(selector);
-                  if (element) {
-                      element.innerHTML = `<option value="" disabled>Seleccionar plataforma</option>${platformOptions}`;
-                  }
-              });
-          })
-          .catch(error => {
-              console.error('Error al cargar plataformas:', error);
-              showToast('Error al cargar la lista de plataformas', 'error');
-          });
-  }
-
-  // Función para actualizar el resumen de claves
-  function updateKeySummary() {
-      keyApi.getAll()
-          .then(keys => {
-              const totalKeys = keys.length;
-              const availableKeys = keys.filter(key => !key.isSold).length;
-              const soldKeys = keys.filter(key => key.isSold).length;
-
-              // Actualizar los contadores en el panel de resumen
-              document.querySelector('.card .mb-0.text-muted:nth-of-type(1)').textContent = totalKeys;
-              document.querySelector('.card .mb-0.text-muted:nth-of-type(2)').textContent = availableKeys;
-              document.querySelector('.card .mb-0.text-muted:nth-of-type(3)').textContent = soldKeys;
-
-              // Actualizar el resumen de juegos top (simplificado)
-              updateTopGamesSummary(keys);
-          })
-          .catch(error => {
-              console.error('Error al actualizar el resumen de claves:', error);
-          });
-  }
-
-  // Función para actualizar el resumen de juegos top
-  function updateTopGamesSummary(keys) {
-      // Agrupar claves por juego
-      const gameCount = {};
-
-      // Simulación simplificada - en una implementación real, esto requeriría datos adicionales
-      keys.forEach(key => {
-          if (!gameCount[key.gameId]) {
-              gameCount[key.gameId] = 0;
-          }
-          gameCount[key.gameId]++;
-      });
-
-      // En una implementación completa, aquí actualizaríamos las barras de progreso de los juegos top
-  }
-
-  // Configurar filtros de tabla
-  function setupFilters(table) {
-      document.getElementById('filter-all-keys').addEventListener('click', function() {
-          table.column(2).search('').draw();
-          document.querySelectorAll('#keysTable_filter input')[0].value = '';
-          $('.btn-outline-primary').removeClass('active');
-          $(this).addClass('active');
-      });
-
-      document.getElementById('filter-available-keys').addEventListener('click', function() {
-          table.column(2).search('No').draw();
-          document.querySelectorAll('#keysTable_filter input')[0].value = '';
-          $('.btn-outline-primary').removeClass('active');
-          $(this).addClass('active');
-      });
-
-      document.getElementById('filter-sold-keys').addEventListener('click', function() {
-          table.column(2).search('Sí').draw();
-          document.querySelectorAll('#keysTable_filter input')[0].value = '';
-          $('.btn-outline-primary').removeClass('active');
-          $(this).addClass('active');
-      });
-  }
-
-  // Configurar métodos de entrada de claves
-  function setupKeyInputMethods() {
-      const radioButtons = document.querySelectorAll('input[name="keysInputMethod"]');
-      radioButtons.forEach(button => {
-          button.addEventListener('change', function() {
-              if (this.value === 'generate') {
-                  document.getElementById('generateKeysOptions').classList.remove('d-none');
-                  document.getElementById('importKeysOptions').classList.add('d-none');
-              } else {
-                  document.getElementById('generateKeysOptions').classList.add('d-none');
-                  document.getElementById('importKeysOptions').classList.remove('d-none');
-              }
-          });
-      });
-  }
-
-  // Configurar eventos de los modales
-  function setupModalEvents() {
-      // Ver detalles de clave
-      document.addEventListener('click', function(e) {
-          if (e.target && e.target.closest('.view-key')) {
-              const id = e.target.closest('.view-key').getAttribute('data-id');
-              loadKeyDetails(id);
-          }
-      });
-
-      // Cargar formulario de edición
-      document.addEventListener('click', function(e) {
-          if (e.target && e.target.closest('.edit-key')) {
-              const id = e.target.closest('.edit-key').getAttribute('data-id');
-              loadKeyForEdit(id);
-          }
-      });
-
-      // Preparar modal para eliminación
-      document.addEventListener('click', function(e) {
-          if (e.target && e.target.closest('.delete-key')) {
-              const button = e.target.closest('.delete-key');
-              const id = button.getAttribute('data-id');
-              const key = button.getAttribute('data-key');
-
-              document.getElementById('deleteKeyModal').setAttribute('data-key-id', id);
-              document.querySelector('#deleteKeyModal p strong').textContent = key;
-          }
-      });
-
-      // Guardar cambios en clave
-      document.querySelector('#editKeyModal .btn-primary').addEventListener('click', function() {
-          saveKeyChanges();
-      });
-
-      // Eliminar clave
-      document.querySelector('#deleteKeyModal .btn-danger').addEventListener('click', function() {
-          deleteKey();
-      });
-
-      // Crear lote de claves
-      document.querySelector('#addKeysModal .btn-primary').addEventListener('click', function() {
-          createKeyBatch();
-      });
-  }
-
-  // Cargar detalles de una clave
-  function loadKeyDetails(id) {
-      keyApi.getById(id)
-          .then(key => {
-              const modal = document.getElementById('viewKeyModal');
-
-              // Rellenar datos en el modal
-              modal.querySelector('.font-monospace').textContent = key.activationKey;
-
-              // Obtener datos adicionales (juego, edición, plataforma)
-              Promise.all([
-                  relatedDataApi.getGames().then(games => games.find(g => g.id == key.gameId)),
-                  relatedDataApi.getEditions().then(editions => editions.find(e => e.id == key.editionId)),
-                  relatedDataApi.getPlatforms().then(platforms => platforms.find(p => p.id == key.platformId))
-              ])
-              .then(([game, edition, platform]) => {
-                  // Rellenar datos relacionados
-                  modal.querySelectorAll('p')[0].textContent = game ? game.title : 'Desconocido';
-                  modal.querySelectorAll('p')[1].textContent = edition ? edition.name : 'Desconocido';
-                  modal.querySelectorAll('p')[2].textContent = platform ? platform.name : 'Desconocido';
-
-                  // Estado de la clave
-                  const badgeClass = key.isSold ? 'bg-danger' : 'bg-success';
-                  const badgeText = key.isSold ? 'Vendida' : 'Disponible';
-                  modal.querySelectorAll('p')[3].innerHTML = `<span class="badge ${badgeClass}">${badgeText}</span>`;
-
-                  // Fechas
-                  modal.querySelectorAll('p')[4].textContent = formatDate(key.createdAt || new Date().toISOString());
-                  modal.querySelectorAll('p')[5].textContent = key.soldAt ? formatDate(key.soldAt) : '-';
-
-                  // Notas
-                  modal.querySelectorAll('p')[6].textContent = key.notes || '-';
-              })
-              .catch(error => {
-                  console.error('Error al cargar datos relacionados:', error);
-              });
-          })
-          .catch(error => {
-              console.error('Error al cargar detalles de la clave:', error);
-              showToast('Error al cargar los detalles de la clave', 'error');
-          });
-  }
-
-  // Cargar clave para edición
-  function loadKeyForEdit(id) {
-      keyApi.getById(id)
-          .then(key => {
-              // Rellenar el formulario de edición
-              document.getElementById('editKeyId').value = key.id;
-              document.getElementById('editKeyActivationKey').value = key.activationKey;
-
-              // Seleccionar juego, edición y plataforma
-              selectOption('editKeyIdGames', key.gameId);
-              selectOption('editKeyIdEdition', key.editionId);
-              selectOption('editKeyIdPlatform', key.platformId);
-
-              // Estado de venta
-              selectOption('editKeyIsSold', key.isSold ? 'true' : 'false');
-          })
-          .catch(error => {
-              console.error('Error al cargar clave para editar:', error);
-              showToast('Error al cargar los datos de la clave', 'error');
-          });
-  }
-
-  // Guardar cambios en una clave
-  function saveKeyChanges() {
-      const id = document.getElementById('editKeyId').value;
-
-      const keyData = {
-          id: id,
-          activationKey: document.getElementById('editKeyActivationKey').value,
-          gameId: document.getElementById('editKeyIdGames').value,
-          editionId: document.getElementById('editKeyIdEdition').value,
-          platformId: document.getElementById('editKeyIdPlatform').value,
-          isSold: document.getElementById('editKeyIsSold').value === 'true'
-      };
-
-      keyApi.update(id, keyData)
-          .then(updatedKey => {
-              bootstrap.Modal.getInstance(document.getElementById('editKeyModal')).hide();
-              $('#keysTable').DataTable().ajax.reload();
-              updateKeySummary();
-              showToast('Réplica actualizada correctamente', 'success');
-          })
-          .catch(error => {
-              console.error('Error al actualizar réplica:', error);
-              showToast('Error al actualizar la réplica', 'error');
-          });
-  }
-
-  // Eliminar una clave
-  function deleteKey() {
-      const id = document.getElementById('deleteKeyModal').getAttribute('data-key-id');
-
-      keyApi.delete(id)
-          .then(() => {
-              bootstrap.Modal.getInstance(document.getElementById('deleteKeyModal')).hide();
-              $('#keysTable').DataTable().ajax.reload();
-              updateKeySummary();
-              showToast('Réplica eliminada correctamente', 'success');
-          })
-          .catch(error => {
-              console.error('Error al eliminar réplica:', error);
-              showToast('Error al eliminar la réplica', 'error');
-          });
-  }
-
-  // Crear lote de claves
-  function createKeyBatch() {
-      const gameId = document.getElementById('batchGame').value;
-      const editionId = document.getElementById('batchEdition').value;
-      const platformId = document.getElementById('batchPlatform').value;
-      const isSold = document.getElementById('batchIsSold').value === 'true';
-      const quantity = document.getElementById('batchQuantity').value;
-      const notes = document.getElementById('batchNotes').value;
-
-      // Validar campos requeridos
-      if (!gameId || !editionId || !platformId) {
-          showToast('Debes seleccionar juego, edición y plataforma', 'error');
-          return;
-      }
-
-      let keys = [];
-      const inputMethod = document.querySelector('input[name="keysInputMethod"]:checked').value;
-
-      if (inputMethod === 'generate') {
-          // Generar claves automáticamente
-          const format = document.getElementById('keyFormat').value;
-          const prefix = document.getElementById('keyPrefix').value || '';
-
-          for (let i = 0; i < quantity; i++) {
-              keys.push(prefix + generateKey(format));
-          }
-      } else {
-          // Importar claves manualmente
-          keys = document.getElementById('keysTextarea').value
-              .split('\n')
-              .map(key => key.trim())
-              .filter(key => key.length > 0);
-
-          if (keys.length === 0) {
-              showToast('No has ingresado ninguna clave', 'error');
-              return;
-          }
-      }
-
-      // Crear objeto con datos del lote
-      const batchData = {
-          gameId,
-          editionId,
-          platformId,
-          isSold,
-          keys,
-          notes
-      };
-
-      // Enviar al servidor
-      keyApi.createBatch(batchData)
-          .then(response => {
-              bootstrap.Modal.getInstance(document.getElementById('addKeysModal')).hide();
-              $('#keysTable').DataTable().ajax.reload();
-              updateKeySummary();
-              showToast(`${keys.length} réplica(s) creadas correctamente`, 'success');
-
-              // Limpiar formulario
-              document.getElementById('batchGame').selectedIndex = 0;
-              document.getElementById('batchEdition').selectedIndex = 0;
-              document.getElementById('batchPlatform').selectedIndex = 0;
-              document.getElementById('batchIsSold').selectedIndex = 0;
-              document.getElementById('batchQuantity').value = 10;
-              document.getElementById('batchNotes').value = '';
-              document.getElementById('keysTextarea').value = '';
-              document.getElementById('keyPrefix').value = '';
-          })
-          .catch(error => {
-              console.error('Error al crear lote de réplicas:', error);
-              showToast('Error al crear el lote de réplicas', 'error');
-          });
-  }
-
-  // Función para generar una clave según formato
-  function generateKey(format) {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let key = format;
-
-      // Reemplazar cada 'x' en el formato por un caracter aleatorio
-      for (let i = 0; i < key.length; i++) {
-          if (key[i] === 'x') {
-              const randomChar = chars.charAt(Math.floor(Math.random() * chars.length));
-              key = key.substring(0, i) + randomChar + key.substring(i + 1);
-          }
-      }
-
-      return key;
-  }
-
-  // Función para seleccionar una opción en un select
-  function selectOption(selectId, value) {
-      const select = document.getElementById(selectId);
-      for(let i = 0; i < select.options.length; i++) {
-          if(select.options[i].value == value) {
-              select.options[i].selected = true;
-              break;
-          }
-      }
-  }
-
-  // Función para formatear fechas
-  function formatDate(dateString) {
-      if (!dateString) return '-';
-      const date = new Date(dateString);
-      return date.toLocaleDateString('es-ES');
-  }
-
-  // Función para mostrar toast
-  function showToast(message, type) {
-      Toastify({
-          text: message,
-          duration: 3000,
-          close: true,
-          gravity: "top",
-          position: "right",
-          backgroundColor: type === 'success' ? "#4fbe87" : "#ff5b5b",
-      }).showToast();
-  }
+        // Envío de formulario mediante AJAX
+        $('#submitBatchForm').click(function() {
+            // Código para envío de formulario por AJAX
+        });
+    });
 </script>
 </body>
-
 </html>
