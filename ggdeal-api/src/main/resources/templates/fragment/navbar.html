@@ -9,20 +9,20 @@
           <a href="#" id="topbarUserDropdown"
              class="user-dropdown d-flex align-items-center dropend dropdown-toggle "
              data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="avatar avatar-md2">
-              <img th:src="@{'/uploads/avatar/' + ${#authentication.principal.avatarPath}}"
-                   th:if="${#authentication.principal.avatarPath != null}"
-                   alt="Avatar"
-                   class="avatar">
-              <img th:unless="${#authentication.principal.avatarPath != null}"
-                   th:src="@{/assets/compiled/jpg/1.jpg}"
-                   alt="Avatar por defecto"
-                   class="avatar">
-            </div>
-            <div class="text">
-              <h6 class="user-dropdown-name" sec:authentication="principal.username">Administrador</h6>
-              <p class="user-dropdown-status text-sm text-muted" sec:authentication="principal.role">Administrador</p>
-            </div>
+<!--            <div class="avatar avatar-md2">-->
+<!--              <img th:src="@{'/uploads/avatar/' + ${#authentication.principal.avatarPath}}"-->
+<!--                   th:if="${#authentication.principal.avatarPath != null}"-->
+<!--                   alt="Avatar"-->
+<!--                   class="avatar">-->
+<!--              <img th:unless="${#authentication.principal.avatarPath != null}"-->
+<!--                   th:src="@{/assets/compiled/jpg/1.jpg}"-->
+<!--                   alt="Avatar por defecto"-->
+<!--                   class="avatar">-->
+<!--            </div>-->
+<!--            <div class="text">-->
+<!--              <h6 class="user-dropdown-name" sec:authentication="principal.username">Administrador</h6>-->
+<!--              <p class="user-dropdown-status text-sm text-muted" sec:authentication="principal.role">Administrador</p>-->
+<!--            </div>-->
           </a>
           <ul class="dropdown-menu dropdown-menu-end shadow-lg"
               aria-labelledby="topbarUserDropdown">

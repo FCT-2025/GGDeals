@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragment/head :: head('Administración de Ventas')"></head>
+
+<body>
+<script th:src="@{/assets/static/js/initTheme.js}"></script>
+<div id="app">
+    <div id="main" class="layout-horizontal">
+
+        <header th:replace="fragment/navbar"></header>
+
+        <div class="content-wrapper container">
+            <div class="page-heading">
+                <div class="d-flex justify-content-between">
+                    <h3>Gestión de Ventas</h3>
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSaleModal">
+                        <i class="bi bi-plus"></i> Nueva Venta
+                    </a>
+                </div>
+            </div>
+            <!-- Lista de ventas -->
+            <section class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Lista de Ventas</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="salesTable">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Fecha</th>
+                                        <th>Importe</th>
+                                        <th>Usuario</th>
+                                        <th>Producto</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="sale : ${sales}">
+                                        <td th:text="${sale.id}">1</td>
+                                        <td th:text="${#temporals.format(sale.purchaseDate, 'dd/MM/yyyy HH:mm')}">
+                                            01/05/2023 14:30
+                                        </td>
+                                        <td th:text="${'€' + #numbers.formatDecimal(sale.amount, 1, 2)}">€59.99</td>
+                                        <td th:text="${sale.user != null ? 'ID: ' + sale.user.id + ' - ' + sale.user.username : 'N/A'}">
+                                            ID: 1 - Juan Pérez
+                                        </td>
+                                        <td th:text="${sale.replica != null && sale.replica.game != null ? sale.replica.game.title : 'N/A'}">
+                                            The Legend of Zelda
+                                        </td>
+                                        <td>
+                                          <span th:class="${'badge bg-' + (sale.status == 'completed' ? 'success' : (sale.status == 'processing' ? 'warning' : (sale.status == 'refunded' ? 'info' : 'danger')))}"
+                                                th:text="${sale.status == 'completed' ? 'Completada' :
+                                                         (sale.status == 'processing' ? 'En proceso' :
+                                                         (sale.status == 'refunded' ? 'Reembolsada' : 'Cancelada'))}">
+                                            Completada
+                                          </span>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm dropdown-toggle" type="button"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                           th:data-bs-target="'#viewSaleDetailsModal-' + ${sale.id}"
+                                                           th:data-id="${sale.id}"><i class="bi bi-eye"></i>
+                                                        Ver Detalles</a></li>
+                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                           data-bs-target="#editSaleModal-"
+                                                           th:data-bs-target="'#editSaleModal-' + ${sale.id}"
+                                                           th:data-id="${sale.id}"><i class="bi bi-pencil"></i>
+                                                        Editar</a></li>
+                                                    <li><a class="dropdown-item text-success" href="#"
+                                                           th:data-id="${sale.id}"><i class="bi bi-receipt"></i>
+                                                        Generar Factura</a></li>
+                                                    <li>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
+                                                    <li><a class="dropdown-item text-danger" href="#"
+                                                           data-bs-toggle="modal" data-bs-target="#deleteSaleModal"
+                                                           th:data-id="${sale.id}"><i class="bi bi-trash"></i>
+                                                        Cancelar Venta</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="page-content">
+                <!-- Sección Estadísticas de Ventas -->
+                <section class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Estadísticas de Ventas</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <!-- Total de ventas -->
+                                    <div class="col-6 col-lg-3 col-md-6">
+                                        <div class="card">
+                                            <div class="card-body px-4 py-4-5">
+                                                <div class="row">
+                                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                        <div class="stats-icon purple mb-2">
+                                                            <i class="iconly-boldShow"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                        <h6 class="text-muted font-semibold">Total Ventas</h6>
+                                                        <h6 class="font-extrabold mb-0"
+                                                            th:text="${statistics != null ? '€' + #numbers.formatDecimal(statistics.totalRevenue, 1, 2) : '€0.00'}">
+                                                            €0.00</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Número de transacciones -->
+                                    <div class="col-6 col-lg-3 col-md-6">
+                                        <div class="card">
+                                            <div class="card-body px-4 py-4-5">
+                                                <div class="row">
+                                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                        <div class="stats-icon blue mb-2">
+                                                            <i class="iconly-boldProfile"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                        <h6 class="text-muted font-semibold">Transacciones</h6>
+                                                        <h6 class="font-extrabold mb-0"
+                                                            th:text="${statistics != null ? statistics.totalSales : '0'}">
+                                                            0</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Venta Promedio -->
+                                    <div class="col-6 col-lg-3 col-md-6">
+                                        <div class="card">
+                                            <div class="card-body px-4 py-4-5">
+                                                <div class="row">
+                                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                        <div class="stats-icon green mb-2">
+                                                            <i class="iconly-boldAdd-User"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                        <h6 class="text-muted font-semibold">Venta Promedio</h6>
+                                                        <h6 class="font-extrabold mb-0"
+                                                            th:text="${statistics != null ? '€' + #numbers.formatDecimal(statistics.averageSale, 1, 2) : '€0.00'}">
+                                                            €0.00</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Réplicas disponibles -->
+                                    <div class="col-6 col-lg-3 col-md-6">
+                                        <div class="card">
+                                            <div class="card-body px-4 py-4-5">
+                                                <div class="row">
+                                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start">
+                                                        <div class="stats-icon red mb-2">
+                                                            <i class="iconly-boldBookmark"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                                        <h6 class="text-muted font-semibold">Réplicas disponibles</h6>
+                                                        <h6 class="font-extrabold mb-0"
+                                                            th:text="${statistics != null ? statistics.availableReplicas : '0'}">
+                                                            0</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Gráficos y filtros -->
+                                <div class="row">
+                                    <div class="col-12 col-xl-8">
+                                        <h5>Ventas por Mes</h5>
+                                        <div class="chart-container" style="position: relative; height:300px;">
+                                            <canvas id="salesChart"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-xl-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Filtros</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label for="sale-filter-status" class="form-label">Período</label>
+                                                    <select class="form-select" id="sale-filter-status">
+                                                        <option value="all" selected>Todos los períodos</option>
+                                                        <option value="today">Hoy</option>
+                                                        <option value="week">Esta semana</option>
+                                                        <option value="month">Este mes</option>
+                                                        <option value="year">Este año</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="sale-filter-user" class="form-label">Usuario</label>
+                                                    <select class="form-select" id="sale-filter-user">
+                                                        <option value="all" selected>Todos los usuarios</option>
+                                                        <option th:each="user : ${users}" th:value="${user.id}"
+                                                                th:text="${user.username}">Usuario
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer th:replace="fragment/footer"></footer>
+
+    </div>
+</div>
+
+<!-- Modal Añadir Venta -->
+<div class="modal fade" id="addSaleModal" tabindex="-1" aria-labelledby="addSaleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSaleModalLabel">Añadir Nueva Venta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addSaleForm">
+                    <div class="mb-3">
+                        <label for="addSaleDate" class="form-label">Fecha de Compra</label>
+                        <input type="text" class="form-control flatpickr-datetime" id="addSaleDate"
+                               placeholder="Selecciona fecha y hora">
+                    </div>
+                    <div class="mb-3">
+                        <label for="addSaleAmount" class="form-label">Importe</label>
+                        <div class="input-group">
+                            <span class="input-group-text">€</span>
+                            <input type="number" class="form-control" id="addSaleAmount" placeholder="0.00" step="0.01">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addSaleUserId" class="form-label">Usuario</label>
+                        <select class="form-select" id="addSaleUserId">
+                            <option value="" selected disabled>Selecciona un usuario</option>
+                            <option th:each="user : ${users}" th:value="${user.id}"
+                                    th:text="${user.id} + ' - ' + ${user.username}">1 - Juan Pérez
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addSaleReplicaId" class="form-label">Réplica</label>
+                        <select class="form-select" id="addSaleReplicaId">
+                            <option value="" selected disabled>Selecciona una réplica</option>
+                            <option th:each="replica : ${availableReplicas}" th:value="${replica.id}"
+                                    th:text="${replica.id} + ' - ' + ${replica.game != null ? replica.game.title : 'Sin título'}">
+                                1 - The Legend of Zelda
+                            </option>
+                        </select>
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> Al crear una venta, se registrará automáticamente y se
+                        actualizará el inventario.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="addSaleBtn">Añadir Venta</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modales de Editar Venta (uno por cada venta) -->
+<div th:each="sale : ${sales}" th:id="'editSaleModal-' + ${sale.id}" class="modal fade" tabindex="-1"
+     th:attr="aria-labelledby='editSaleModalLabel-' + ${sale.id}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" th:id="'editSaleModalLabel-' + ${sale.id}"
+                    th:text="'Editar Venta #' + ${sale.id}">Editar Venta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:id="'editSaleForm-' + ${sale.id}">
+                    <div class="mb-3">
+                        <label th:for="'editSaleId-' + ${sale.id}" class="form-label">ID</label>
+                        <input type="text" class="form-control" name="id" th:id="'editSaleId-' + ${sale.id}"
+                               th:value="${sale.id}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="'editSaleDate-' + ${sale.id}" class="form-label">Fecha de Compra</label>
+                        <input type="text" class="form-control flatpickr-datetime" name="purchaseDate"
+                               th:id="'editSaleDate-' + ${sale.id}"
+                               th:value="${#temporals.format(sale.purchaseDate, 'dd/MM/yyyy HH:mm:ss')}">
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="'editSaleAmount-' + ${sale.id}" class="form-label">Importe</label>
+                        <div class="input-group">
+                            <span class="input-group-text">€</span>
+                            <input type="number" class="form-control" name="amount"
+                                   th:id="'editSaleAmount-' + ${sale.id}"
+                                   th:value="${sale.amount}" step="0.01">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="'editSaleUserId-' + ${sale.id}" class="form-label">Usuario</label>
+                        <select class="form-select" name="userId" th:id="'editSaleUserId-' + ${sale.id}">
+                            <option th:each="user : ${users}" th:value="${user.id}"
+                                    th:selected="${sale.user != null && sale.user.id == user.id}"
+                                    th:text="${user.id} + ' - ' + ${user.username}">
+                                1 - Juan Pérez
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="'editSaleReplicaId-' + ${sale.id}" class="form-label">Réplica</label>
+                        <select class="form-select" name="replicaId" th:id="'editSaleReplicaId-' + ${sale.id}">
+                            <option th:each="replica : ${allReplicas}" th:value="${replica.id}"
+                                    th:selected="${sale.replica != null && sale.replica.id == replica.id}"
+                                    th:text="${replica.id} + ' - ' + ${replica.game != null ? replica.game.title : 'Sin título'}">
+                                1 - The Legend of Zelda
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="'editSaleStatus-' + ${sale.id}" class="form-label">Estado</label>
+                        <select class="form-select" name="status" th:id="'editSaleStatus-' + ${sale.id}">
+                            <option value="completed" th:selected="${sale.status == 'completed'}">Completada</option>
+                            <option value="processing" th:selected="${sale.status == 'processing'}">Procesando</option>
+                            <option value="refunded" th:selected="${sale.status == 'refunded'}">Reembolsada</option>
+                            <option value="cancelled" th:selected="${sale.status == 'cancelled'}">Cancelada</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-circle"></i> Cambiar detalles de la venta puede afectar a las
+                        estadísticas y reportes.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary update-sale-btn" th:data-id="${sale.id}">Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modales de Ver Detalles (uno por cada venta) -->
+<div th:each="sale : ${sales}" th:id="'viewSaleDetailsModal-' + ${sale.id}" class="modal fade" tabindex="-1"
+     th:attr="aria-labelledby='viewSaleDetailsModalLabel-' + ${sale.id}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" th:id="'viewSaleDetailsModalLabel-' + ${sale.id}"
+                    th:text="'Detalles de Venta #' + ${sale.id}">Detalles de Venta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Información de la Venta</h6>
+                        <table class="table table-borderless">
+                            <tr>
+                                <th>ID:</th>
+                                <td th:text="${sale.id}">1</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha:</th>
+                                <td th:text="${#temporals.format(sale.purchaseDate, 'dd/MM/yyyy HH:mm')}">01/05/2023
+                                    14:30
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Importe:</th>
+                                <td th:text="${'€' + #numbers.formatDecimal(sale.amount, 1, 2)}">€59.99</td>
+                            </tr>
+                            <tr>
+                                <th>Estado:</th>
+                                <td>
+                  <span th:class="${'badge bg-' + (sale.status == 'completed' ? 'success' : (sale.status == 'processing' ? 'warning' : (sale.status == 'refunded' ? 'info' : 'danger')))}"
+                        th:text="${sale.status == 'completed' ? 'Completada' :
+                                 (sale.status == 'processing' ? 'En proceso' :
+                                 (sale.status == 'refunded' ? 'Reembolsada' : 'Cancelada'))}">
+                    Completada
+                  </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Información del Cliente</h6>
+                        <table class="table table-borderless">
+                            <tr>
+                                <th>Usuario:</th>
+                                <td th:text="${sale.user != null ? sale.user.username : 'N/A'}">Juan Pérez</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td th:text="${sale.user != null ? sale.user.email : 'N/A'}">juan@ejemplo.com</td>
+                            </tr>
+                            <tr>
+                                <th>Teléfono:</th>
+                                <td th:text="${sale.user != null && sale.user.numberPhone != null ? sale.user.numberPhone : 'No disponible'}">
+                                    No disponible
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <h6>Productos Comprados</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>ID Réplica</th>
+                            <th>Plataforma</th>
+                            <th>Edición</th>
+                            <th>Precio</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+<!--                                <div class="d-flex align-items-center">-->
+<!--&lt;!&ndash;                                    <div class="avatar avatar-md me-3"&ndash;&gt;-->
+<!--&lt;!&ndash;                                         th:if="${sale.replica != null && sale.replica.game != null && sale.replica.game.coverImage != null}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <img th:src="@{'/uploads/games/' + ${sale.replica.game.coverImage}}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                             alt="Imagen del juego">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+<!--                                    <div>-->
+<!--                                        <p class="mb-0 font-bold"-->
+<!--                                           th:text="${sale.replica != null && sale.replica.game != null ? sale.replica.game.title : 'N/A'}">-->
+<!--                                            The Legend of Zelda</p>-->
+<!--                                        <small class="text-muted"-->
+<!--                                               th:text="${sale.replica != null && sale.replica.game != null ? sale.replica.game.genre : 'N/A'}">Aventura</small>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                                <p>Deberia de ir la imagen</p>
+                            </td>
+                            <td th:text="${sale.replica != null ? sale.replica.id : 'N/A'}">101</td>
+                            <td th:text="${sale.replica != null && sale.replica.platformModel != null ? sale.replica.platformModel.name : 'N/A'}">
+                                PC
+                            </td>
+                            <td th:text="${sale.replica != null && sale.replica.edition != null ? sale.replica.edition.name : 'N/A'}">
+                                Game of the Year
+                            </td>
+                            <td th:text="${'€' + #numbers.formatDecimal(sale.amount, 1, 2)}">€59.99</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th colspan="4" class="text-end">Total:</th>
+                            <th th:text="${'€' + #numbers.formatDecimal(sale.amount, 1, 2)}">€59.99</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <a href="#" class="btn btn-success" th:data-id="${sale.id}"><i class="bi bi-receipt"></i> Generar
+                    Factura</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar Venta (común para todas las ventas) -->
+<div class="modal fade" id="deleteSaleModal" tabindex="-1" aria-labelledby="deleteSaleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteSaleModalLabel">Eliminar Venta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteSaleForm">
+                    <input type="hidden" id="deleteSaleId" name="id">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                        <h4 class="mt-3">¿Estás seguro?</h4>
+                        <p>¿Realmente deseas eliminar la venta <strong id="deleteSaleName"></strong>? Esta acción no se
+                            puede deshacer.</p>
+                    </div>
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-circle"></i> La eliminación de una venta afectará a los informes
+                        financieros y estadísticas.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteSaleBtn">Eliminar Venta</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/assets/static/js/components/dark.js}"></script>
+<script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
+<script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script th:src="@{/assets/compiled/js/app.js}"></script>
+<script th:src="@{/assets/extensions/jquery/jquery.min.js}"></script>
+<script th:src="@{/assets/extensions/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js}"></script>
+<script th:src="@{/assets/extensions/flatpickr/flatpickr.min.js}"></script>
+<script th:src="@{/assets/extensions/toastify-js/src/toastify.js}"></script>
+<script th:src="@{/assets/extensions/chart.js/chart.umd.js}"></script>
+
+<script th:inline="javascript">
+    $(document).ready(function() {
+        // Inicializar DataTable
+        var table = $('#salesTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+            }
+        });
+
+        // Inicializar Flatpickr para selector de fecha y hora
+        flatpickr(".flatpickr-datetime", {
+            enableTime: true,
+            dateFormat: "d/m/Y H:i:S",
+            time_24hr: true,
+            locale: {
+                firstDayOfWeek: 1,
+                weekdays: {
+                    shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                    longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+                },
+                months: {
+                    shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+                }
+            }
+        });
+
+        // Generar gráfico de ventas por mes
+        if (document.getElementById('salesChart')) {
+            // Verificar que statistics existe antes de acceder a sus propiedades
+            var statistics = /*[[${statistics}]]*/ null;
+            var salesPerMonth = statistics && statistics.salesPerMonth ? statistics.salesPerMonth : [];
+
+            const labels = [];
+            const data = [];
+
+            if (salesPerMonth && salesPerMonth.length) {
+                for (let item of salesPerMonth) {
+                    labels.push(item.monthName);
+                    data.push(item.salesCount);
+                }
+            } else {
+                // Datos de ejemplo cuando no hay información
+                const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+                for (let i = 0; i < 12; i++) {
+                    labels.push(months[i]);
+                    data.push(0);
+                }
+            }
+
+            new Chart(document.getElementById('salesChart'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ventas por mes',
+                        data: data,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Filtros de periodo
+        $('#sale-filter-status').change(function() {
+            var value = $(this).val();
+            if (value === 'all') {
+                table.column(1).search('').draw();
+            } else {
+                // Aquí implementarías la lógica real de filtrado por periodo
+                console.log('Filtrando por periodo: ' + value);
+            }
+        });
+
+        // Filtros de usuario
+        $('#sale-filter-user').change(function() {
+            var value = $(this).val();
+
+            if (value === 'all') {
+                table.column(3).search('').draw();
+            } else {
+                table.column(3).search('ID: ' + value).draw();
+            }
+        });
+
+    // Añadir nueva venta
+$('#addSaleBtn').click(function() {
+    var amount = parseFloat($('#addSaleAmount').val());
+    var dateStr = $('#addSaleDate').val();
+
+    var formData = {
+        userId: $('#addSaleUserId').val(),
+        replicaId: $('#addSaleReplicaId').val(),
+        amount: amount,
+        purchaseDate: parseFlatpickrDate(dateStr),
+        status: "completed",
+        paymentMethod: "credit_card"
+    };
+
+    if (!dateStr || isNaN(amount) || !formData.userId || !formData.replicaId) {
+        showToast('Por favor completa todos los campos', 'error');
+        return;
+    }
+
+    $.ajax({
+        url: '/api/admin/sales',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+            $('#addSaleModal').modal('hide');
+            showToast('Venta creada correctamente', 'success');
+            window.location.reload();
+        },
+        error: function(xhr) {
+            showToast('Error al crear la venta: ' + xhr.responseText, 'error');
+        }
+    });
+});
+
+// Actualizar venta
+$('.update-sale-btn').click(function() {
+    var id = $(this).data('id');
+    var formId = '#editSaleForm-' + id;
+    var amount = parseFloat($(formId + ' input[name="amount"]').val());
+    var dateStr = $(formId + ' input[name="purchaseDate"]').val();
+
+    var formData = {
+        id: id,
+        userId: $(formId + ' select[name="userId"]').val(),
+        replicaId: $(formId + ' select[name="replicaId"]').val(),
+        amount: amount,
+        purchaseDate: parseFlatpickrDate(dateStr),
+        status: $(formId + ' select[name="status"]').val(),
+        paymentMethod: "credit_card"
+    };
+
+    $.ajax({
+        url: '/api/admin/sales/' + id,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function() {
+            $('#editSaleModal-' + id).modal('hide');
+            showToast('Venta actualizada correctamente', 'success');
+            window.location.reload();
+        },
+        error: function(xhr) {
+            showToast('Error al actualizar la venta: ' + xhr.responseText, 'error');
+        }
+    });
+});
+
+        // Mostrar modal de eliminar con datos dinámicos
+        $('a[href="#deleteSaleModal"]').click(function() {
+            var id = $(this).data('id');
+            var title = $(this).data('title') || 'Venta #' + id;
+            $('#deleteSaleId').val(id);
+            $('#deleteSaleName').text('#' + id + ' - ' + title);
+        });
+
+        // Eliminar venta
+        $('#confirmDeleteSaleBtn').click(function() {
+            var id = $('#deleteSaleId').val();
+
+            $.ajax({
+                url: '/api/admin/sales/' + id,
+                type: 'DELETE',
+                success: function() {
+                    $('#deleteSaleModal').modal('hide');
+                    showToast('Venta eliminada correctamente', 'success');
+                    window.location.reload();
+                },
+                error: function(xhr) {
+                    showToast('Error al eliminar la venta: ' + xhr.responseText, 'error');
+                }
+            });
+        });
+
+        // Generar factura
+        $('.dropdown-item.text-success[data-id]').click(function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            window.location.href = '/api/admin/sales/' + id + '/invoice';
+        });
+    });
+
+    // Función para parsear la fecha de flatpickr a formato ISO
+    function parseFlatpickrDate(dateString) {
+        if (!dateString) return null;
+
+        const parts = dateString.split(' ');
+        if (parts.length !== 2) return null;
+
+        const dateParts = parts[0].split('/');
+        const timeParts = parts[1].split(':');
+
+        if (dateParts.length !== 3 || timeParts.length !== 3) return null;
+
+        const day = parseInt(dateParts[0], 10);
+        const month = parseInt(dateParts[1], 10) - 1; // Meses en JS son 0-11
+        const year = parseInt(dateParts[2], 10);
+
+        const hour = parseInt(timeParts[0], 10);
+        const minute = parseInt(timeParts[1], 10);
+        const second = parseInt(timeParts[2], 10);
+
+        const date = new Date(year, month, day, hour, minute, second);
+        return date.toISOString();
+    }
+
+    // Función para mostrar notificaciones
+    function showToast(message, type) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            backgroundColor: type === 'success' ? "#4fbe87" : "#ff5b5b",
+        }).showToast();
+    }
+</script>
+</body>
+</html>

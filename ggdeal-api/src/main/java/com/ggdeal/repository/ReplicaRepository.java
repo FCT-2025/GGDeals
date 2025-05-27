@@ -10,4 +10,5 @@ import java.util.List;
 public interface ReplicaRepository extends JpaRepository<Replica, Long> {
     List<Replica> findByIsSold(boolean isSold);
     long countByIsSold(boolean isSold);
+
 }

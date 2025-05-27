@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface SaleRepository extends JpaRepository<Sale, Long> {
-    List<Sale> findTop5ByOrderByPurcharseDateDesc();
+    List<Sale> findTop5ByOrderByPurchaseDateDesc(); // Corregido de purcharseDate
 
     @Query("SELECT new com.ggdeal.dto.PopularGameSalesDTO(g.title, COUNT(s.id)) " +
             "FROM Sale s " +
@@ -19,9 +19,9 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             "ORDER BY COUNT(s.id) DESC")
     List<PopularGameSalesDTO> findTop5PopularGames();
 
-    @Query("SELECT new com.ggdeal.dto.SalesPerMonthDTO(MONTH(s.purcharseDate), COUNT(s.id)) " +
+    @Query("SELECT new com.ggdeal.dto.SalesPerMonthDTO(MONTH(s.purchaseDate), COUNT(s.id)) " +
             "FROM Sale s " +
-            "GROUP BY MONTH(s.purcharseDate) " +
-            "ORDER BY MONTH(s.purcharseDate) DESC")
+            "GROUP BY MONTH(s.purchaseDate) " +
+            "ORDER BY MONTH(s.purchaseDate) DESC")
     List<SalesPerMonthDTO> findNumberSalesPerMonth();
 }
