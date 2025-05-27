@@ -1,0 +1,61 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "categories": "Categorías",
+    "contact": "Contacto",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "welcome": "Bienvenido a GGDeal",
+    "profile": "Mira tu perfil",
+    "userProfile": {
+      "title": "Perfil de usuario",
+      "see": "Ver perfil",
+      "logout": "Cerrar sesión"
+    }
+  },
+  "gameShowCase": {
+    "title": "Nuevos listados físicos"
+  },
+  "charity": {
+    "title": "Dedicados a Apoyar la Caridad",
+    "description": "NUESTROS MEJORES DESCUENTOS EN LOS JUEGOS MÁS CALIENTES DEL VERANO",
+    "learnMore": "Aprende Más"
+  },
+  "register": {
+    "title": "Registrarse",
+    "description": "Los campos marcados con <red>*</red> son obligatorios",
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "birthdate": "Fecha de nacimiento",
+    "phone": "Teléfono (opcional)",
+    "submit": "Registrarse",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta? Inicia sesión",
+    "error": {
+      "network": "Error de red o del servidor",
+      "failed": "Registro fallido",
+      "default": "Falla registro"
+    },
+    "placeholders": {
+      "email": "Correo electrónico",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "search": "Buscar un juego..."
+    }
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "metaDescription": "Inicia sesión en GGDeal",
+    "placeholders": {
+      "usernameOrEmail": "Correo electrónico o nombre de usuario",
+      "password": "********"
+    },
+    "submit": "Iniciar sesión",
+    "altImage": "Ilustración de inicio de sesión",
+    "errors": {
+      "default": "Error al iniciar sesión. Inténtalo de nuevo.",
+      "invalid_credentials": "Usuario o contraseña inválidos.",
+      "network": "Error de red. Revisa tu conexión."
+    }
+  }
+}

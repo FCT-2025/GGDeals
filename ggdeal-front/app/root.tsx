@@ -4,27 +4,28 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useNavigation
 } from "react-router";
-
-
-
+import { useEffect, useState, useRef } from "react";
+import { getUsuario } from "./services/authService";
+import type { User } from "./services/authService";
+import { UserProvider } from "./context/UserContext";
 import type { Route } from "./+types/root";
 import "./app.css";
 import Nav from "./componets/Nav";
 import Footer from "./componets/Footer";
 import PageError from "./pages/PageError";
-
+import "./i18n";
+import { useTranslation } from "react-i18next";
+import { LanguageProvider } from "./context/LanguageContext";
 
 export const links: Route.LinksFunction = () => [
   {
-    rel:"preconnect",
-    href: "https://fonts.googleapis.com"
+    rel: "preconnect",
+    href: "https://fonts.googleapis.com",
   },
   {
     rel: "preconnect",
     href: "https://fonts.gstatic.com",
-  
   },
   {
     rel: "stylesheet",
@@ -40,33 +41,37 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap"
+    href: "https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap",
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap"
+    href: "https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap",
   },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const navigation = useNavigation();
+  const { i18n } = useTranslation();
+
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <Nav />
-        {navigation.state === "loading" && <div className="loading">Loading...</div>}
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-        <Footer/>
-      </body>
-    </html>
+    <LanguageProvider i18nInstance={i18n}>
+      <UserProvider>
+        <html lang={i18n.language} className="scroll-smooth">
+          <head>
+            <meta charSet="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <Meta />
+            <Links />
+          </head>
+          <body className="relative">
+            <Nav />
+            {children}
+            <ScrollRestoration />
+            <Scripts />
+            <Footer />
+          </body>
+        </html>
+      </UserProvider>
+    </LanguageProvider>
   );
 }
 

@@ -13,38 +13,28 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @RequestMapping("/api/admin")
 @Controller
 public class AdminController {
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
+    private final GameRepository gameRepository;
+    private final SaleRepository salesRepostiory;
+    private final ReservationRepository reservationRepository;
+    private final PlatformTypeRepository platformTypeRepository;
+    private final JwtProvider jwtProvider;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private GameRepository gameRepository;
-
-    @Autowired
-    private SaleRepository salesRepostiory;
-
-    @Autowired
-    private ReservationRepository reservationRepository;
-
-    @Autowired
-    private PlatformTypeRepository platformTypeRepository;
-
-    @Autowired
-    private JwtProvider jwtProvider;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-
-    private final StorageService storageService;
-
-    @Autowired
-    public AdminController(StorageService storageService) {
-        this.storageService = storageService;
+    public AdminController(BCryptPasswordEncoder passwordEncoder, JwtProvider jwtProvider, PlatformTypeRepository platformTypeRepository, ReservationRepository reservationRepository, SaleRepository salesRepostiory, GameRepository gameRepository, UserRepository userRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.jwtProvider = jwtProvider;
+        this.platformTypeRepository = platformTypeRepository;
+        this.reservationRepository = reservationRepository;
+        this.salesRepostiory = salesRepostiory;
+        this.gameRepository = gameRepository;
+        this.userRepository = userRepository;
     }
-
 
 
     @GetMapping("")
@@ -79,7 +69,7 @@ public class AdminController {
         return "redirect:/api/admin";
     }
 
-    @GetMapping ("/logout")
+    @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
         jwtProvider.deleteTokenCookie(response);
         return "redirect:/api/admin/login";

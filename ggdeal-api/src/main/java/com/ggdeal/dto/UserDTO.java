@@ -18,6 +18,7 @@ public class UserDTO {
     private String numberPhone;
     private String avatarPath;
     private Role role;
-    private LocalDate created_at;
+    private LocalDate birthdate;
+    private LocalDate createdAt;
     private Boolean isVerified;
 }

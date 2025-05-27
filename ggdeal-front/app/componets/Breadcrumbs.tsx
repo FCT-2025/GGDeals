@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router";
-import  formatSlugName  from "~/utils/formatSlugName";
+import  { formatSlugName }  from "~/utils/utils";
 
 export default function Breadcrumbs({ className }: { className?: string }) {
   const location = useLocation();

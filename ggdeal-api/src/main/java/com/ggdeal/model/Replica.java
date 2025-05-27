@@ -20,7 +20,7 @@ public class Replica {
     @NotBlank(message = "The activation key is Mandatory")
     private String activation_key;
 
-    private Boolean is_sold;
+    private Boolean isSold;
 
     @ManyToOne
     @JoinColumn(name = "game_id")
@@ -40,8 +40,8 @@ public class Replica {
 
     @PrePersist
     public void prePersist() {
-        if (this.is_sold == null) {
-            this.is_sold = false;
+        if (this.isSold == null) {
+            this.isSold = false;
         }
     }
 }

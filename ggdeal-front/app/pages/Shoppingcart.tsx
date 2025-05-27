@@ -2,7 +2,7 @@ export default function ShoppingCart() {
     return (
         <>
             {/* Header section with lines and circle */}
-            <section className="relative max-w-[1440px] mx-auto px-4 mt-10 mb-12">
+            <section className="relative max-w-[1440px] mx-auto px-4 mt-35 mb-12">
                 <div className="flex items-center justify-center">
                     <div className="flex-1 h-[1px] bg-gray-400"></div>
                     <div className="mx-4 w-10 h-10 rounded-full border-2 border-white flex items-center justify-center">

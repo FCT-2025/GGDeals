@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 @font-face {
   font-family: 'NouvelR';
   src: url('/fonts/NouvelRRegular.woff') format('woff');
@@ -128,6 +129,7 @@
   --font-karantina: "Karantina", sans-serif;
   --font-sofia: "Sofia Sans", sans-serif;
 }
+
 
 html,
 body {

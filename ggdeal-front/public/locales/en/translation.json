@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "home": "Home",
+    "categories": "Categories",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "welcome": "Welcome to GGDeal",
+    "profile": "View your profile",
+    "userProfile": {
+      "title": "User Profile",
+      "see": "See Profile",
+      "logout": "Log out"
+    }
+  },
+  "gameShowCase": {
+    "title": "Newest physical listings"
+  },
+  "charity": {
+    "title": "Dedicated to Supporting Charity",
+    "description": "OUR BEST DISCOUNTS ON SUMMER’S HOTTEST GAMES",
+    "learnMore": "Learn More"
+  },
+  "register": {
+    "title": "Register",
+    "description": "Fields marked with <red>*</red> are required",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "birthdate": "Birthdate",
+    "phone": "Phone (optional)",
+    "submit": "Register",
+    "alreadyHaveAccount": "Already have an account? Log in",
+    "error": {
+      "network": "Network or server error",
+      "failed": "Registration failed",
+      "default": "Registration error"
+    },
+    "placeholders": {
+      "email": "Email",
+      "username": "Username",
+      "password": "Password",
+      "search": "Search for a game..."
+    }
+  },
+  "login": {
+    "title": "Log in",
+    "metaDescription": "Log in to GGDeal",
+    "placeholders": {
+      "usernameOrEmail": "Email or Username",
+      "password": "********"
+    },
+    "submit": "Log in",
+    "altImage": "Login illustration",
+    "errors": {
+      "default": "Login failed. Please try again.",
+      "invalid_credentials": "Invalid username or password.",
+      "network": "Network error. Please check your connection."
+    }
+  },
+  "placeholders": {
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "search": "Search for a game..."
+  }
+}

@@ -1,5 +1,6 @@
 package com.ggdeal.service;
 
+import com.ggdeal.model.GameMedia;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -66,5 +67,15 @@ public class LocalStorageService implements StorageService {
             Path destination = path.resolve(filePath);
             Files.deleteIfExists(destination);
         }
+    }
+
+    @Override
+    public GameMedia storeGameMedia(MultipartFile[] file) throws IOException {
+        return null;
+    }
+
+    @Override
+    public void deleteGameMedia(GameMedia[] gameMedia) throws IOException {
+
     }
 }

@@ -2,9 +2,7 @@ package com.ggdeal.model;
 
 import com.ggdeal.dto.UserUpdateDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -43,6 +41,10 @@ public class User {
     private String numberPhone;
 
     private String avatarPath;
+
+    @NotNull
+    @Past(message = "La fecha de nacimiento debe ser una fecha pasada")
+    private LocalDate birthdate;
 
     @Enumerated(EnumType.STRING)
     private Role role;

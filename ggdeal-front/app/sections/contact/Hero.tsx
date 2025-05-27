@@ -1,6 +1,6 @@
 export default function Hero() {
   return (
-    <section className="relative w-full h-[70vh] mt-2">
+    <section className="relative w-full h-[70vh] mt-35">
       <img
         src="/img/contact-hero.png"
         alt="Contact Hero"

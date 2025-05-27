@@ -7,7 +7,7 @@ import Rewies from "~/sections/game/ReviewsSection";
 import Visual from "~/sections/game/VisualSection";
 import type { Route } from "../+types/root";
 import { useParams } from "react-router";
-import formatSlugName from "~/utils/formatSlugName";
+import { formatSlugName } from "~/utils/utils";
 
 
 export function meta({}: Route.MetaArgs) {

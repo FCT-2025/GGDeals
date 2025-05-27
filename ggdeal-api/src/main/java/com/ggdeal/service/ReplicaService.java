@@ -86,7 +86,7 @@ public class ReplicaService {
             Edition edition = editionService.findById(editionId).orElse(null);
             replica.setEdition(edition);
 
-            replica.setIs_sold(isSold);
+            replica.setIsSold(isSold);
 
             savedReplicas.add(replicaRepository.save(replica));
         }
