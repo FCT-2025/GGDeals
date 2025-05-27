@@ -5,6 +5,7 @@ import com.ggdeal.model.Replica;
 import com.ggdeal.model.Sale;
 import com.ggdeal.model.SaleEvent;
 import com.ggdeal.model.User;
+import com.ggdeal.repository.SaleEventRepository;
 import com.ggdeal.service.ReplicaService;
 import com.ggdeal.service.SaleService;
 import com.ggdeal.service.StatisticsService;
@@ -31,16 +32,19 @@ public class AdminSalesController {
     private final UserService userService;
     private final ReplicaService replicaService;
     private final StatisticsService statisticsService;
+    private final SaleEventRepository saleEventRepository;
 
     @Autowired
     public AdminSalesController(SaleService saleService,
                                 UserService userService,
                                 ReplicaService replicaService,
-                                StatisticsService statisticsService) {
+                                StatisticsService statisticsService,
+                                SaleEventRepository saleEventRepository) {
         this.saleService = saleService;
         this.userService = userService;
         this.replicaService = replicaService;
         this.statisticsService = statisticsService;
+        this.saleEventRepository = saleEventRepository;
     }
 
     @GetMapping
@@ -267,27 +271,33 @@ public class AdminSalesController {
 
     // API para eliminar una venta
     @DeleteMapping("/{id}")
-    @ResponseBody
     public ResponseEntity<?> deleteSale(@PathVariable Long id) {
         try {
+            // Verificar si la venta existe usando findById en lugar de existsById
             Optional<Sale> saleOpt = saleService.findById(id);
             if (saleOpt.isEmpty()) {
                 return ResponseEntity.notFound().build();
             }
 
-            Sale sale = saleOpt.get();
-
             // Liberar réplica si existe
+            Sale sale = saleOpt.get();
             if (sale.getReplica() != null) {
                 Replica replica = sale.getReplica();
                 replica.setIsSold(false);
                 replicaService.save(replica);
             }
 
+            // Eliminar primero los eventos para evitar el TransientObjectException
+            if (sale.getEvents() != null && !sale.getEvents().isEmpty()) {
+                saleEventRepository.deleteBySaleId(id);
+            }
+
+            // Finalmente eliminar la venta
             saleService.deleteById(id);
+
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Error al eliminar la venta: " + e.getMessage());
         }
     }
 

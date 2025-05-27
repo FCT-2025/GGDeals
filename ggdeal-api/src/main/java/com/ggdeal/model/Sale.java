@@ -49,7 +49,7 @@ public class Sale {
         this.purchaseAmount = purchaseAmount;
     }
 
-    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<SaleEvent> events;
 
     @PrePersist
