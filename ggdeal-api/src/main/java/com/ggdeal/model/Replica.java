@@ -20,6 +20,7 @@ public class Replica {
     @NotBlank(message = "The activation key is Mandatory")
     private String activation_key;
 
+
     private Boolean isSold;
 
     @ManyToOne
@@ -31,9 +32,15 @@ public class Replica {
     private Edition edition;
 
     @ManyToOne
-    @JoinColumn(name = "plataform_id")
-    private PlatformType plataform;
+    @JoinColumn(name = "platform_type")
+    private PlatformType platformType;
 
+    @ManyToOne
+    @JoinColumn(name = "platform_model")
+    private PlatformModel platformModel;
+
+    @Column(name = "platform_id", nullable = false)
+    private Long platformId;
 
     @OneToOne(mappedBy = "replica")
     private Sale sale;

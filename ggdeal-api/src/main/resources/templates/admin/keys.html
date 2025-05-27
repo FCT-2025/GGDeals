@@ -3,7 +3,6 @@
 
 <head th:replace="fragment/head :: head('Administración de Réplicas')"></head>
 
-
 <body>
 <script th:src="@{/assets/static/js/initTheme.js}"></script>
 <div id="app">
@@ -53,12 +52,12 @@
                                             <td th:text="${replica.id}">1</td>
                                             <td th:text="${replica.activation_key}">XXXX-XXXX-XXXX-XXXX</td>
                                             <td>
-                                                <span th:if="${replica.is_sold}" class="badge bg-danger">Sí</span>
-                                                <span th:unless="${replica.is_sold}" class="badge bg-success">No</span>
+                                                <span th:if="${replica.isSold}" class="badge bg-danger">Sí</span>
+                                                <span th:unless="${replica.isSold}" class="badge bg-success">No</span>
                                             </td>
-                                            <td th:text="${replica.game != null ? replica.game.name : ''}">Nombre del juego</td>
+                                            <td th:text="${replica.game != null ? replica.game.title : ''}">Nombre del juego</td>
                                             <td th:text="${replica.edition != null ? replica.edition.name : ''}">Nombre de edición</td>
-                                            <td th:text="${replica.plataform != null ? replica.plataform.name : ''}">Nombre de plataforma</td>
+                                            <td th:text="${replica.platformModel != null ? replica.platformModel.name : ''}">Nombre de modelo</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -151,12 +150,12 @@
 </div>
 
 <!-- Modales -->
-<!-- Modal Ver Réplica (repeat for each replica) -->
+<!-- Modal Ver Réplica -->
 <div th:each="replica : ${replicas}" th:id="'viewKeyModal-' + ${replica.id}" class="modal fade" tabindex="-1" aria-labelledby="viewKeyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewKeyModalLabel">Detalles de la Réplica</h5>
+                <h5 class="modal-title">Detalles de la Réplica</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -169,7 +168,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <h6 class="text-muted">Juego</h6>
-                        <p class="mb-0" th:text="${replica.game != null ? replica.game.name : '-'}">The Witcher 3: Wild Hunt</p>
+                        <p class="mb-0" th:text="${replica.game != null ? replica.game.title : '-'}">The Witcher 3: Wild Hunt</p>
                     </div>
                     <div class="col-md-6 mb-3">
                         <h6 class="text-muted">Edición</h6>
@@ -177,13 +176,13 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <h6 class="text-muted">Plataforma</h6>
-                        <p class="mb-0" th:text="${replica.plataform != null ? replica.plataform.name : '-'}">PC</p>
+                        <p class="mb-0" th:text="${replica.platformModel != null ? replica.platformModel.name : '-'}">PlayStation 5</p>
                     </div>
                     <div class="col-md-6 mb-3">
                         <h6 class="text-muted">Estado</h6>
                         <p class="mb-0">
-                            <span th:if="${replica.is_sold}" class="badge bg-danger">Vendida</span>
-                            <span th:unless="${replica.is_sold}" class="badge bg-success">Disponible</span>
+                            <span th:if="${replica.isSold}" class="badge bg-danger">Vendida</span>
+                            <span th:unless="${replica.isSold}" class="badge bg-success">Disponible</span>
                         </p>
                     </div>
                 </div>
@@ -191,6 +190,115 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal" th:data-bs-target="'#editKeyModal-' + ${replica.id}" data-bs-toggle="modal">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Réplica -->
+<div th:each="replica : ${replicas}" th:id="'editKeyModal-' + ${replica.id}" class="modal fade" tabindex="-1" aria-labelledby="editKeyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Réplica</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:id="'editKeyForm-' + ${replica.id}">
+                    <input type="hidden" name="id" th:value="${replica.id}">
+                    <div class="mb-3">
+                        <label for="editKeyValue" class="form-label">Clave de Activación</label>
+                        <input type="text" class="form-control" id="editKeyValue" name="activation_key" th:value="${replica.activation_key}" required>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="editGame" class="form-label">Juego</label>
+                            <select class="form-select" id="editGame" name="gameId" required>
+                                <option value="" disabled>Seleccionar juego</option>
+                                <option th:each="game : ${games}"
+                                        th:value="${game.id}"
+                                        th:text="${game.title}"
+                                        th:selected="${replica.game != null && replica.game.id == game.id}">
+                                    Nombre del juego
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editEdition" class="form-label">Edición</label>
+                            <select class="form-select" id="editEdition" name="editionId" required>
+                                <option value="" disabled>Seleccionar edición</option>
+                                <option th:each="edition : ${editions}"
+                                        th:value="${edition.id}"
+                                        th:text="${edition.name}"
+                                        th:selected="${replica.edition != null && replica.edition.id == edition.id}">
+                                    Nombre de edición
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="editPlatform" class="form-label">Plataforma</label>
+                            <select class="form-select" id="editPlatform" name="platformId" required>
+                                <option value="" disabled>Seleccionar plataforma</option>
+                                <option th:each="platform : ${platforms}"
+                                        th:value="${platform.id}"
+                                        th:text="${platform.name}"
+                                        th:selected="${replica.platformModel != null && replica.platformModel.id == platform.id}">
+                                    Nombre de plataforma
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editIsSold" class="form-label">¿Vendida?</label>
+                            <select class="form-select" id="editIsSold" name="isSold">
+                                <option value="false" th:selected="${!replica.isSold}">No</option>
+                                <option value="true" th:selected="${replica.isSold}">Sí</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary update-key-btn" th:data-id="${replica.id}">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar Réplica -->
+<div th:each="replica : ${replicas}" th:id="'deleteKeyModal-' + ${replica.id}" class="modal fade" tabindex="-1" aria-labelledby="deleteKeyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar esta réplica?</p>
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Esta acción no se puede deshacer.
+                </div>
+                <div class="p-3 bg-light rounded mb-3">
+                    <h6 class="mb-1">Clave de Activación:</h6>
+                    <p class="mb-0 font-monospace" th:text="${replica.activation_key}">XXXX-XXXX-XXXX-XXXX</p>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <h6 class="mb-1">Juego:</h6>
+                        <p class="mb-0" th:text="${replica.game != null ? replica.game.title : '-'}">Nombre del juego</p>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <h6 class="mb-1">Edición:</h6>
+                        <p class="mb-0" th:text="${replica.edition != null ? replica.edition.name : '-'}">Nombre de edición</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger delete-key-btn" th:data-id="${replica.id}">Eliminar</button>
             </div>
         </div>
     </div>
@@ -205,20 +313,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/api/admin/keys/batch}" method="post">
+                <form id="batchKeysForm">
                     <div class="row mb-3">
                         <div class="col-md-6 mb-3 mb-md-0">
                             <label for="batchGame" class="form-label">Juego</label>
                             <select class="form-select" id="batchGame" name="gameId" required>
                                 <option value="" selected disabled>Seleccionar juego</option>
-                                <option th:each="game : ${games}" th:value="${game.id}" th:text="${game.name}">The Witcher 3: Wild Hunt</option>
+                                <option th:each="game : ${games}" th:value="${game.id}" th:text="${game.title}">Nombre del juego</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label for="batchEdition" class="form-label">Edición</label>
                             <select class="form-select" id="batchEdition" name="editionId" required>
                                 <option value="" selected disabled>Seleccionar edición</option>
-                                <option th:each="edition : ${editions}" th:value="${edition.id}" th:text="${edition.name}">Estándar</option>
+                                <option th:each="edition : ${editions}" th:value="${edition.id}" th:text="${edition.name}">Nombre de edición</option>
                             </select>
                         </div>
                     </div>
@@ -227,7 +335,7 @@
                             <label for="batchPlatform" class="form-label">Plataforma</label>
                             <select class="form-select" id="batchPlatform" name="platformId" required>
                                 <option value="" selected disabled>Seleccionar plataforma</option>
-                                <option th:each="platform : ${platforms}" th:value="${platform.id}" th:text="${platform.name}">PC</option>
+                                <option th:each="platform : ${platforms}" th:value="${platform.id}" th:text="${platform.name}">Nombre de plataforma</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -239,8 +347,56 @@
                         </div>
                     </div>
 
-                    <!-- Resto del formulario... -->
+                    <div class="mb-3">
+                        <label class="form-label">Método de Creación de Claves</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="keyCreationMethod" id="generateKeysRadio" value="generate" checked>
+                            <label class="form-check-label" for="generateKeysRadio">
+                                Generar claves automáticamente
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="keyCreationMethod" id="manualKeysRadio" value="manual">
+                            <label class="form-check-label" for="manualKeysRadio">
+                                Introducir claves manualmente
+                            </label>
+                        </div>
+                    </div>
 
+                    <!-- Sección para generar claves automáticamente -->
+                    <div id="generateKeysSection" class="mb-3 border rounded p-3">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="keysQuantity" class="form-label">Cantidad</label>
+                                <input type="number" class="form-control" id="keysQuantity" name="quantity" min="1" value="1">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="keysFormat" class="form-label">Formato</label>
+                                <input type="text" class="form-control" id="keysFormat" name="format" value="XXXX-XXXX-XXXX-XXXX">
+                                <small class="text-muted">Usar X para caracteres aleatorios</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="keysPrefix" class="form-label">Prefijo (opcional)</label>
+                                <input type="text" class="form-control" id="keysPrefix" name="prefix">
+                            </div>
+                        </div>
+                        <div class="alert alert-info mb-0">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Las claves se generarán automáticamente siguiendo el formato indicado.
+                        </div>
+                    </div>
+
+                    <!-- Sección para introducir claves manualmente -->
+                    <div id="manualKeysSection" class="mb-3 border rounded p-3" style="display: none;">
+                        <div class="mb-3">
+                            <label for="manualKeys" class="form-label">Claves de Activación</label>
+                            <textarea class="form-control" id="manualKeys" name="activationKeys" rows="5" placeholder="Introduce una clave por línea"></textarea>
+                        </div>
+                        <div class="alert alert-info mb-0">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Introduce una clave por línea. Cada línea se considerará una clave individual.
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -288,9 +444,98 @@
             $(this).addClass('active');
         });
 
-        // Envío de formulario mediante AJAX
+        // Cambiar entre modos de creación de claves
+        $('input[name="keyCreationMethod"]').change(function() {
+            if ($(this).val() === 'generate') {
+                $('#generateKeysSection').show();
+                $('#manualKeysSection').hide();
+            } else {
+                $('#generateKeysSection').hide();
+                $('#manualKeysSection').show();
+            }
+        });
+
+        // Envío de formulario de lote mediante AJAX
         $('#submitBatchForm').click(function() {
-            // Código para envío de formulario por AJAX
+            var formData = {
+                gameId: $('#batchGame').val(),
+                editionId: $('#batchEdition').val(),
+                platformId: $('#batchPlatform').val(),
+                isSold: $('#batchIsSold').val()
+            };
+
+            // Determinar método de creación de claves
+            var method = $('input[name="keyCreationMethod"]:checked').val();
+
+            if (method === 'generate') {
+                formData.generateKeys = true;
+                formData.quantity = $('#keysQuantity').val();
+                formData.format = $('#keysFormat').val();
+                formData.prefix = $('#keysPrefix').val();
+            } else {
+                formData.generateKeys = false;
+                formData.activationKeys = $('#manualKeys').val().split('\n').filter(key => key.trim() !== '');
+            }
+
+            $.ajax({
+                url: '/api/admin/keys/batch',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    $('#addKeysModal').modal('hide');
+                    window.location.reload();
+                },
+                error: function(xhr) {
+                    alert('Error al crear el lote de réplicas: ' + xhr.responseText);
+                }
+            });
+        });
+
+        // Actualizar réplica
+        $('.update-key-btn').click(function() {
+            var id = $(this).data('id');
+            var formId = '#editKeyForm-' + id;
+
+            var formData = {
+                id: $(formId + ' input[name="id"]').val(),
+                activation_key: $(formId + ' input[name="activation_key"]').val(),
+                gameId: $(formId + ' select[name="gameId"]').val(),
+                editionId: $(formId + ' select[name="editionId"]').val(),
+                platformId: $(formId + ' select[name="platformId"]').val(),
+                isSold: $(formId + ' select[name="isSold"]').val() === 'true'
+            };
+
+            $.ajax({
+                url: '/api/admin/keys/' + id,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function() {
+                    $('#editKeyModal-' + id).modal('hide');
+                    window.location.reload();
+                },
+                error: function(xhr) {
+                    alert('Error al actualizar la réplica: ' + xhr.responseText);
+                }
+            });
+        });
+
+        // Eliminar réplica
+        $('.delete-key-btn').click(function() {
+            var id = $(this).data('id');
+
+            $.ajax({
+                url: '/api/admin/keys/' + id,
+                type: 'DELETE',
+                success: function() {
+                    $('#deleteKeyModal-' + id).modal('hide');
+                    window.location.reload();
+                },
+                error: function(xhr) {
+                    alert('Error al eliminar la réplica: ' + xhr.responseText);
+                }
+            });
         });
     });
 </script>

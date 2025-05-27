@@ -23,11 +23,10 @@ public class PlatformType {
     private String name;
     private String pathLogo;
 
-
-    @OneToMany(mappedBy = "plataform")
+    @OneToMany(mappedBy = "platformType")
     private List<Replica> replicas;
 
-    @ManyToMany(mappedBy = "plataforms")
+    @ManyToMany(mappedBy = "platforms")
     private List<Game> games;
 
 }

@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface PlatformTypeRepository extends JpaRepository<PlatformType, Long> {
 
-    @Query("SELECT p, COUNT(r) FROM PlatformType p LEFT JOIN Replica r ON r.plataform = p GROUP BY p")
+    @Query("SELECT p, COUNT(r) FROM PlatformType p LEFT JOIN PlatformModel pm ON pm.platformType = p LEFT JOIN Replica r ON r.platformModel = pm GROUP BY p")
     List<Object[]> findWithDistributionOfReplica();
 }
