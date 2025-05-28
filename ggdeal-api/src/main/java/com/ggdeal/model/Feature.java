@@ -21,7 +21,7 @@ public class Feature {
     private Long id;
 
     @NotBlank
-    @Size(min = 2 , max = 15, message = "Feature must be between 2 and 15 characters")
+    @Size(min = 2 , max = 30, message = "Feature must be between 2 and 15 characters")
     private String name;
 
     @ManyToMany(mappedBy = "features")

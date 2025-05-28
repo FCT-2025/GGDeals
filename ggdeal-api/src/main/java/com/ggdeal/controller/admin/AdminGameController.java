@@ -2,48 +2,72 @@ package com.ggdeal.controller.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ggdeal.model.Feature;
 import com.ggdeal.model.Game;
-import com.ggdeal.service.GameService;
+import com.ggdeal.model.GameMedia;
+import com.ggdeal.service.FeatureService;
+import com.ggdeal.service.game.GameService;
+import com.ggdeal.service.gameMedia.GameMediaService;
+import com.ggdeal.service.game.GameServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequestMapping("/api/admin/games")
 @Controller
 public class AdminGameController {
 
-    private final GameService gameService;
+    private final GameService gameServiceImpl;
     private final ObjectMapper objectMapper;
+    private final FeatureService featureService;
+    private final GameMediaService gameMediaService;
 
     @Autowired
-    public AdminGameController(GameService gameService, ObjectMapper objectMapper) {
-        this.gameService = gameService;
+    public AdminGameController(GameService gameServiceImpl, ObjectMapper objectMapper,
+                               FeatureService featureService, GameMediaService gameMediaService) {
+        this.gameServiceImpl = gameServiceImpl;
         this.objectMapper = objectMapper;
+        this.featureService = featureService;
+        this.gameMediaService = gameMediaService;
     }
 
     @GetMapping("")
     public String adminGameDashboard(Model model) throws JsonProcessingException {
-        List<Game> games = gameService.findAll();
+        List<Game> games = gameServiceImpl.findAll();
+        List<Feature> features = featureService.getAllFeatures();
+        Map<Long, String> thumbnails = new HashMap<>();
+
+        games.forEach(game -> {
+            game.getGameMedias().stream()
+                    .filter(GameMedia::getIsThumbnail)
+                    .findFirst()
+                    .ifPresent(media -> thumbnails.put(game.getId(), media.getPath()));
+        });
+
+        model.addAttribute("features", features);
         model.addAttribute("games", games);
-        model.addAttribute("gamesJson", objectMapper.writeValueAsString(games));
+        model.addAttribute("thumbnails", thumbnails);
+
         return "admin/games";
     }
+
+    // ==================== ENDPOINTS PARA GESTIÓN DE JUEGOS ====================
 
     @GetMapping("/list")
     @ResponseBody
     public ResponseEntity<List<Game>> getGames() {
-        return ResponseEntity.ok(gameService.findAll());
+        return ResponseEntity.ok(gameServiceImpl.findAll());
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Game> getGame(@PathVariable Long id) {
-        return gameService.findById(id)
+        return gameServiceImpl.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -51,20 +75,125 @@ public class AdminGameController {
     @PostMapping("")
     @ResponseBody
     public ResponseEntity<Game> createGame(@RequestBody Game game) {
-        return ResponseEntity.ok(gameService.save(game));
+        return ResponseEntity.ok(gameServiceImpl.save(game));
     }
 
     @PutMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody Game game) {
         game.setId(id);
-        return ResponseEntity.ok(gameService.save(game));
+        return ResponseEntity.ok(gameServiceImpl.save(game));
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteGame(@PathVariable Long id) {
-        gameService.deleteById(id);
+        gameServiceImpl.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    // ==================== ENDPOINTS PARA GESTIÓN DE CARACTERÍSTICAS ====================
+
+    @PostMapping("/{gameId}/features")
+    public ResponseEntity<Void> updateGameFeatures(@PathVariable Long gameId, @RequestBody List<Long> featureIds) {
+        gameServiceImpl.updateFeatures(gameId, featureIds);
+        return ResponseEntity.ok().build();
+    }
+
+    // ==================== ENDPOINTS PARA GESTIÓN DE MEDIOS ====================
+
+    @GetMapping("/{gameId}/media")
+    @ResponseBody
+    public ResponseEntity<List<GameMedia>> getGameMedia(@PathVariable Long gameId) {
+        return gameServiceImpl.findById(gameId)
+                .map(game -> {
+                            List<GameMedia> medias = new ArrayList<>(game.getGameMedias());
+                            medias.sort((a, b) -> Boolean.compare(!a.getIsThumbnail(), !b.getIsThumbnail()));
+                            return ResponseEntity.ok(medias);
+                        }
+                ).orElse(ResponseEntity.notFound().build());
+
+    }
+
+    @PostMapping("/{gameId}/media")
+    @ResponseBody
+    public ResponseEntity<List<GameMedia>> uploadGameMedia(
+            @PathVariable Long gameId,
+            @RequestParam("media") MultipartFile[] files,
+            @RequestParam(value = "isThumbnail", defaultValue = "false") boolean isThumbnail) {
+        List<GameMedia> savedMedia = new ArrayList<>();
+        for (MultipartFile file : files) {
+            GameMedia media = gameMediaService.saveMedia(gameId, file, isThumbnail);
+            savedMedia.add(media);
+        }
+        return ResponseEntity.ok(savedMedia);
+    }
+
+    @PutMapping("/media/{mediaId}")
+    @ResponseBody
+    public ResponseEntity<GameMedia> updateGameMedia(
+            @PathVariable Long mediaId,
+            @RequestParam(value = "media", required = false) MultipartFile file,
+            @RequestParam(value = "isThumbnail", defaultValue = "false") boolean isThumbnail) {
+
+        GameMedia media = gameMediaService.updateMedia(mediaId, file, isThumbnail);
+        return ResponseEntity.ok(media);
+    }
+
+    @PutMapping("/media/{mediaId}/set-thumbnail")
+    @ResponseBody
+    public ResponseEntity<Void> setAsThumbnail(
+            @PathVariable Long mediaId) {
+
+        gameMediaService.setAsThumbnail(mediaId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/media/{mediaId}")
+    @ResponseBody
+    public ResponseEntity<?> deleteGameMedia(
+            @PathVariable Long mediaId) {
+
+        gameMediaService.deleteMedia(mediaId);
+        return ResponseEntity.ok().build();
+    }
+
+/*    // ==================== ENDPOINTS PARA GESTIÓN DE EDICIONES ====================
+
+    @GetMapping("/{gameId}/editions")
+    @ResponseBody
+    public ResponseEntity<List<Edition>> getGameEditions(@PathVariable Long gameId) {
+        // Implementación para obtener ediciones del juego
+        return ResponseEntity.ok(gameService.findEditionsByGameId(gameId));
+    }
+
+    @PostMapping("/{gameId}/editions")
+    @ResponseBody
+    public ResponseEntity<Edition> addGameEdition(
+            @PathVariable Long gameId,
+            @RequestBody Edition edition) {
+
+        return ResponseEntity.ok(gameService.addEdition(gameId, edition));
+    }
+
+    @PutMapping("/{gameId}/editions/{editionId}")
+    @ResponseBody
+    public ResponseEntity<Edition> updateGameEdition(
+            @PathVariable Long gameId,
+            @PathVariable Long editionId,
+            @RequestBody GameEdition edition) {
+
+        edition.setId(editionId);
+        return ResponseEntity.ok(gameService.updateEdition(edition));
+    }
+
+    @DeleteMapping("/{gameId}/editions/{editionId}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteGameEdition(
+            @PathVariable Long gameId,
+            @PathVariable Long editionId) {
+
+        gameService.deleteEdition(editionId);
+        return ResponseEntity.ok().build();
+    }*/
 }

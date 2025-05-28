@@ -1,5 +1,7 @@
 package com.ggdeal.configuration;
 
+import com.ggdeal.service.game.GameService;
+import com.ggdeal.service.game.GameServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -73,4 +75,5 @@ public class SecurityConf {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

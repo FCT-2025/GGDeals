@@ -26,7 +26,6 @@ public class Sale {
     @JoinColumn(name = "user_id")
     private User user;
 
-
     @OneToOne
     @JoinColumn(name = "replica_id")
     private Replica replica;

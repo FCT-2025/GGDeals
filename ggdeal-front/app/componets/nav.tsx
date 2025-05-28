@@ -495,7 +495,7 @@ export default function Nav() {
                       />
                     </svg>
                   </div>
-                  <span className="text-red-600 font-medium">{t("user.userProfile.logout")}</span>
+                  <span className="text-red-600 font-medium">{t("nav.userProfile.logout")}</span>
                 </button>
               </div>
             </div>

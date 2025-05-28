@@ -6,12 +6,11 @@ import com.ggdeal.dto.UserDTO;
 import com.ggdeal.dto.UserProfileDTO;
 import com.ggdeal.model.User;
 import com.ggdeal.repository.UserRepository;
-import com.ggdeal.service.StorageService;
+import com.ggdeal.service.storage.StorageService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +29,8 @@ import java.io.IOException;
 @Controller
 public class AdminProfileController {
 
-    private static final String REDIRECT_PROFILE = "redirect:/api/admin/users";
-    private static final String PROFILE_VIEW = "admin/users";
+    private static final String REDIRECT_PROFILE = "redirect:/api/admin/profile";
+    private static final String PROFILE_VIEW = "admin/profile";
 
     @Autowired
     private UserRepository userRepository;

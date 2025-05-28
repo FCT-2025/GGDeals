@@ -1,7 +1,6 @@
-package com.ggdeal.service;
+package com.ggdeal.service.storage;
 
 
-import com.ggdeal.model.GameMedia;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -14,18 +13,18 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
-public class LocalStorageService implements StorageService {
+public class StorageServiceImpl implements StorageService {
 
     @Value("${app.upload-dir}")
     private String uploadDir;
 
     @Override
     public String storeAvatar(MultipartFile file, String oldAvatarPath) throws IOException {
-        if (file.isEmpty()) return null;
+        if (file == null || file.isEmpty()) return null;
 
-        if (oldAvatarPath != null) {
-            deleteFileAvatar(oldAvatarPath);
-        }
+
+        deleteFileAvatar(oldAvatarPath);
+
 
         Path uploadPath = Paths.get(uploadDir + "avatar/");
         Files.createDirectories(uploadPath);
@@ -41,7 +40,7 @@ public class LocalStorageService implements StorageService {
 
     @Override
     public String storeAvatar(MultipartFile file) throws IOException {
-        if (file.isEmpty()) return null;
+        if (file == null || file.isEmpty()) return null;
 
         Path uploadPath = Paths.get(uploadDir + "avatar/");
         Files.createDirectories(uploadPath);
@@ -57,7 +56,7 @@ public class LocalStorageService implements StorageService {
 
     @Override
     public void deleteFileAvatar(String filePath) throws IOException {
-        if (filePath != null) {
+        if (filePath != null || !filePath.isBlank()) {
             Path path = Paths.get(uploadDir + "avatar/");
             Path destination = path.resolve(filePath);
             Files.deleteIfExists(destination);
@@ -65,39 +64,45 @@ public class LocalStorageService implements StorageService {
     }
 
     @Override
-    public GameMedia storeGameMedia(MultipartFile[] files) throws IOException {
-        if (files == null || files.length == 0) return null;
+    public String storeMedia(MultipartFile file, String oldAvatarPath) throws IOException {
+        if (file ==  null || file.isEmpty()) return null;
 
-        
-        Path uploadPath = Paths.get(uploadDir + "game-media/");
+        deleteFileMedia(oldAvatarPath);
+
+        Path uploadPath = Paths.get(uploadDir + "media/");
         Files.createDirectories(uploadPath);
 
-      
-        GameMedia gameMedia = new GameMedia();
+        String filename = UUID.randomUUID() + "." +
+                StringUtils.getFilenameExtension(file.getOriginalFilename());
 
-        
-        if (files.length > 0 && !files[0].isEmpty()) {
-            String filename = UUID.randomUUID() + "." +
-                    StringUtils.getFilenameExtension(files[0].getOriginalFilename());
-            Path destination = uploadPath.resolve(filename);
-            files[0].transferTo(destination);
-            gameMedia.setPath(filename); 
-        }
+        Path destination = uploadPath.resolve(filename);
+        file.transferTo(destination);
 
-        return gameMedia;
+        return filename;
     }
 
     @Override
-    public void deleteGameMedia(GameMedia[] gameMediaArray) throws IOException {
-        if (gameMediaArray == null) return;
+    public String storeMedia(MultipartFile file) throws IOException {
+        if (file ==  null || file.isEmpty()) return null;
 
-        Path path = Paths.get(uploadDir + "game-media/");
+        Path uploadPath = Paths.get(uploadDir + "media/");
+        Files.createDirectories(uploadPath);
 
-        for (GameMedia media : gameMediaArray) {
-            if (media != null && media.getPath() != null) { 
-                Path destination = path.resolve(media.getPath()); 
-                Files.deleteIfExists(destination);
-            }
+        String filename = UUID.randomUUID() + "." +
+                StringUtils.getFilenameExtension(file.getOriginalFilename());
+
+        Path destination = uploadPath.resolve(filename);
+        file.transferTo(destination);
+
+        return filename;
+    }
+
+    @Override
+    public void deleteFileMedia(String filePath) throws IOException {
+        if (filePath != null || !filePath.isBlank()) {
+            Path path = Paths.get(uploadDir + "media/");
+            Path destination = path.resolve(filePath);
+            Files.deleteIfExists(destination);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.ggdeal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ggdeal.model.util.ModelUtils;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -34,7 +35,7 @@ public class Game {
         
     private LocalDate releaseDate;
 
-    private LocalDate published_date;
+    private LocalDate publishedDate;
 
     @NotNull(message = "The game genre is required.")
     private String genre;
@@ -73,13 +74,14 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private List<Reservation> reservations;
 
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<GameMedia> gameMedias;
 
     @PrePersist
     public void prePersist() {
-        if (this.published_date == null) {
-            this.published_date = LocalDate.now();
+        if (this.publishedDate == null) {
+            this.publishedDate = LocalDate.now();
         }
         if(this.releaseDate == null) {
             this.releaseDate = LocalDate.now();
@@ -89,6 +91,11 @@ public class Game {
     }
 
     public boolean isPublished() {
-        return this.published_date != null && !this.published_date.isAfter(LocalDate.now());
+        return this.publishedDate != null && !this.publishedDate.isAfter(LocalDate.now());
     }
+
+    public List<Long> getListIdFeatures() {
+        return getFeatures().stream().map(feature -> feature.getId()).toList();
+    }
+
 }

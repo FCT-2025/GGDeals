@@ -2,6 +2,7 @@ package com.ggdeal.service;
 
 import com.ggdeal.model.User;
 import com.ggdeal.repository.UserRepository;
+import com.ggdeal.service.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

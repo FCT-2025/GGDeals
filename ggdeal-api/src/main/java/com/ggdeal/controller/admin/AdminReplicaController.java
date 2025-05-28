@@ -1,13 +1,11 @@
 package com.ggdeal.controller.admin;
 
-import com.ggdeal.model.Edition;
 import com.ggdeal.model.Game;
-import com.ggdeal.model.PlatformType;
 import com.ggdeal.model.PlatformModel;
 import com.ggdeal.model.Replica;
 import com.ggdeal.repository.PlatformModelRepository;
 import com.ggdeal.service.EditionService;
-import com.ggdeal.service.GameService;
+import com.ggdeal.service.game.GameServiceImpl;
 import com.ggdeal.service.PlatformTypeService;
 import com.ggdeal.service.ReplicaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,19 +24,19 @@ import java.util.Optional;
 public class AdminReplicaController {
 
     private final ReplicaService replicaService;
-    private final GameService gameService;
+    private final GameServiceImpl gameServiceImpl;
     private final EditionService editionService;
     private final PlatformTypeService platformTypeService;
     private final PlatformModelRepository platformModelRepository;
 
     @Autowired
     public AdminReplicaController(ReplicaService replicaService,
-                                  GameService gameService,
+                                  GameServiceImpl gameServiceImpl,
                                   EditionService editionService,
                                   PlatformTypeService platformTypeService,
                                   PlatformModelRepository platformModelRepository) {
         this.replicaService = replicaService;
-        this.gameService = gameService;
+        this.gameServiceImpl = gameServiceImpl;
         this.editionService = editionService;
         this.platformTypeService = platformTypeService;
         this.platformModelRepository = platformModelRepository;
@@ -55,7 +53,7 @@ public class AdminReplicaController {
         model.addAttribute("totalReplicas", totalReplicas);
         model.addAttribute("availableReplicas", availableReplicas);
         model.addAttribute("soldReplicas", soldReplicas);
-        model.addAttribute("games", gameService.findAll());
+        model.addAttribute("games", gameServiceImpl.findAll());
         model.addAttribute("editions", editionService.findAll());
         model.addAttribute("platforms", platformModelRepository.findAll());
 
@@ -111,7 +109,7 @@ public class AdminReplicaController {
         Boolean isSold = requestBody.get("isSold") != null ?
                 Boolean.valueOf(requestBody.get("isSold").toString()) : false;
 
-        Optional<Game> game = gameService.findById(gameId);
+        Optional<Game> game = gameServiceImpl.findById(gameId);
         Optional<PlatformModel> platformModel = platformModelRepository.findById(platformModelId);
 
         if (!game.isPresent() || !platformModel.isPresent()) {
@@ -157,7 +155,7 @@ public class AdminReplicaController {
         // Actualizar juego
         if (requestBody.get("gameId") != null) {
             Long gameId = Long.valueOf(requestBody.get("gameId").toString());
-            gameService.findById(gameId).ifPresent(replica::setGame);
+            gameServiceImpl.findById(gameId).ifPresent(replica::setGame);
         }
 
         // Actualizar edición
