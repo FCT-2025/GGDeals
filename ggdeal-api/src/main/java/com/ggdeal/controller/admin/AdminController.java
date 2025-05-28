@@ -2,6 +2,7 @@ package com.ggdeal.controller.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ggdeal.configuration.JwtProvider;
+import com.ggdeal.model.Replica;
 import com.ggdeal.model.User;
 import com.ggdeal.repository.*;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 @RequestMapping("/api/admin")
 @Controller
@@ -23,9 +25,16 @@ public class AdminController {
     private final PlatformTypeRepository platformTypeRepository;
     private final JwtProvider jwtProvider;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final ReplicaRepository replicaRepository;
 
     @Autowired
-    public AdminController(BCryptPasswordEncoder passwordEncoder, JwtProvider jwtProvider, PlatformTypeRepository platformTypeRepository, ReservationRepository reservationRepository, SaleRepository salesRepostiory, GameRepository gameRepository, UserRepository userRepository) {
+    public AdminController(BCryptPasswordEncoder passwordEncoder, JwtProvider jwtProvider,
+                           PlatformTypeRepository platformTypeRepository,
+                           ReservationRepository reservationRepository,
+                           SaleRepository salesRepostiory,
+                           GameRepository gameRepository,
+                           UserRepository userRepository,
+                           ReplicaRepository replicaRepository) {
         this.passwordEncoder = passwordEncoder;
         this.jwtProvider = jwtProvider;
         this.platformTypeRepository = platformTypeRepository;
@@ -33,6 +42,7 @@ public class AdminController {
         this.salesRepostiory = salesRepostiory;
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
+        this.replicaRepository = replicaRepository;
     }
 
 
@@ -42,7 +52,7 @@ public class AdminController {
         model.addAttribute("countGames", gameRepository.count());
         model.addAttribute("countSales", salesRepostiory.count());
         model.addAttribute("countReservation", reservationRepository.count());
-        model.addAttribute("lastSales", salesRepostiory.findTop5ByOrderByPurcharseDateDesc());
+        model.addAttribute("lastSales", salesRepostiory.findTop5ByOrderByPurchaseDateDesc());
         model.addAttribute("popularSales", salesRepostiory.findTop5PopularGames());
         model.addAttribute("popularPlatform", platformTypeRepository.findWithDistributionOfReplica());
         model.addAttribute("salesPerMonth", salesRepostiory.findNumberSalesPerMonth());
@@ -72,5 +82,9 @@ public class AdminController {
     public String logout(HttpServletResponse response) {
         jwtProvider.deleteTokenCookie(response);
         return "redirect:/api/admin/login";
+    }
+
+    public List<Replica> findAvailableReplicas() {
+        return replicaRepository.findByIsSold(false);
     }
 }
