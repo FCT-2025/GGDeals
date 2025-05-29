@@ -5,10 +5,10 @@ export interface User {
   username: string;
   email: string;
   createdAt: Date;
-  avatarPath: string;
+  avatarPath?: string;
   role: string;
   isVerified: boolean;
-  numberPhones: string;
+  numberPhone?: string;
 }
 
 export async function getUsuario(): Promise<User | null> {

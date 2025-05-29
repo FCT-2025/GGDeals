@@ -67,7 +67,17 @@ public class AdminController {
 
     @PostMapping("/login")
     public String login(@RequestParam String emailUsername, @RequestParam String password, HttpServletResponse response, Model model) {
-        User user = userRepository.findByEmail(emailUsername);
+        User userByEmail = userRepository.findByEmail(emailUsername);
+        User user =  null;
+
+        if(userByEmail != null) {
+            user = userByEmail;
+        }
+
+        if(user == null) {
+            user = userRepository.findByUsername(emailUsername);
+        }
+
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             model.addAttribute("error", "Usuario o contraseña incorrectos");
             return "admin/login";

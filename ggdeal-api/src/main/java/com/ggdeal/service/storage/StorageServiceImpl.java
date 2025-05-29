@@ -56,16 +56,17 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public void deleteFileAvatar(String filePath) throws IOException {
-        if (filePath != null || !filePath.isBlank()) {
-            Path path = Paths.get(uploadDir + "avatar/");
-            Path destination = path.resolve(filePath);
-            Files.deleteIfExists(destination);
-        }
+        if (filePath == null || filePath.isBlank()) return;
+
+        Path path = Paths.get(uploadDir + "avatar/");
+        Path destination = path.resolve(filePath);
+        Files.deleteIfExists(destination);
+
     }
 
     @Override
     public String storeMedia(MultipartFile file, String oldAvatarPath) throws IOException {
-        if (file ==  null || file.isEmpty()) return null;
+        if (file == null || file.isEmpty()) return null;
 
         deleteFileMedia(oldAvatarPath);
 
@@ -83,7 +84,7 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public String storeMedia(MultipartFile file) throws IOException {
-        if (file ==  null || file.isEmpty()) return null;
+        if (file == null || file.isEmpty()) return null;
 
         Path uploadPath = Paths.get(uploadDir + "media/");
         Files.createDirectories(uploadPath);

@@ -57,5 +57,82 @@
       "invalid_credentials": "Usuario o contraseña inválidos.",
       "network": "Error de red. Revisa tu conexión."
     }
+  },
+
+  "profile": {
+    "title": "Perfil de Usuario",
+    "description": "Gestiona la configuración y preferencias de tu cuenta",
+    "userProfile": "Perfil de Usuario",
+    "memberSince": "Miembro desde",
+    "tabs": {
+      "controlPanel": "Panel de Control",
+      "myOrders": "Mis Pedidos",
+      "wallet": "Monedero",
+      "settings": "Configuración",
+      "languageCurrency": "Idioma y Moneda"
+    },
+    "generalView": {
+      "title": "Vista General",
+      "friends": "Amigos",
+      "reviews": "Reseñas",
+      "wishlist": "Lista de Deseos"
+    },
+    "wallet": {
+      "title": "Monedero",
+      "affiliation": "Afiliación",
+      "currentBalance": "Saldo Actual",
+      "addMoney": "Añadir Dinero",
+      "amount": "Cantidad",
+      "enterAmount": "Introduce la cantidad",
+      "paymentMethod": "Método de Pago",
+      "creditCard": "Tarjeta de Crédito",
+      "bankTransfer": "Transferencia Bancaria",
+      "processing": "Procesando...",
+      "securePayment": "Pago seguro procesado por nuestros socios de confianza",
+      "invalidAmount": "Por favor, introduce una cantidad válida",
+      "topUpSuccess": "Dinero añadido exitosamente a tu monedero",
+      "topUpError": "Error al procesar el pago. Por favor, inténtalo de nuevo."
+    },
+    "ranking": {
+      "title": "Ranking",
+      "level": "Nivel"
+    },
+    "affiliation": {
+      "title": "Enlace de Afiliación",
+      "description": "¡Este es tu enlace de afiliación, compártelo para ganar dinero!"
+    },
+    "totalSaved": {
+      "title": "Total Ahorrado"
+    },
+    "wishlist": {
+      "latestGames": "Últimos Juegos Añadidos a la Lista de Deseos"
+    },
+    "orders": {
+      "title": "Mis Pedidos",
+      "noOrders": "Aún no tienes ningún pedido."
+    },
+    "settings": {
+      "profileImage": "Imagen de perfil",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "profileInfo": "Información del perfil",
+      "updateProfile": "Actualizar perfil",
+      "changePassword": "Cambiar contraseña",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "confirmNewPassword": "Confirmar nueva contraseña",
+      "send": "Enviar",
+      "accept": "Aceptar",
+      "changeEmail": "Cambiar correo electrónico",
+      "newEmail": "Nuevo correo electrónico",
+      "confirmEmail": "Confirmar correo electrónico",
+      "phone": "Teléfono"
+    },
+    "language": {
+      "title": "Idiomas"
+    },
+    "currency": {
+      "title": "Monedas"
+    }
   }
 }

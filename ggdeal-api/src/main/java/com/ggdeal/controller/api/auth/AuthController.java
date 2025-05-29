@@ -1,28 +1,25 @@
-package com.ggdeal.controller.api;
+package com.ggdeal.controller.api.auth;
 
 import com.ggdeal.configuration.JwtProvider;
 import com.ggdeal.dto.UserDTO;
 import com.ggdeal.model.Role;
 import com.ggdeal.model.User;
 import com.ggdeal.repository.UserRepository;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpResponse;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-public class UserController {
+public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
@@ -118,13 +115,13 @@ public class UserController {
         }
 
         UserDTO user = jwtProvider.validateToken(token);
-        if(user.getAvatarPath() == null) {
-            user.setAvatarPath(baseUrl + "/assets/compiled/jpg/1.jpg");
-        } else {
+        if(user.getAvatarPath() != null) {
             user.setAvatarPath(baseUrl + "/uploads/avatar/" + user.getAvatarPath());
         }
 
         return ResponseEntity.ok(user);
     }
+
+
 
 }

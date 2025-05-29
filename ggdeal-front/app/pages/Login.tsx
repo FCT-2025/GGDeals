@@ -37,8 +37,8 @@ export default function Login() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setError(t(`login.errors.${errorData.error || "default"}`));
-        console.warn("Login Error:", errorData);
+        setError(t('login.errors.invalid_credentials'));
+        console.error("Login Error:", errorData);
         return;
       }
 

@@ -10,6 +10,7 @@ import { useUser } from "../context/UserContext";
 import { Config } from "~/config/config";
 import { t } from "i18next";
 
+
 export default function Nav() {
   const [isHovered, setHover] = useState(false);
   const [onFocus, setFocus] = useState(false);
@@ -20,7 +21,7 @@ export default function Nav() {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const {user, setUser} = useUser();
+  const {user , setUser} = useUser();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -52,7 +53,6 @@ export default function Nav() {
   let lastScrollY = useRef(0);
 
   const handleScroll = () => {
-    console.log(lastScrollY.current + " " + window.scrollY);
     const deltaY = Math.abs(window.scrollY - lastScrollY.current);
 
     if (deltaY > 600) {
@@ -195,7 +195,7 @@ export default function Nav() {
                   className="relative group cursor-pointer"
                 >
                   <img
-                    src={user.avatarPath}
+                    src={user.avatarPath ?? '/img/user.png'}
                     alt="Avatar"
                     className="h-12 w-12 rounded-full object-cover transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-lg group-hover:scale-105"
                   />
@@ -317,7 +317,7 @@ export default function Nav() {
                 className="flex items-center space-x-4 w-full text-left group hover:bg-gray-50 p-2 rounded-lg transition-colors duration-200"
               >
                 <img
-                  src={user.avatarPath}
+                  src={user.avatarPath ?? '/img/user.png'}
                   alt="Avatar"
                   className="h-12 w-12 rounded-full object-cover"
                 />
@@ -372,10 +372,10 @@ export default function Nav() {
                 <h3 className="text-xl font-bold">{t("nav.userProfile.title")}</h3>
                 <button
                   onClick={() => setUserModalOpen(false)}
-                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-200"
+                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-800 transition-colors duration-200"
                   aria-label="Close modal"
                 >
-                  <span className="text-xl text-white">&times;</span>
+                  <span className="aspect-1 text-xl text-white">&times;</span>
                 </button>
               </div>
 
@@ -383,7 +383,7 @@ export default function Nav() {
               <div className="flex flex-col items-center mb-6">
                 <div className="relative mb-4">
                   <img
-                    src={user.avatarPath}
+                    src={user.avatarPath ?? '/img/user.png'}
                     alt="Avatar"
                     className="h-20 w-20 rounded-full object-cover "
                   />
@@ -401,7 +401,7 @@ export default function Nav() {
               <div className="space-y-2 mb-6">
                 <Link
                   to="/profile"
-                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
                   onClick={() => setUserModalOpen(false)}
                 >
                   <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-200">
@@ -411,8 +411,8 @@ export default function Nav() {
                 </Link>
 
                 <Link
-                  to="/orders"
-                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                  to="/profile#myOrders"
+                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
                   onClick={() => setUserModalOpen(false)}
                 >
                   <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors duration-200">
@@ -435,7 +435,7 @@ export default function Nav() {
 
                 <Link
                   to="/wishlist"
-                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
                   onClick={() => setUserModalOpen(false)}
                 >
                   <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors duration-200">
@@ -445,8 +445,8 @@ export default function Nav() {
                 </Link>
 
                 <Link
-                  to="/settings"
-                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                  to="/profile#settings"
+                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
                   onClick={() => setUserModalOpen(false)}
                 >
                   <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-gray-200 transition-colors duration-200">
@@ -478,7 +478,7 @@ export default function Nav() {
               <div className="border-t border-gray-200 pt-4">
                 <button
                   onClick={handleLogout}
-                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-red-50 transition-colors duration-200 group"
+                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
                 >
                   <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors duration-200">
                     <svg

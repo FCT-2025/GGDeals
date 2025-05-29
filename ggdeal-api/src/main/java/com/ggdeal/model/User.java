@@ -51,6 +51,8 @@ public class User {
 
     private LocalDate createdAt;
 
+    private Float amount;
+
     @Column(nullable = true)
     private Boolean isVerified;
 
@@ -68,5 +70,12 @@ public class User {
         if(createdAt==null) {
             createdAt = LocalDate.now();
         }
+
+        this.amount = 0f;
+    }
+
+    public Float updateBalance(Float amount) {
+        this.amount += amount;
+        return this.amount;
     }
 }
