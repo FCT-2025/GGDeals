@@ -17,19 +17,22 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <GameShowcase className="mt-15"/>
-      <Charity style={{marginBottom: "160px"}}/>
+      <GameShowcase className="mt-8 sm:mt-10 md:mt-15 px-4 sm:px-6 md:px-8" />
+      <Charity className="mb-12 sm:mb-20 md:mb-32 lg:mb-40 xl:mb-[160px] px-4 sm:px-6 md:px-8" />
       <CompanyGames
         companyName="BANDAI NANCOT Entreteniments games"
         isMain={true}
+        className="mb-12 sm:mb-16 md:mb-20 lg:mb-24 px-4 sm:px-6 md:px-8"
       />
       <CompanyGames
         companyName="Steam"
         isMain={false}
+        className="mb-12 sm:mb-16 md:mb-20 px-4 sm:px-6 md:px-8"
       />
       <CompanyGames
         companyName="Epic"
         isMain={false}
+        className="mb-12 sm:mb-16 md:mb-20 px-4 sm:px-6 md:px-8"
       />
     </>
   );

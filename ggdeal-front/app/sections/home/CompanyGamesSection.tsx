@@ -4,32 +4,37 @@ import IconSlideButton from "../../assets/icons/icon-slide-button.svg?react";
 export default function CompanyGames({
   companyName,
   isMain,
+  className
 }: {
   companyName: string;
   isMain: boolean;
+  className?: string;
 }) {
   return (
-    <section>
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="font-epilogue text-2xl font-light text-gray-100">
+    <section className={className}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6">
+        <h3 className="font-epilogue text-xl sm:text-2xl font-light text-gray-100 mb-2 sm:mb-0">
           {companyName}
         </h3>
-        <div className="flex space-x-4">
-          <IconSlideButton className="cursor-pointer" />
-          <IconSlideButton className="cursor-pointer rotate-180" />
+        <div className="flex space-x-2 sm:space-x-4">
+          <IconSlideButton className="cursor-pointer w-8 h-8 sm:w-auto sm:h-auto" />
+          <IconSlideButton className="cursor-pointer rotate-180 w-8 h-8 sm:w-auto sm:h-auto" />
         </div>
       </div>
-      <div className={`flex w-full space-x-2 justify-center items-center flex-wrap ${ isMain ? "h-full" : "h-[55vh]" }`}>
+      
+      <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 ${
+        isMain ? "h-full" : "md:max-h-[55vh]"
+      }`}>
         {featuresGames.map((card, index) => (
-            <CardPrimary
-              className="flex-1 w-full h-full flex flex-col"
-              key={`featuresGames-${index}`} 
-              src={card.src}
-              alt={card.alt}
-              description={card.description}
-              prize={card.prize}
-              discount={card.discount}
-            />
+          <CardPrimary
+            className="flex-1 w-full h-full"
+            key={`featuresGames-${index}`} 
+            src={card.src}
+            alt={card.alt}
+            description={card.description}
+            prize={card.prize}
+            discount={card.discount}
+          />
         ))}
       </div>
     </section>

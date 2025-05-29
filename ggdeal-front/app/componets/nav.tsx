@@ -21,6 +21,7 @@ export default function Nav() {
   const navigate = useNavigate();
   const location = useLocation();
   const {user, setUser} = useUser();
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -28,10 +29,26 @@ export default function Nav() {
     setQuery(queryFromUrl);
   }, []);
 
-  // Cerrar menú mobile cuando cambie la ruta
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      if (scrollPosition > 100) { 
+        setHasScrolled(true);
+      } else {
+        setHasScrolled(false);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleSearchClick = () => {
     if (query.trim() === "") {
@@ -100,10 +117,16 @@ export default function Nav() {
 
   return (
     <>
-      <header className="flex items-center justify-between fixed left-1/2 transform top-0 -translate-x-1/2 w-full z-50 pt-10 px-4 lg:px-0">
+      <header 
+        className={`flex items-center justify-between fixed left-1/2 w-full z-50 
+        transition-all duration-300 ease-in-out transform 
+        ${hasScrolled 
+          ? "pt-2 pb-2 px-4 lg:px-6 bg-black/80 backdrop-blur-lg shadow-lg -translate-x-1/2 -translate-y-1" 
+          : "pt-10 px-4 lg:px-0 bg-transparent -translate-x-1/2 top-0"
+        }`}>
         <Link to="/">
           <div className="group relative flex items-center justify-center">
-            <IconGGD className="z-50" />
+            <IconGGD className={`z-50 transition-transform duration-300 ${hasScrolled ? "scale-90" : ""}`} />
             <div
               className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 
                animate-neon-glow pointer-events-none transform scale-130 transition-all duration-300"
@@ -197,7 +220,9 @@ export default function Nav() {
                   <img
                     src={user.avatarPath}
                     alt="Avatar"
-                    className="h-12 w-12 rounded-full object-cover transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-lg group-hover:scale-105"
+                    className={`rounded-full object-cover transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-lg group-hover:scale-105 ${
+                      hasScrolled ? "h-10 w-10" : "h-12 w-12"
+                    }`}                  
                   />
                   <div className="absolute inset-0 rounded-full bg-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </button>
@@ -218,13 +243,11 @@ export default function Nav() {
           </div>
         </nav>
 
-        {/* Mobile Menu Icons */}
         <div className="lg:hidden flex items-center gap-4">
           <Link to="/shoppingcart" className="flex justify-center items-center">
             <IconCart />
           </Link>
 
-          {/* Hamburger Button */}
           <button
             onClick={toggleMobileMenu}
             className="flex flex-col justify-center items-center w-8 h-8 bg-transparent border-none cursor-pointer group"
@@ -237,7 +260,6 @@ export default function Nav() {
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
       <div
         className={`fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300 ${
           isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -245,14 +267,12 @@ export default function Nav() {
         onClick={() => setMobileMenuOpen(false)}
       ></div>
 
-      {/* Mobile Menu */}
       <nav
         className={`fixed top-0 right-0 h-full w-80 bg-black shadow-xl z-50 lg:hidden transform transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full">
-          {/* Mobile Menu Header */}
           <div className="flex justify-between items-center p-6 border-b border-gray-200">
             <h2 className="text-xl font-bold">Menu</h2>
             <button
@@ -264,7 +284,6 @@ export default function Nav() {
             </button>
           </div>
 
-          {/* Mobile Search */}
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center space-x-3">
               <input
@@ -288,7 +307,6 @@ export default function Nav() {
             </div>
           </div>
 
-          {/* Mobile Navigation Links */}
           <div className="flex-1 overflow-y-auto">
             <ul className="py-4">
               <li>
@@ -309,7 +327,6 @@ export default function Nav() {
             </ul>
           </div>
 
-          {/* Mobile User Section */}
           <div className="border-t border-gray-200 p-6">
             {user ? (
               <button
@@ -347,10 +364,8 @@ export default function Nav() {
         </div>
       </nav>
 
-      {/* User Profile Modal */}
       {user && (
         <>
-          {/* Modal Overlay */}
           <div
             className={`fixed inset-0 bg-black/50 z-50 transition-opacity duration-300 ${
               isUserModalOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -358,7 +373,6 @@ export default function Nav() {
             onClick={() => setUserModalOpen(false)}
           ></div>
 
-          {/* Modal Content */}
           <div
             className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black rounded-2xl shadow-2xl z-50 w-96 max-w-[90vw] transition-all duration-300 ${
               isUserModalOpen
@@ -367,7 +381,6 @@ export default function Nav() {
             }`}
           >
             <div className="p-6">
-              {/* Modal Header */}
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold">{t("nav.userProfile.title")}</h3>
                 <button
@@ -379,7 +392,6 @@ export default function Nav() {
                 </button>
               </div>
 
-              {/* User Info */}
               <div className="flex flex-col items-center mb-6">
                 <div className="relative mb-4">
                   <img
@@ -397,7 +409,6 @@ export default function Nav() {
                 </p>
               </div>
 
-              {/* Menu Options */}
               <div className="space-y-2 mb-6">
                 <Link
                   to="/profile"
@@ -474,7 +485,6 @@ export default function Nav() {
                 </Link>
               </div>
 
-              {/* Logout Button */}
               <div className="border-t border-gray-200 pt-4">
                 <button
                   onClick={handleLogout}
