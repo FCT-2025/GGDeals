@@ -57,7 +57,7 @@ public class AdminReplicaController {
         model.addAttribute("editions", editionService.findAll());
         model.addAttribute("platforms", platformModelRepository.findAll());
 
-        return "admin/keys";
+        return "admin/replica";
     }
 
     @GetMapping("/list")
@@ -96,15 +96,18 @@ public class AdminReplicaController {
     @ResponseBody
     public ResponseEntity<List<Replica>> createReplicaBatch(
             @RequestBody Map<String, Object> requestBody) {
-        // Verificar campos obligatorios
-        if (requestBody.get("gameId") == null ||
-                requestBody.get("editionId") == null ||
-                requestBody.get("platformId") == null) {
+
+        if (requestBody.get("gameId") == null || requestBody.get("platformId") == null) {
             return ResponseEntity.badRequest().body(null);
         }
 
         Long gameId = Long.valueOf(requestBody.get("gameId").toString());
-        Long editionId = Long.valueOf(requestBody.get("editionId").toString());
+
+        Long editionId = null;
+        if (requestBody.get("editionId") != null) {
+            editionId = Long.valueOf(requestBody.get("editionId").toString());
+        }
+
         Long platformModelId = Long.valueOf(requestBody.get("platformId").toString());
         Boolean isSold = requestBody.get("isSold") != null ?
                 Boolean.valueOf(requestBody.get("isSold").toString()) : false;
@@ -118,7 +121,7 @@ public class AdminReplicaController {
 
         List<String> activationKeys;
 
-        if (requestBody.containsKey("generateKeys") && (Boolean)requestBody.get("generateKeys")) {
+        if (requestBody.containsKey("generateKeys") && (Boolean) requestBody.get("generateKeys")) {
             int quantity = Integer.parseInt(requestBody.get("quantity").toString());
             String format = requestBody.get("format").toString();
             String prefix = requestBody.get("prefix") != null ?
@@ -137,6 +140,7 @@ public class AdminReplicaController {
         return ResponseEntity.ok(savedReplicas);
     }
 
+
     @PutMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateReplica(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) {
@@ -147,46 +151,41 @@ public class AdminReplicaController {
 
         Replica replica = optionalReplica.get();
 
-        // Actualizar clave de activación
-        if (requestBody.get("activation_key") != null) {
-            replica.setActivation_key(requestBody.get("activation_key").toString());
+
+        if (requestBody.get("activationKey") != null) {
+            replica.setActivationKey(requestBody.get("activationKey").toString());
         }
 
-        // Actualizar juego
+
         if (requestBody.get("gameId") != null) {
             Long gameId = Long.valueOf(requestBody.get("gameId").toString());
             gameServiceImpl.findById(gameId).ifPresent(replica::setGame);
         }
 
-        // Actualizar edición
+
         if (requestBody.get("editionId") != null) {
             Long editionId = Long.valueOf(requestBody.get("editionId").toString());
             editionService.findById(editionId).ifPresent(replica::setEdition);
         }
 
-        // Actualizar plataforma
         if (requestBody.get("platformId") != null) {
             Long platformId = Long.valueOf(requestBody.get("platformId").toString());
             platformModelRepository.findById(platformId).ifPresent(platformModel -> {
                 replica.setPlatformModel(platformModel);
-                replica.setPlatformId(platformId);
-                if (platformModel.getPlatformType() != null) {
-                    replica.setPlatformType(platformModel.getPlatformType());
-                }
             });
         }
 
-        // Actualizar estado de venta
+
         if (requestBody.get("isSold") != null) {
             replica.setIsSold(Boolean.valueOf(requestBody.get("isSold").toString()));
         }
 
         Replica savedReplica = replicaService.save(replica);
 
-        // Devolver solo los datos necesarios
+
         Map<String, Object> response = new HashMap<>();
         response.put("id", savedReplica.getId());
-        response.put("activation_key", savedReplica.getActivation_key());
+        response.put("activation_key", savedReplica.getActivationKey());
         response.put("isSold", savedReplica.getIsSold());
 
         return ResponseEntity.ok(response);

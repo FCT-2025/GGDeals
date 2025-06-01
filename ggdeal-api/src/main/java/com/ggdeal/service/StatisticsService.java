@@ -1,7 +1,7 @@
 package com.ggdeal.service;
 
-import com.ggdeal.dto.PopularGameSalesDTO;
-import com.ggdeal.dto.SalesPerMonthDTO;
+import com.ggdeal.dto.admin.PopularGameSalesDTO;
+import com.ggdeal.dto.admin.SalesPerMonthDTO;
 import com.ggdeal.model.Sale;
 import com.ggdeal.repository.GameRepository;
 import com.ggdeal.repository.ReplicaRepository;
@@ -96,7 +96,7 @@ public class StatisticsService {
         Map<String, Object> categorySales = allSales.stream()
                 .filter(sale -> sale.getReplica() != null && sale.getReplica().getGame() != null)
                 .collect(Collectors.groupingBy(
-                        sale -> sale.getReplica().getGame().getGenre(), // Cambiado de getCategory() a getGenre()
+                        sale -> sale.getReplica().getGame().getGenre().getName(), // Cambiado de getCategory() a getGenre()
                         Collectors.collectingAndThen(
                                 Collectors.toList(),
                                 salesList -> {

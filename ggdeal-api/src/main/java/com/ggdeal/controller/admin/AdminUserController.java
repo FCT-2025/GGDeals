@@ -1,6 +1,6 @@
 package com.ggdeal.controller.admin;
 
-import com.ggdeal.dto.UserUpdateDTO;
+import com.ggdeal.dto.admin.UserUpdateDTO;
 import com.ggdeal.model.User;
 import com.ggdeal.service.UserService;
 import jakarta.validation.Valid;

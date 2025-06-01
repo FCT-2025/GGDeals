@@ -57,13 +57,6 @@
                         <button
                           type="button"
                           class="btn btn-sm btn-outline-primary"
-                          id="filter-unpublished"
-                        >
-                          No Publicados
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-sm btn-outline-primary"
                           id="filter-coming"
                         >
                           Próximamente
@@ -80,7 +73,7 @@
                             <th>Imagen</th>
                             <th>Título</th>
                             <th>Desarrollo</th>
-                            <th>Nombre</th>
+                            <th>Nombre Slug</th>
                             <th>Precio</th>
                             <th>Fecha Lanzamiento</th>
                             <th>Fecha Publicación</th>
@@ -432,21 +425,7 @@
                     <option value="" disabled selected>
                       Seleccionar género
                     </option>
-                    <option value="Acción">Acción</option>
-                    <option value="Aventura">Aventura</option>
-                    <option value="RPG">RPG</option>
-                    <option value="Estrategia">Estrategia</option>
-                    <option value="Deportes">Deportes</option>
-                    <option value="Simulación">Simulación</option>
-                    <option value="Puzzle">Puzzle</option>
-                    <option value="Plataformas">Plataformas</option>
-                    <option value="Shooter">Shooter</option>
-                    <option value="Horror">Horror</option>
-                    <option value="Mundo Abierto">Mundo Abierto</option>
-                    <option value="Carreras">Carreras</option>
-                    <option value="Lucha">Lucha</option>
-                    <option value="Música/Ritmo">Música/Ritmo</option>
-                    <option value="Indie">Indie</option>
+                    <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
                   </select>
                 </div>
               </div>
@@ -565,29 +544,7 @@
                   placeholder="Seleccionar fecha de publicación"
                 />
               </div>
-              <div class="mb-5">
-                <label for="editGameThumbnail" class="form-label"
-                  >Imagen Principal</label
-                >
-                <div class="d-flex align-items-center mb-2">
-                  <img
-                    src="./assets/compiled/jpg/1.jpg"
-                    width="100"
-                    height="100"
-                    class="rounded me-3"
-                    alt="Current Thumbnail"
-                  />
-                  <span class="text-muted"
-                    >Imagen actual - Cargar una nueva para reemplazar</span
-                  >
-                </div>
-                <input
-                  type="file"
-                  class="filepond"
-                  id="editGameThumbnail"
-                  name="media"
-                />
-              </div>
+
               <div class="form-group">
                 <label for="editGameGenre">Género</label>
                 <select
@@ -597,21 +554,7 @@
                   required
                 >
                   <option value="" disabled>Seleccionar género</option>
-                  <option value="Acción">Acción</option>
-                  <option value="Aventura">Aventura</option>
-                  <option value="RPG">RPG</option>
-                  <option value="Estrategia">Estrategia</option>
-                  <option value="Deportes">Deportes</option>
-                  <option value="Simulación">Simulación</option>
-                  <option value="Puzzle">Puzzle</option>
-                  <option value="Plataformas">Plataformas</option>
-                  <option value="Shooter">Shooter</option>
-                  <option value="Horror">Horror</option>
-                  <option value="Mundo Abierto">Mundo Abierto</option>
-                  <option value="Carreras">Carreras</option>
-                  <option value="Lucha">Lucha</option>
-                  <option value="Música/Ritmo">Música/Ritmo</option>
-                  <option value="Indie">Indie</option>
+                  <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
                 </select>
               </div>
               <div class="form-group">
@@ -1375,8 +1318,7 @@
         // Filtros de estado
         $("#filter-all").click(() => filterGames(""));
         $("#filter-published").click(() => filterGames("Publicado"));
-        $("#filter-unpublished").click(() => filterGames("No Publicado"));
-        $("#filter-coming").click(() => filterGames("Próximamente"));
+        $("#filter-coming").click(() => filterGames("^(?!Publicado$).*$"));
 
         // Formulario de ediciones
         $("#addEditionBtn").click(() =>
@@ -1453,7 +1395,7 @@
               publishedDate: parseFlatpickrDate(
                 document.getElementById("gameIsPublished").value
               ),
-              genre: document.getElementById("gameGenre").value,
+              genre: {id: document.getElementById("gameGenre").value},
               description: document.getElementById("gameDescription").value,
               price: document.getElementById("gamePrice").value
                 ? parseFloat(document.getElementById("gamePrice").value)
@@ -1487,11 +1429,11 @@
               publishedDate: parseFlatpickrDate(
                 document.getElementById("editGameIsPublished").value
               ),
-              genre: document.getElementById("editGameGenre").value,
+              genre: { id: document.getElementById("editGameGenre").value },
               description: document.getElementById("editGameDescription").value,
               price: document.getElementById("editGamePrice").value
                 ? parseFloat(document.getElementById("editGamePrice").value)
-                : null,
+                : 0,
             };
 
             gameApi
@@ -1913,7 +1855,7 @@
 
       function filterGames(status) {
         const table = $("#gamesTable").DataTable();
-        table.column(6).search(status).draw();
+        table.column(7).search(status, true, false).draw();
         $(".btn-outline-primary").removeClass("active");
         $(`#filter-${status.toLowerCase().replace(/ /g, "-")}`).addClass(
           "active"

@@ -1,28 +1,22 @@
 import { Config } from "../config/config";
+import type { Game } from "~/types/Game";
+import type { PaginationGame } from "~/types/PaginationGame";
 
-type Game = {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  price: number;
-  releaseDate: string;
-};
 
-async function getGames(): Promise<Game[]> {
-  const res = await fetch(`${Config.API_URL}/game`);
+export async function getPageGames(): Promise<PaginationGame> {
+  const res = await fetch(Config.GGDEAL.GAME);
   const data = await res.json();
-  return data as Game[];
+  return data as PaginationGame;
 }
 
 async function getGameBySlugOrId(id: number | string): Promise<Game> {
-  const res = await fetch(`${Config.API_URL}/game/${id}`);
+  const res = await fetch(`${Config.GGDEAL.GAME}/${id}`);
   const data = await res.json();
   return data as Game;
 }
 
 async function getGameByName(name: string): Promise<Game[]> {
-  const res = await fetch(`${Config.API_URL}/game?name=${name}`);
+  const res = await fetch(`${Config.GGDEAL}/game?name=${name}`);
   const data = await res.json();
   return data as Game[];
 }

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragment/head :: head('Administración de Géneros')"></head>
+
+<body>
+<script th:src="@{/assets/static/js/initTheme.js}"></script>
+<div id="app">
+    <div id="main" class="layout-horizontal">
+        <header th:replace="fragment/navbar"></header>
+
+        <div class="content-wrapper container">
+            <div class="page-heading">
+                <h3>Administración de Géneros</h3>
+            </div>
+
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div class="page-content">
+                <section class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title">Géneros</h4>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#addGenreModal">
+                                        <i class="bi bi-plus"></i> Nuevo Género
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-lg" id="genresTable">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="genre : ${genres}">
+                                            <td th:text="${genre.id}">1</td>
+                                            <td th:text="${genre.name}">Acción</td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-primary btn-edit-genre"
+                                                        th:data-id="${genre.id}">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-danger btn-delete-genre"
+                                                        th:data-id="${genre.id}"
+                                                        th:data-name="${genre.name}">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer th:replace="fragment/footer"></footer>
+    </div>
+</div>
+
+<!-- Modal para agregar género -->
+<div class="modal fade" id="addGenreModal" tabindex="-1" role="dialog" aria-labelledby="addGenreModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addGenreModalLabel">Nuevo Género</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addGenreForm">
+                    <div class="form-group mb-3">
+                        <label for="genreName">Nombre del Género</label>
+                        <input type="text" class="form-control" id="genreName" name="name" required
+                               placeholder="Ej: Acción, Aventura, RPG...">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="saveGenre()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar género -->
+<div class="modal fade" id="editGenreModal" tabindex="-1" role="dialog" aria-labelledby="editGenreModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editGenreModalLabel">Editar Género</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editGenreForm">
+                    <input type="hidden" id="editGenreId" name="id">
+                    <div class="form-group mb-3">
+                        <label for="editGenreName">Nombre del Género</label>
+                        <input type="text" class="form-control" id="editGenreName" name="name" required
+                               placeholder="Ej: Acción, Aventura, RPG...">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="updateGenre()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para eliminar género -->
+<div class="modal fade" id="deleteGenreModal" tabindex="-1" role="dialog" aria-labelledby="deleteGenreModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteGenreModalLabel">Eliminar Género</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteGenreForm">
+                    <input type="hidden" id="deleteGenreId" name="id">
+                    <p>¿Estás seguro de que deseas eliminar el género <span id="deleteGenreName"
+                                                                            class="fw-bold"></span>?</p>
+                    <p>Esta acción no se puede deshacer.</p>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="deleteGenre()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/assets/static/js/components/dark.js}"></script>
+<script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
+<script th:src="@{/assets/compiled/js/app.js}"></script>
+<script th:src="@{/assets/extensions/jquery/jquery.min.js}"></script>
+
+<!-- Simple DataTables -->
+<script th:src="@{/assets/extensions/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar DataTable
+        var table = $('#genresTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+            }
+        });
+
+        // Eventos para botones de editar
+        document.querySelectorAll('.btn-edit-genre').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                editGenre(id);
+            });
+        });
+
+        // Eventos para botones de eliminar
+        document.querySelectorAll('.btn-delete-genre').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                setDeleteGenre(id, name);
+            });
+        });
+    });
+
+    function setDeleteGenre(id, name) {
+        document.getElementById('deleteGenreId').value = id;
+        document.getElementById('deleteGenreName').textContent = name;
+        new bootstrap.Modal(document.getElementById('deleteGenreModal')).show();
+    }
+
+    function saveGenre() {
+        const name = document.getElementById('genreName').value.trim();
+
+        if (!name) {
+            alert('Por favor, ingresa el nombre del género');
+            return;
+        }
+
+        const genreData = {
+            name: name
+        };
+
+        fetch('/api/admin/genre', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(genreData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al guardar el género');
+            }
+            return response.json();
+        })
+        .then(data => {
+            bootstrap.Modal.getInstance(document.getElementById('addGenreModal')).hide();
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ha ocurrido un error al guardar el género');
+        });
+    }
+
+    function editGenre(id) {
+        fetch(`/api/admin/genre/${id}`, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al cargar datos del género');
+            }
+            return response.json();
+        })
+        .then(genre => {
+            document.getElementById('editGenreId').value = genre.id;
+            document.getElementById('editGenreName').value = genre.name;
+
+            new bootstrap.Modal(document.getElementById('editGenreModal')).show();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al cargar los datos del género');
+        });
+    }
+
+    function updateGenre() {
+        const id = document.getElementById('editGenreId').value;
+        const name = document.getElementById('editGenreName').value.trim();
+
+        if (!name) {
+            alert('Por favor, ingresa el nombre del género');
+            return;
+        }
+
+        const genreData = {
+            name: name
+        };
+
+        fetch(`/api/admin/genre/${id}`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(genreData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al actualizar el género');
+            }
+            return response.json();
+        })
+        .then(data => {
+            bootstrap.Modal.getInstance(document.getElementById('editGenreModal')).hide();
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ha ocurrido un error al actualizar el género');
+        });
+    }
+
+    function deleteGenre() {
+        const id = document.getElementById('deleteGenreId').value;
+
+        fetch(`/api/admin/genre/${id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al eliminar el género');
+            }
+            bootstrap.Modal.getInstance(document.getElementById('deleteGenreModal')).hide();
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ha ocurrido un error al eliminar el género');
+        });
+    }
+</script>
+</body>
+
+</html>

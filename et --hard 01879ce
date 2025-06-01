@@ -1,0 +1,60 @@
+[33m6b1f15d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33m01879ce[m HEAD@{1}: commit:
+[33m6b1f15d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{2}: reset: moving to ORIG_HEAD
+[33m6b1f15d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{3}: commit: Monedero, Settings y Game Empezando
+[33mb6dfa36[m HEAD@{4}: pull --tags origin main: Merge made by the 'ort' strategy.
+[33me641eca[m HEAD@{5}: commit: GameMedia y Features
+[33mf9eed3c[m HEAD@{6}: commit: Arhivos basura eliminados
+[33m5d82bdc[m HEAD@{7}: commit (merge): Merge branch 'main' of https://github.com/FCT-2025/GGDeals
+[33m9e1eb55[m HEAD@{8}: commit: Inicializador BDS, idiomas, login,registro,pergfil
+[33mfc2ee76[m HEAD@{9}: commit (merge): Merge branch 'main' of https://github.com/FCT-2025/GGDeals
+[33me8f92bd[m HEAD@{10}: commit: Profile, Reservation, User
+[33m7b50969[m HEAD@{11}: commit (merge): Resolviendo conflictos del nav
+[33m56701f1[m HEAD@{12}: commit: Profile back y login y register del fron solucionado
+[33m2582226[m HEAD@{13}: commit (merge): conflictos solucionados
+[33me9a5bf5[m HEAD@{14}: commit: head ...
+[33m2ebabc6[m HEAD@{15}: commit: Fragmentos, 404 y configuracion de thymleaf
+[33m90a7d37[m HEAD@{16}: commit: Validaciones, Correcciones, login
+[33m8ce9a4c[m HEAD@{17}: commit: Back:Dashboard, PlataformType Fornt:Service
+[33m6c50a80[m HEAD@{18}: pull: Fast-forward
+[33mfe35b9f[m HEAD@{19}: pull: Merge made by the 'ort' strategy.
+[33m0bf94dc[m HEAD@{20}: commit: Carousel, nueva nomenclatura y ajustes de estilos
+[33m3fec0ac[m HEAD@{21}: pull: Fast-forward
+[33m9b98439[m HEAD@{22}: commit: CamelCase, cambio de directorio y nuevas secciones
+[33m03d8526[m HEAD@{23}: commit: Endpoints y middlewares.
+[33m66cc255[m HEAD@{24}: commit: Validaciones y muestra de Error
+[33mca456e8[m HEAD@{25}: pull: Fast-forward
+[33mb126df7[m HEAD@{26}: pull: Fast-forward
+[33mc201dfb[m HEAD@{27}: pull: Fast-forward
+[33m3e0f9cf[m HEAD@{28}: commit: Seccion game showcase finalizada
+[33m1b27fba[m HEAD@{29}: commit: Footer, feature carousel y game showcase
+[33md4744c9[m HEAD@{30}: commit: Estilos y fuentes
+[33me7cc2f9[m HEAD@{31}: commit: UserController devuelve token
+[33m4c35bec[m HEAD@{32}: commit: Secciones añadidas estilos globales y funciones
+[33m1502d8d[m HEAD@{33}: reset: moving to HEAD~1
+[33m1b8cbb5[m HEAD@{34}: commit: Home, Buscador, charity añadiddos
+[33m1502d8d[m HEAD@{35}: reset: moving to HEAD
+[33m1502d8d[m HEAD@{36}: reset: moving to HEAD
+[33m1502d8d[m HEAD@{37}: commit: override methods equals and hashcode over models and simplify de lombook label with @Data
+[33m250be1a[m HEAD@{38}: commit: Models and repositories
+[33m2610742[m HEAD@{39}: commit: Disable security stuff , jwt and auth authentication
+[33m32d3321[m HEAD@{40}: reset: moving to HEAD~1
+[33m20ad288[m HEAD@{41}: commit: - Disable login and CSRF
+[33m32d3321[m HEAD@{42}: commit: Rename folder: back-end->ggdeal-api
+[33mb01ad4f[m HEAD@{43}: reset: moving to HEAD~1
+[33ma631352[m HEAD@{44}: reset: moving to HEAD~1
+[33m8227ecb[m HEAD@{45}: reset: moving to HEAD~1
+[33m201a82b[m HEAD@{46}: reset: moving to HEAD~1
+[33mcbdf4bd[m HEAD@{47}: reset: moving to HEAD~1
+[33ma2bf812[m HEAD@{48}: reset: moving to HEAD~1
+[33m00c0fdc[m HEAD@{49}: reset: moving to HEAD~1
+[33m414c87c[m HEAD@{50}: commit: Auth and Repository
+[33m00c0fdc[m HEAD@{51}: commit: Test
+[33ma2bf812[m HEAD@{52}: commit: Models
+[33mcbdf4bd[m HEAD@{53}: commit: Initi , properties and custom banner
+[33m201a82b[m HEAD@{54}: commit: Inicialization
+[33m8227ecb[m HEAD@{55}: commit: Mockup
+[33ma631352[m HEAD@{56}: commit: Rename Folder: back-end->ggdeal-api
+[33mb01ad4f[m HEAD@{57}: commit: Rename folder: front-end -> ggdeal-fron
+[33mdc72ef4[m HEAD@{58}: commit: initialization projects
+[33m0fe60b1[m HEAD@{59}: clone: from https://github.com/FCT-2025/GGDeals.git

@@ -4,10 +4,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigate,
+  useLocation,
 } from "react-router";
-import { useEffect, useState, useRef } from "react";
-import { getUsuario } from "./services/authService";
-import type { User } from "./services/authService";
+import { useEffect } from "react";
+import { getUsuario } from "./services/AuthService";
+import type { User } from "./services/AuthService";
 import { UserProvider } from "./context/UserContext";
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -50,7 +52,15 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { i18n } = useTranslation();
+  const { i18n, ready } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.search) {
+      navigate(location.pathname, { replace: true });
+    }
+  }, []);
 
   return (
     <LanguageProvider i18nInstance={i18n}>
@@ -58,16 +68,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <html lang={i18n.language} className="scroll-smooth">
           <head>
             <meta charSet="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1"
+            />
             <Meta />
             <Links />
           </head>
           <body className="relative">
-            <Nav />
-            {children}
-            <ScrollRestoration />
+            {ready && <Nav />}
+            {ready && children}
+            <ScrollRestoration
+              getKey={(location, matches) => {
+                return location.pathname;
+              }}
+            />
             <Scripts />
-            <Footer />
+           {ready &&  <Footer />}
           </body>
         </html>
       </UserProvider>

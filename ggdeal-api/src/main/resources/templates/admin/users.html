@@ -49,7 +49,7 @@
                                                 id="filter-customers">Clientes
                                         </button>
                                         <button type="button" class="btn btn-sm btn-outline-primary"
-                                                id="filter-admins">Administradores
+                                                id="filter-admins">Administrador
                                         </button>
                                     </div>
                                 </div>
@@ -328,13 +328,13 @@
         });
 
         $('#filter-customers').click(function () {
-            table.column(5).search('Cliente').draw();
+            table.column(5).search('User').draw();
             $('.btn-outline-primary').removeClass('active');
             $(this).addClass('active');
         });
 
         $('#filter-admins').click(function () {
-            table.column(5).search('Administrador').draw();
+            table.column(5).search('Admin').draw();
             $('.btn-outline-primary').removeClass('active');
             $(this).addClass('active');
         });

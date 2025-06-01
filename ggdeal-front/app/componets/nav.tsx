@@ -5,10 +5,11 @@ import IconCart from "../assets/icons/icon-cart.svg?react";
 import IconFavourite from "../assets/icons/icon-favourite.svg?react";
 import IconUser from "../assets/icons/icon-user.svg?react";
 import IconGGD from "../assets/icons/GGD.svg?react";
-import type { User } from "../services/authService";
+import type { User } from "../services/AuthService";
 import { useUser } from "../context/UserContext";
 import { Config } from "~/config/config";
 import { t } from "i18next";
+
 
 export default function Nav() {
   const [isHovered, setHover] = useState(false);
@@ -20,8 +21,7 @@ export default function Nav() {
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const {user, setUser} = useUser();
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const {user , setUser} = useUser();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -29,26 +29,10 @@ export default function Nav() {
     setQuery(queryFromUrl);
   }, []);
 
+  // Cerrar menú mobile cuando cambie la ruta
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      if (scrollPosition > 100) { 
-        setHasScrolled(true);
-      } else {
-        setHasScrolled(false);
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   const handleSearchClick = () => {
     if (query.trim() === "") {
@@ -69,7 +53,6 @@ export default function Nav() {
   let lastScrollY = useRef(0);
 
   const handleScroll = () => {
-    console.log(lastScrollY.current + " " + window.scrollY);
     const deltaY = Math.abs(window.scrollY - lastScrollY.current);
 
     if (deltaY > 600) {
@@ -117,16 +100,10 @@ export default function Nav() {
 
   return (
     <>
-      <header 
-        className={`flex items-center justify-between fixed left-1/2 w-full z-50 
-        transition-all duration-300 ease-in-out transform 
-        ${hasScrolled 
-          ? "pt-2 pb-2 px-4 lg:px-6 bg-black/80 backdrop-blur-lg shadow-lg -translate-x-1/2 -translate-y-1" 
-          : "pt-10 px-4 lg:px-0 bg-transparent -translate-x-1/2 top-0"
-        }`}>
+      <header className="flex items-center justify-between fixed left-1/2 transform top-0 -translate-x-1/2 w-full z-50 pt-10 px-4 lg:px-0">
         <Link to="/">
           <div className="group relative flex items-center justify-center">
-            <IconGGD className={`z-50 transition-transform duration-300 ${hasScrolled ? "scale-90" : ""}`} />
+            <IconGGD className="z-50" />
             <div
               className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 
                animate-neon-glow pointer-events-none transform scale-130 transition-all duration-300"
@@ -218,11 +195,9 @@ export default function Nav() {
                   className="relative group cursor-pointer"
                 >
                   <img
-                    src={user.avatarPath}
+                    src={user.avatarPath ?? '/img/user.png'}
                     alt="Avatar"
-                    className={`rounded-full object-cover transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-lg group-hover:scale-105 ${
-                      hasScrolled ? "h-10 w-10" : "h-12 w-12"
-                    }`}                  
+                    className="h-12 w-12 rounded-full object-cover transition-all duration-300 group-hover:border-blue-400 group-hover:shadow-lg group-hover:scale-105"
                   />
                   <div className="absolute inset-0 rounded-full bg-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </button>
@@ -243,11 +218,13 @@ export default function Nav() {
           </div>
         </nav>
 
+        {/* Mobile Menu Icons */}
         <div className="lg:hidden flex items-center gap-4">
           <Link to="/shoppingcart" className="flex justify-center items-center">
             <IconCart />
           </Link>
 
+          {/* Hamburger Button */}
           <button
             onClick={toggleMobileMenu}
             className="flex flex-col justify-center items-center w-8 h-8 bg-transparent border-none cursor-pointer group"
@@ -260,6 +237,7 @@ export default function Nav() {
         </div>
       </header>
 
+      {/* Mobile Menu Overlay */}
       <div
         className={`fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300 ${
           isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -267,12 +245,14 @@ export default function Nav() {
         onClick={() => setMobileMenuOpen(false)}
       ></div>
 
+      {/* Mobile Menu */}
       <nav
         className={`fixed top-0 right-0 h-full w-80 bg-black shadow-xl z-50 lg:hidden transform transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full">
+          {/* Mobile Menu Header */}
           <div className="flex justify-between items-center p-6 border-b border-gray-200">
             <h2 className="text-xl font-bold">Menu</h2>
             <button
@@ -284,6 +264,7 @@ export default function Nav() {
             </button>
           </div>
 
+          {/* Mobile Search */}
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center space-x-3">
               <input
@@ -307,6 +288,7 @@ export default function Nav() {
             </div>
           </div>
 
+          {/* Mobile Navigation Links */}
           <div className="flex-1 overflow-y-auto">
             <ul className="py-4">
               <li>
@@ -327,6 +309,7 @@ export default function Nav() {
             </ul>
           </div>
 
+          {/* Mobile User Section */}
           <div className="border-t border-gray-200 p-6">
             {user ? (
               <button
@@ -334,7 +317,7 @@ export default function Nav() {
                 className="flex items-center space-x-4 w-full text-left group hover:bg-gray-50 p-2 rounded-lg transition-colors duration-200"
               >
                 <img
-                  src={user.avatarPath}
+                  src={user.avatarPath ?? '/img/user.png'}
                   alt="Avatar"
                   className="h-12 w-12 rounded-full object-cover"
                 />
@@ -347,14 +330,14 @@ export default function Nav() {
               <div className="space-y-3">
                 <Link
                   to="/login"
-                  className="flex items-center justify-center space-x-2 w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                  className="flex items-center justify-center border border-primary space-x-2 w-full py-3 px-4 bg-primary text-white rounded-lg hover:bg-transparent transition-colors duration-200"
                 >
                   <IconUser className="w-5 h-5" />
                   <span>Login</span>
                 </Link>
                 <Link
                   to="/register"
-                  className="flex items-center justify-center w-full py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                  className="flex items-center justify-center w-full py-3 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-black transition-colors duration-200"
                 >
                   Register
                 </Link>
@@ -364,8 +347,10 @@ export default function Nav() {
         </div>
       </nav>
 
+      {/* User Profile Modal */}
       {user && (
         <>
+          {/* Modal Overlay */}
           <div
             className={`fixed inset-0 bg-black/50 z-50 transition-opacity duration-300 ${
               isUserModalOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -373,6 +358,7 @@ export default function Nav() {
             onClick={() => setUserModalOpen(false)}
           ></div>
 
+          {/* Modal Content */}
           <div
             className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black rounded-2xl shadow-2xl z-50 w-96 max-w-[90vw] transition-all duration-300 ${
               isUserModalOpen
@@ -381,21 +367,23 @@ export default function Nav() {
             }`}
           >
             <div className="p-6">
+              {/* Modal Header */}
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold">{t("nav.userProfile.title")}</h3>
                 <button
                   onClick={() => setUserModalOpen(false)}
-                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-200"
+                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-800 transition-colors duration-200"
                   aria-label="Close modal"
                 >
-                  <span className="text-xl text-white">&times;</span>
+                  <span className="aspect-1 text-xl text-white">&times;</span>
                 </button>
               </div>
 
+              {/* User Info */}
               <div className="flex flex-col items-center mb-6">
                 <div className="relative mb-4">
                   <img
-                    src={user.avatarPath}
+                    src={user.avatarPath ?? '/img/user.png'}
                     alt="Avatar"
                     className="h-20 w-20 rounded-full object-cover "
                   />
@@ -409,10 +397,11 @@ export default function Nav() {
                 </p>
               </div>
 
+              {/* Menu Options */}
               <div className="space-y-2 mb-6">
                 <Link
                   to="/profile"
-                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
                   onClick={() => setUserModalOpen(false)}
                 >
                   <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-200">
@@ -422,8 +411,8 @@ export default function Nav() {
                 </Link>
 
                 <Link
-                  to="/orders"
-                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                  to="/profile#myOrders"
+                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
                   onClick={() => setUserModalOpen(false)}
                 >
                   <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors duration-200">
@@ -446,7 +435,7 @@ export default function Nav() {
 
                 <Link
                   to="/wishlist"
-                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
                   onClick={() => setUserModalOpen(false)}
                 >
                   <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors duration-200">
@@ -456,8 +445,8 @@ export default function Nav() {
                 </Link>
 
                 <Link
-                  to="/settings"
-                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group"
+                  to="/profile#settings"
+                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
                   onClick={() => setUserModalOpen(false)}
                 >
                   <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-gray-200 transition-colors duration-200">
@@ -485,10 +474,11 @@ export default function Nav() {
                 </Link>
               </div>
 
+              {/* Logout Button */}
               <div className="border-t border-gray-200 pt-4">
                 <button
                   onClick={handleLogout}
-                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-red-50 transition-colors duration-200 group"
+                  className="flex items-center space-x-3 w-full p-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
                 >
                   <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors duration-200">
                     <svg

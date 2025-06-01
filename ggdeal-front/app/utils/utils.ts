@@ -1,3 +1,5 @@
+import { useSearchParams, useNavigate } from "react-router";
+
 export function formatSlugName(crumb: string | undefined) {
   if (crumb === undefined) return "";
   return crumb
@@ -10,10 +12,11 @@ export function joinUrl(...parts: string[]): string {
   return parts
     .map((part, index) => {
       if (index === 0) {
-        return part.replace(/\/+$/, '');
+        return part.replace(/\/+$/, "");
       } else {
-        return part.replace(/^\/+|\/+$/g, '');
+        return part.replace(/^\/+|\/+$/g, "");
       }
     })
-    .join('/');
+    .join("/");
 }
+

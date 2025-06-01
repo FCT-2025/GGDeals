@@ -16,4 +16,5 @@ public interface GameService {
     Edition addEdition(Long gameId, Edition edition);
     Edition updateEdition(Edition edition);
     void deleteEdition(Long editionId);
+    Game update(Game game);
 }

@@ -33,7 +33,7 @@ public class SecurityConf {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/admin/login", "/api/admin/register", "/api/admin/logout", "/**" , "/static/uploads/**").permitAll()
+                        .requestMatchers( "/**" ).permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
                         .requestMatchers("/api/ggdeal/**", "/api/auth/**", "/assets/**").permitAll()
                         .anyRequest().authenticated()

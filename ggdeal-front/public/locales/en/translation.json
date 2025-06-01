@@ -63,5 +63,87 @@
     "username": "Username",
     "password": "Password",
     "search": "Search for a game..."
+  },
+  "profile": {
+    "title": "User Profile",
+    "description": "Manage your account settings and preferences",
+    "userProfile": "User Profile",
+    "memberSince": "Member since",
+    "tabs": {
+      "controlPanel": "Control Panel",
+      "myOrders": "My Orders",
+      "wallet": "Wallet",
+      "settings": "Settings",
+      "languageCurrency": "Language & Currency"
+    },
+    "generalView": {
+      "title": "General View",
+      "friends": "Friends",
+      "reviews": "Reviews",
+      "wishlist": "Wishlist"
+    },
+    "wallet": {
+      "title": "Wallet",
+      "affiliation": "Affiliation",
+      "currentBalance": "Current Balance",
+      "addMoney": "Add Money",
+      "amount": "Amount",
+      "enterAmount": "Enter amount",
+      "paymentMethod": "Payment Method",
+      "creditCard": "Credit Card",
+      "bankTransfer": "Bank Transfer",
+      "processing": "Processing...",
+      "securePayment": "Secure payment processed by our trusted partners",
+      "invalidAmount": "Please enter a valid amount",
+      "topUpSuccess": "Money added successfully to your wallet",
+      "topUpError": "Error processing payment. Please try again."
+    },
+    "ranking": {
+      "title": "Ranking",
+      "level": "Level"
+    },
+    "affiliation": {
+      "title": "Affiliation Link",
+      "description": "This is your affiliation link, share it to earn money!"
+    },
+    "totalSaved": {
+      "title": "Total Saved"
+    },
+    "wishlist": {
+      "latestGames": "Latest Games Added to Wishlist"
+    },
+    "orders": {
+      "title": "My Orders",
+      "noOrders": "You don't have any orders yet."
+    },
+    "settings": {
+      "profileImage": "Profile image",
+      "username": "Username",
+      "email": "Email",
+      "profileInfo": "Profile information",
+      "updateProfile": "Update profile",
+      "changePassword": "Change password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password",
+      "send": "Send",
+      "accept": "Accept",
+      "changeEmail": "Change email",
+      "newEmail": "New email",
+      "confirmEmail": "Confirm email",
+      "phone": "Phone"
+    },
+    "language": {
+      "title": "Languages"
+    },
+    "currency": {
+      "title": "Currencies"
+    }
+  },
+  "categories": {
+    "show" : {
+      "less": "Show less",
+      "more": "Show more"
+    }
   }
 }

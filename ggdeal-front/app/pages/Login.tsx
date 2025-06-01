@@ -35,6 +35,7 @@ export default function Login() {
         credentials: "include",
       });
 
+
       if (!res.ok) {
         const err = await res.json();
         setError(t(`login.errors.${err.error || "default"}`));
