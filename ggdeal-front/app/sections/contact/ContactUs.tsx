@@ -11,7 +11,8 @@ export default function ContactUs() {
         </div>
       </div>
       
-      <div className="flex md:flex-1 justify-center items-center md:order-2 order-1 bg-gray-900/40 p-4 sm:p-6 md:p-8 rounded-lg">
+      {/* Eliminado el fondo bg-gray-900/40 */}
+      <div className="flex md:flex-1 justify-center items-center md:order-2 order-1 p-4 sm:p-6 md:p-8 rounded-lg">
         <div className="flex flex-col items-center w-full max-w-md">
           <h2 className="text-2xl sm:text-3xl text-center mb-3 sm:mb-4 font-bold text-white">Contact with us</h2>
           <div className="w-32 sm:w-48 h-[1px] bg-gray-400 mb-4 sm:mb-6"></div>
@@ -21,26 +22,26 @@ export default function ContactUs() {
               <input
                 type="text"
                 placeholder="Name"
-                className="w-full px-3 sm:px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-black text-white"
+                className="w-full px-3 sm:px-4 py-2 border rounded-md focus:outline-none focus:ring-0 bg-black text-white"
               />
               <input
                 type="text"
                 placeholder="Username"
-                className="w-full px-3 sm:px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-black text-white"
+                className="w-full px-3 sm:px-4 py-2 border rounded-md focus:outline-none focus:ring-0 bg-black text-white"
               />
             </div>
             <div className="mb-3 sm:mb-4">
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full px-3 sm:px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-black text-white"
+                className="w-full px-3 sm:px-4 py-2 border rounded-md focus:outline-none focus:ring-0 bg-black text-white"
               />
             </div>
             <div className="mb-3 sm:mb-4">
               <textarea
                 placeholder="Your Message"
                 rows={5}
-                className="w-full px-3 sm:px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-black text-white resize-none"
+                className="w-full px-3 sm:px-4 py-2 border rounded-md focus:outline-none focus:ring-0 bg-black text-white resize-none"
               ></textarea>
             </div>
             <button className="w-full bg-secondary text-center text-black font-bold py-2 sm:py-3 rounded-md border border-transparent hover:bg-transparent hover:border-secondary hover:text-secondary transition duration-300 ease-in-out cursor-pointer">
