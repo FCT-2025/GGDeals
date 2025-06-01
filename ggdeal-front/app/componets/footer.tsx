@@ -22,7 +22,7 @@ export default function Footer() {
       </div>
       
       <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-6 px-4 gap-8 md:gap-6 lg:gap-[30px]">
-        <div className="font-sofia space-y-2 relative">
+        <div className="font-sofia space-y-2 relative flex flex-col md:block items-center md:items-start text-center md:text-left">
           <h2 className="text-lg mb-3 font-[700]">Service-Hotline</h2>
           <div>
             <p className="text-sm font-light">Telefonische Beratung unter:</p>
@@ -30,7 +30,7 @@ export default function Footer() {
           </div>
           <div className="font-[600]">
             <p>Monday - Friday</p>
-            <ul className="pl-2">
+            <ul className="pl-2 list-none md:list-disc">
               <li>08:00 - 12.00 Uhr</li>
               <li>13.00 - 17:00 Uhr</li>
             </ul>
@@ -38,7 +38,7 @@ export default function Footer() {
           <div className="hidden md:block absolute h-[60%] w-[2px] bg-gray-100 -translate-y-1/2 top-1/2 right-[-15px]"></div>
         </div>
         
-        <div className="font-sofia space-y-2 relative">
+        <div className="font-sofia space-y-2 relative flex flex-col md:block items-center md:items-start text-center md:text-left">
           <h2 className="text-lg mb-3 font-[700]">Shop</h2>
           <ul className="font-[600] space-y-1">
             <li className="cursor-pointer hover:text-primary transition-colors">Games</li>
@@ -50,7 +50,7 @@ export default function Footer() {
           <div className="hidden md:block absolute h-[60%] w-[2px] bg-gray-100 -translate-y-1/2 top-1/2 right-[-15px]"></div>
         </div>
         
-        <div className="font-sofia space-y-2 relative">
+        <div className="font-sofia space-y-2 relative flex flex-col md:block items-center md:items-start text-center md:text-left">
           <h2 className="text-lg mb-3 font-[700]">Information</h2>
           <ul className="font-[600] space-y-1">
             <li className="cursor-pointer hover:text-primary transition-colors">Download Area</li>
@@ -62,7 +62,7 @@ export default function Footer() {
           <div className="hidden lg:block absolute h-[60%] w-[2px] bg-gray-100 -translate-y-1/2 top-1/2 right-[-15px]"></div>
         </div>
         
-        <div className="font-sofia space-y-2">
+        <div className="font-sofia space-y-2 flex flex-col md:block items-center md:items-start text-center md:text-left">
           <h2 className="text-lg mb-3 font-[700]">Our Company</h2>
           <ul className="font-[600] space-y-1">
             <li className="cursor-pointer hover:text-primary transition-colors">About us</li>
@@ -70,7 +70,7 @@ export default function Footer() {
             <li className="cursor-pointer hover:text-primary transition-colors">Privacy Policy</li>
             <li className="cursor-pointer hover:text-primary transition-colors">Terms of Use</li>
           </ul>
-          <div className="flex flex-wrap gap-4 mt-4">
+          <div className="flex flex-wrap gap-4 mt-4 justify-center md:justify-start">
             <IconTwitter className="cursor-pointer hover:opacity-80 transition-opacity" />
             <IconFacebook className="cursor-pointer hover:opacity-80 transition-opacity" />
             <IconInstagram className="cursor-pointer hover:opacity-80 transition-opacity" />
