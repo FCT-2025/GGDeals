@@ -2,6 +2,7 @@ package com.ggdeal.controller.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ggdeal.model.Edition;
 import com.ggdeal.model.Feature;
 import com.ggdeal.model.Game;
 import com.ggdeal.model.GameMedia;
@@ -157,43 +158,38 @@ public class AdminGameController {
         gameMediaService.deleteMedia(mediaId);
         return ResponseEntity.ok().build();
     }
-
-/*    // ==================== ENDPOINTS PARA GESTIÓN DE EDICIONES ====================
-
+    // ==================== ENDPOINTS PARA GESTIÓN DE EDICIONES ====================
+    // Obtener todas las ediciones de un juego
     @GetMapping("/{gameId}/editions")
     @ResponseBody
     public ResponseEntity<List<Edition>> getGameEditions(@PathVariable Long gameId) {
-        // Implementación para obtener ediciones del juego
-        return ResponseEntity.ok(gameService.findEditionsByGameId(gameId));
+        return ResponseEntity.ok(gameServiceImpl.findEditionsByGameId(gameId));
     }
 
+    // Añadir una nueva edición
     @PostMapping("/{gameId}/editions")
     @ResponseBody
     public ResponseEntity<Edition> addGameEdition(
             @PathVariable Long gameId,
             @RequestBody Edition edition) {
-
-        return ResponseEntity.ok(gameService.addEdition(gameId, edition));
+        return ResponseEntity.ok(gameServiceImpl.addEdition(gameId, edition));
     }
 
-    @PutMapping("/{gameId}/editions/{editionId}")
+    // Actualizar una edición existente
+    @PutMapping("/editions/{editionId}")
     @ResponseBody
-    public ResponseEntity<Edition> updateGameEdition(
-            @PathVariable Long gameId,
+    public ResponseEntity<Edition> updateEdition(
             @PathVariable Long editionId,
-            @RequestBody GameEdition edition) {
-
+            @RequestBody Edition edition) {
         edition.setId(editionId);
-        return ResponseEntity.ok(gameService.updateEdition(edition));
+        return ResponseEntity.ok(gameServiceImpl.updateEdition(edition));
     }
 
-    @DeleteMapping("/{gameId}/editions/{editionId}")
+    // Eliminar una edición
+    @DeleteMapping("/editions/{editionId}")
     @ResponseBody
-    public ResponseEntity<Void> deleteGameEdition(
-            @PathVariable Long gameId,
-            @PathVariable Long editionId) {
-
-        gameService.deleteEdition(editionId);
-        return ResponseEntity.ok().build();
-    }*/
+    public ResponseEntity<Void> deleteEdition(@PathVariable Long editionId) {
+        gameServiceImpl.deleteEdition(editionId);
+        return ResponseEntity.noContent().build();
+    }
 }
