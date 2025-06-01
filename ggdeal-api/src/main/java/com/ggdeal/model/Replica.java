@@ -27,7 +27,7 @@ public class Replica {
 
     @ManyToOne
     @JoinColumn(name = "game_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Game game;
 
     @ManyToOne

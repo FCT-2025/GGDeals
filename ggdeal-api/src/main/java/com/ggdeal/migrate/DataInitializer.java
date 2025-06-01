@@ -48,7 +48,7 @@ public class DataInitializer implements CommandLineRunner {
                 .username("root")
                 .email("root@example.com")
                 .role(Role.ADMIN)
-                .password(bCryptPasswordEncoder.encode("1234"))
+                .password(bCryptPasswordEncoder.encode("12345"))
                 .birthdate(LocalDate.now().minusYears(20))
                 .build());
 
