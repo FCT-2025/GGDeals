@@ -33,20 +33,19 @@ public class SecurityConf {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/**" ).permitAll()
-                        .requestMatchers("/api/admin/**").permitAll()
-                        .requestMatchers("/api/ggdeal/**", "/api/auth/**", "/assets/**").permitAll()
+                        .requestMatchers("/api/admin/login", "/api/admin/register" ,"/uploads/**", "/assets/**", "/api/ggdeal/**", "/api/auth/**", "/api/user/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
-                            if (!request.getRequestURI().startsWith("/api/ggdeal")) {
-                                response.sendRedirect("/api/admin/");
+                            if (request.getRequestURI().startsWith("/api/admin")) {
+                                response.sendRedirect("/api/admin/login");
                             }
 
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            if (!request.getRequestURI().startsWith("/api/ggdeal")) {
+                            if (request.getRequestURI().startsWith("/api/admin")) {
                                 response.sendRedirect("/api/admin/login");
                             }
                         })

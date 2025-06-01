@@ -14,12 +14,13 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Login() {
   const [onError, setError] = useState<string | null>(null);
+  const [isEmail, setIsEmail] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     emailUsername: "",
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const { updateUser } = useUser();
+  const { fetchUser } = useUser();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,11 +28,16 @@ export default function Login() {
     setIsLoading(true);
     setError(null);
 
+    const dataForm = {
+      [isEmail ? 'email' : 'username'] : formData.emailUsername,
+      password: formData.password
+    }
+
     try {
       const res = await fetch(`${Config.AUTH.LOGIN}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataForm),
         credentials: "include",
       });
 
@@ -44,7 +50,7 @@ export default function Login() {
         return;
       }
 
-      await updateUser();
+      fetchUser();
       navigate("/");
     } catch (err) {
       console.error("Error en login:", err);
@@ -57,6 +63,8 @@ export default function Login() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+
 
   return (
     <section className="flex flex-col md:flex-row min-h-screen mt-20">
@@ -86,10 +94,14 @@ export default function Login() {
 
             <div className="mb-4">
               <input
-                type="text"
+                type={isEmail ? 'email' : 'text'}
                 name="emailUsername"
                 value={formData.emailUsername}
-                onChange={handleChange}
+                onChange={(e)=> {
+                  console.log(e.target.value.includes('@'))
+                  setIsEmail(e.target.value.includes('@'));
+                  handleChange(e);
+                }}
                 placeholder={t("login.placeholders.usernameOrEmail")}
                 required
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-0 bg-black text-white"

@@ -71,12 +71,14 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private List<Reservation> reservations;
 
+    private Integer discount;
+
     @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<GameMedia> gameMedias;
 
     @OneToMany(mappedBy = "game")
-    @JsonBackReference
+    @JsonManagedReference
     private List<Replica> replicas;
 
     @PrePersist

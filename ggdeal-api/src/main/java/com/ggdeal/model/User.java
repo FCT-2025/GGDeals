@@ -34,7 +34,7 @@ public class User {
     private String username;
 
     @NotBlank(message = "Password is mandatory")
-    @Size(min = 3, message = "Password must be unless 5 characters")
+    @Size(min = 4, message = "Password must be unless 5 characters")
     @Size(max = 200, message = "Password must'n overpass 200 characteres")
     private String password;
 
