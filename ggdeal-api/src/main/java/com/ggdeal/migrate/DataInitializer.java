@@ -1,12 +1,9 @@
 package com.ggdeal.migrate;
 
-import com.ggdeal.model.Feature;
-import com.ggdeal.model.PlatformType;
-import com.ggdeal.model.Role;
-import com.ggdeal.model.User;
-import com.ggdeal.repository.FeatureRepository;
-import com.ggdeal.repository.PlatformTypeRepository;
-import com.ggdeal.repository.UserRepository;
+import com.ggdeal.enums.Role;
+import com.ggdeal.model.*;
+import com.ggdeal.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -21,12 +18,17 @@ public class DataInitializer implements CommandLineRunner {
     private final PlatformTypeRepository platformTypeRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final FeatureRepository featureRepository;
+    private final PlatformModelRepository platformModelRepository;
+    private final GenreRepostiory genreRepostiory;
 
-    public DataInitializer(UserRepository userRepository, PlatformTypeRepository platformTypeRepository, BCryptPasswordEncoder bCryptPasswordEncoder, FeatureRepository featureRepository) {
+    @Autowired
+    public DataInitializer(UserRepository userRepository, PlatformTypeRepository platformTypeRepository, PlatformModelRepository platformModelRepository, BCryptPasswordEncoder bCryptPasswordEncoder, FeatureRepository featureRepository, GenreRepostiory genreRepostiory) {
         this.userRepository = userRepository;
         this.platformTypeRepository = platformTypeRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.featureRepository = featureRepository;
+        this.platformModelRepository = platformModelRepository;
+        this.genreRepostiory = genreRepostiory;
     }
 
 
@@ -35,39 +37,38 @@ public class DataInitializer implements CommandLineRunner {
         initUser();
         initPlataform();
         initFeatures();
+        intiGenres();
+        initPlataforms();
     }
 
     public void initUser() {
         if (userRepository.count() != 0) return;
-            userRepository.save(User.builder()
-                    .username("root")
-                    .email("root@example.com")
-                    .role(Role.ADMIN)
-                    .password(bCryptPasswordEncoder.encode("1234"))
-                    .birthdate(LocalDate.now().minusYears(20))
-                    .build());
+
+        userRepository.save(User.builder()
+                .username("root")
+                .email("root@example.com")
+                .role(Role.ADMIN)
+                .password(bCryptPasswordEncoder.encode("1234"))
+                .birthdate(LocalDate.now().minusYears(20))
+                .build());
 
     }
 
     public void initPlataform() {
         if (platformTypeRepository.count() != 0) return;
+
+        List<String> plataformsTypeDefault = List.of("Consola", "PC", "Móvil", "Web");
+
+        plataformsTypeDefault.forEach(name -> {
             platformTypeRepository.save(PlatformType.builder()
-                    .name("Consolas")
+                    .name(name)
                     .build());
-            platformTypeRepository.save(PlatformType.builder()
-                    .name("PC")
-                    .build());
-            platformTypeRepository.save(PlatformType.builder()
-                    .name("Móvil")
-                    .build());
-            platformTypeRepository.save(PlatformType.builder()
-                    .name("Web")
-                    .build());
+        });
 
     }
 
     public void initFeatures() {
-        if(featureRepository.count() != 0) return;
+        if (featureRepository.count() != 0) return;
 
         List<String> basicFeatures = List.of(
                 "Multiplayer",
@@ -82,10 +83,72 @@ public class DataInitializer implements CommandLineRunner {
                 "Cross-platform Multiplayer"
         );
 
-        for (String name : basicFeatures) {
-            Feature f = new Feature();
-            f.setName(name);
-            featureRepository.save(f);
-        }
+        basicFeatures.forEach(name -> {
+            featureRepository.save(Feature.builder()
+                    .name(name)
+                    .build());
+        });
+
+    }
+
+    public void initPlataforms() {
+        if (platformModelRepository.count() != 0) return;
+        List<PlatformModel> plataformsModels = List.of(PlatformModel.builder()
+                        .platformType(PlatformType.builder().id(2l).build())
+                        .name("PC")
+                        .pathLogo("pc.svg")
+                        .build(),
+                PlatformModel.builder()
+                        .platformType(PlatformType.builder().id(1l).build())
+                        .name("Play 4")
+                        .pathLogo("play4.svg")
+                        .build(),
+                PlatformModel.builder()
+                        .platformType(PlatformType.builder().id(1l).build())
+                        .name("Play 5")
+                        .pathLogo("play5.svg")
+                        .build(),
+                PlatformModel.builder()
+                        .platformType(PlatformType.builder().id(1l).build())
+                        .name("Xbox One")
+                        .pathLogo("xboxOne.svg")
+                        .build());
+
+        plataformsModels.forEach((platformModel) -> {
+            platformModelRepository.save(platformModel);
+        });
+    }
+
+    public void intiGenres() {
+        if (genreRepostiory.count() != 0) return;
+
+        List<String> genresDefault = List.of(
+                "Action",
+                "Adventure",
+                "Role-Playing",
+                "Shooter",
+                "Platformer",
+                "Fighting",
+                "Racing",
+                "Sports",
+                "Simulation",
+                "Strategy",
+                "Puzzle",
+                "Survival",
+                "Horror",
+                "Open World",
+                "Multiplayer Online Battle Arena",
+                "Battle Royale",
+                "Sandbox",
+                "Stealth",
+                "Rhythm",
+                "MMORPG"
+        );
+
+        genresDefault.forEach(name -> {
+            genreRepostiory.save(Genre.builder()
+                    .name(name)
+                    .build());
+        });
     }
 }

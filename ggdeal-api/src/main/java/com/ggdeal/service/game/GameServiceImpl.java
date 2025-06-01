@@ -69,6 +69,25 @@ public class GameServiceImpl implements GameService {
 
     }
 
+    @Override
+    @Transactional
+    public Game update(Game game) {
+        Game gameSearched = gameRepository.findById(game.getId()).get();
+
+        if(gameSearched == null) {
+            throw new RuntimeException("No se ha encontrado en el juego");
+        }
+
+        gameSearched.setGenre(game.getGenre());
+        gameSearched.setDescription(game.getDescription());
+        gameSearched.setTitle(game.getTitle());
+        gameSearched.setPrice(game.getPrice());
+        gameSearched.setDevelopment(game.getDevelopment());
+        gameSearched.setPublishedDate(game.getPublishedDate());
+
+        return gameRepository.save(gameSearched);
+    }
+
     @Transactional
     public Game save(Game game) {
         return gameRepository.save(game);

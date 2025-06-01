@@ -1,6 +1,6 @@
 package com.ggdeal.model;
 
-import com.ggdeal.dto.UserUpdateDTO;
+import com.ggdeal.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;

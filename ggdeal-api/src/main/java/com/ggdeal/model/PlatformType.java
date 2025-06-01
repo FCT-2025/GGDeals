@@ -1,10 +1,13 @@
 package com.ggdeal.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,13 +23,9 @@ public class PlatformType {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @NotBlank
     private String name;
-    private String pathLogo;
 
     @OneToMany(mappedBy = "platformType")
-    private List<Replica> replicas;
-
-    @ManyToMany(mappedBy = "platforms")
-    private List<Game> games;
-
+    private List<PlatformModel> platformModels;
 }

@@ -5,7 +5,7 @@ import IconCart from "../assets/icons/icon-cart.svg?react";
 import IconFavourite from "../assets/icons/icon-favourite.svg?react";
 import IconUser from "../assets/icons/icon-user.svg?react";
 import IconGGD from "../assets/icons/GGD.svg?react";
-import type { User } from "../services/authService";
+import type { User } from "../services/AuthService";
 import { useUser } from "../context/UserContext";
 import { Config } from "~/config/config";
 import { t } from "i18next";
@@ -330,14 +330,14 @@ export default function Nav() {
               <div className="space-y-3">
                 <Link
                   to="/login"
-                  className="flex items-center justify-center space-x-2 w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                  className="flex items-center justify-center border border-primary space-x-2 w-full py-3 px-4 bg-primary text-white rounded-lg hover:bg-transparent transition-colors duration-200"
                 >
                   <IconUser className="w-5 h-5" />
                   <span>Login</span>
                 </Link>
                 <Link
                   to="/register"
-                  className="flex items-center justify-center w-full py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                  className="flex items-center justify-center w-full py-3 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-black transition-colors duration-200"
                 >
                   Register
                 </Link>

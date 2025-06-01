@@ -18,12 +18,13 @@ function buildUrl(path: string): string {
 export const Config = {
   GGDEAL: {
     GAME: buildUrl(getEnvVar('VITE_API_GGDEAL_GAME')),
-    PLATAFORM: buildUrl(getEnvVar('VITE_API_GGDEAL_PLATAFORM'))
+    PLATAFORM: buildUrl(getEnvVar('VITE_API_GGDEAL_PLATAFORM')),
+    GENRE: buildUrl(getEnvVar('VITE_API_GGDEAL_GENRE'))
   },
   USER: {
     WALLET: buildUrl(getEnvVar("VITE_API_USER_URL_WALLET")),
     PROFILE: buildUrl(getEnvVar("VITE_API_USER_URL_PROFILE")),
-    CHANGE_PASSWORD: buildUrl(getEnvVar("VITE_API_AUTH_URL_CHANGE-PASSWORD")),
+    CHANGE_PASSWORD: buildUrl(getEnvVar("VITE_API_AUTH_URL_CHANGE_PASSWORD")),
   },
   AUTH: {
     LOGIN: buildUrl(getEnvVar("VITE_API_AUTH_URL_LOGIN")),

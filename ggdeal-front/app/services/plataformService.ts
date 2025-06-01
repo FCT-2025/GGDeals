@@ -4,6 +4,7 @@ import { Config } from "~/config/config";
 export type Plataform = {
     id: number;
     name: string;
+    pathLogo:string;
 }
 
 export async function getPlataforms(): Promise<Plataform[]> {

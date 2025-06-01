@@ -139,5 +139,11 @@
     "currency": {
       "title": "Currencies"
     }
+  },
+  "categories": {
+    "show" : {
+      "less": "Show less",
+      "more": "Show more"
+    }
   }
 }

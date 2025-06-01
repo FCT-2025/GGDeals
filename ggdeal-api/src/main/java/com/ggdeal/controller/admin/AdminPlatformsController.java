@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,8 +28,7 @@ public class AdminPlatformsController {
 
     @GetMapping("")
     public String adminPlatformsDashboard(Model model) {
-        List<PlatformModel> platforms = platformService.findAll();
-        model.addAttribute("platforms", platforms);
+        model.addAttribute("platforms", platformService.findAll());
         model.addAttribute("platformTypes", platformTypeRepository.findAll());
         return "admin/platforms";
     }
@@ -40,24 +40,27 @@ public class AdminPlatformsController {
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
     public ResponseEntity<PlatformModel> getPlatform(@PathVariable Long id) {
         return platformService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("")
-    @ResponseBody
-    public ResponseEntity<PlatformModel> createPlatform(@RequestBody PlatformModel platform) {
-        return ResponseEntity.ok(platformService.save(platform));
+    @PostMapping
+    public ResponseEntity<PlatformModel> createPlatform(
+            @ModelAttribute PlatformModel platform,
+            @RequestParam(value = "platformLogo", required = false) MultipartFile platformLogo) {
+
+        PlatformModel savedPlatform = platformService.save(platform, platformLogo);
+        return ResponseEntity.ok(savedPlatform);
     }
 
+
     @PutMapping("/{id}")
-    @ResponseBody
-    public ResponseEntity<PlatformModel> updatePlatform(@PathVariable Long id, @RequestBody PlatformModel platform) {
+    public ResponseEntity<PlatformModel> updatePlatform(@PathVariable Long id, @ModelAttribute PlatformModel platform,
+                                                        @RequestParam(value = "platformLogo", required = false) MultipartFile platformLogo) {
         platform.setId(id);
-        return ResponseEntity.ok(platformService.save(platform));
+        return ResponseEntity.ok(platformService.update(platform, platformLogo));
     }
 
     @DeleteMapping("/{id}")

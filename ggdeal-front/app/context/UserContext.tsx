@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import type { User } from "../services/authService";
-import { getUsuario } from "../services/authService";
+import type { User } from "../services/AuthService";
+import { getUsuario } from "../services/AuthService";
 
 interface UserContextType {
   user: User | null;
@@ -26,7 +26,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const fetchUser = () => {
     getUsuario().then((fetchedUser) => {
       setUser(fetchedUser);
-    });
+    }).catch((err) => {
+        console.error("Error fetching user:", err);
+      });;
   };
 
   useEffect(() => {

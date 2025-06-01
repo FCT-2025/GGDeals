@@ -134,5 +134,11 @@
     "currency": {
       "title": "Monedas"
     }
+  },
+  "categories": {
+    "show" : {
+      "less": "Mostrar menos",
+      "more": "Mostrar más"
+    }
   }
 }

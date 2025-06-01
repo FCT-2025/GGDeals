@@ -1,11 +1,17 @@
-type CardsProps = {
+import type { Plataform } from "~/services/PlataformService";
+import { TypeGame } from "~/types/Game";
+
+
+export type CardsProps = {
   src: string;
   alt: string;
-  description?: string;
+  title: string;
   prize: number;
-  name?: string;
   edition?: string;
-  plataforms?: React.ReactNode[];
+  id: number;
+  type:TypeGame;
+  nameSlug?: string;
+  plataforms?: Array<Plataform>;
   discount?: number;
   className?: string;
 };

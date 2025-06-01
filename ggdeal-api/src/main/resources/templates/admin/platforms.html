@@ -3,6 +3,9 @@
 
 <head th:replace="fragment/head :: head('Administración de Plataformas')"></head>
 
+<link rel="stylesheet" th:href="@{/assets/extensions/filepond/filepond.min.css}">
+<link rel="stylesheet" th:href="@{/assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css}">
+
 <body>
 <script th:src="@{/assets/static/js/initTheme.js}"></script>
 <div id="app">
@@ -31,7 +34,8 @@
                             <div class="card-header">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h4 class="card-title">Plataformas</h4>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPlatformModal">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#addPlatformModal">
                                         <i class="bi bi-plus"></i> Nueva Plataforma
                                     </button>
                                 </div>
@@ -42,6 +46,7 @@
                                         <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Image</th>
                                             <th>Plataforma</th>
                                             <th>Tipo</th>
                                             <th>Acciones</th>
@@ -50,8 +55,28 @@
                                         <tbody>
                                         <tr th:each="platform : ${platforms}">
                                             <td th:text="${platform.id}">1</td>
+                                            <td>
+                                                <img
+                                                        th:if="${platform.pathLogo != null}"
+                                                        th:src="@{'/uploads/media/' + ${platform.pathLogo}}"
+                                                        width="50"
+                                                        height="50"
+                                                        class="rounded"
+                                                        alt="Game"
+                                                />
+                                                <img
+                                                        th:unless="${platform.pathLogo != null}"
+                                                        th:src="@{/assets/compiled/jpg/2.jpg}"
+                                                        width="50"
+                                                        height="50"
+                                                        class="rounded"
+                                                        alt="Game"
+                                                />
+                                            </td>
                                             <td th:text="${platform.name}">PlayStation 5</td>
-                                            <td th:text="${platform.platformType != null ? platform.platformType.name : ''}">Consola</td>
+                                            <td th:text="${platform.platformType != null ? platform.platformType.name : ''}">
+                                                Consola
+                                            </td>
                                             <td>
                                                 <button type="button" class="btn btn-sm btn-primary btn-edit-platform"
                                                         th:data-id="${platform.id}">
@@ -79,7 +104,8 @@
 </div>
 
 <!-- Modal para agregar plataforma -->
-<div class="modal fade" id="addPlatformModal" tabindex="-1" role="dialog" aria-labelledby="addPlatformModalLabel" aria-hidden="true">
+<div class="modal fade" id="addPlatformModal" tabindex="-1" role="dialog" aria-labelledby="addPlatformModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -101,6 +127,7 @@
                                     th:text="${type.name}"></option>
                         </select>
                     </div>
+                    <input type="file" class="filepond mt-4" id="platformLogo">
                 </form>
             </div>
             <div class="modal-footer">
@@ -112,7 +139,8 @@
 </div>
 
 <!-- Modal para editar plataforma -->
-<div class="modal fade" id="editPlatformModal" tabindex="-1" role="dialog" aria-labelledby="editPlatformModalLabel" aria-hidden="true">
+<div class="modal fade" id="editPlatformModal" tabindex="-1" role="dialog" aria-labelledby="editPlatformModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -135,6 +163,7 @@
                                     th:text="${type.name}"></option>
                         </select>
                     </div>
+                    <input type="file" class="filepond mt-4" id="platformLogoEdit">
                 </form>
             </div>
             <div class="modal-footer">
@@ -146,7 +175,8 @@
 </div>
 
 <!-- Modal para eliminar plataforma -->
-<div class="modal fade" id="deletePlatformModal" tabindex="-1" role="dialog" aria-labelledby="deletePlatformModalLabel" aria-hidden="true">
+<div class="modal fade" id="deletePlatformModal" tabindex="-1" role="dialog" aria-labelledby="deletePlatformModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -156,7 +186,8 @@
             <div class="modal-body">
                 <form id="deletePlatformForm">
                     <input type="hidden" id="deletePlatformId" name="id">
-                    <p>¿Estás seguro de que deseas eliminar la plataforma <span id="deletePlatformName" class="fw-bold"></span>?</p>
+                    <p>¿Estás seguro de que deseas eliminar la plataforma <span id="deletePlatformName"
+                                                                                class="fw-bold"></span>?</p>
                     <p>Esta acción no se puede deshacer.</p>
                 </form>
             </div>
@@ -173,22 +204,48 @@
 <script th:src="@{/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
 <script th:src="@{/assets/static/js/pages/horizontal-layout.js}"></script>
 <script th:src="@{/assets/compiled/js/app.js}"></script>
+<script th:src="@{/assets/extensions/filepond/filepond.js}"></script>
+<script
+        th:src="@{/assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.js}"
+></script>
+<script
+        th:src="@{/assets/extensions/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.js}"
+></script>
+<script
+        th:src="@{/assets/extensions/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.js}"
+></script>
+<script th:src="@{/assets/extensions/jquery/jquery.min.js}"></script>
 
 <!-- Simple DataTables -->
-<script th:src="@{/assets/extensions/simple-datatables/umd/simple-datatables.js}"></script>
-<script th:src="@{/assets/static/js/pages/simple-datatables.js}"></script>
+<script th:src="@{/assets/extensions/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js}"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+
+        FilePond.registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType);
+
+        $('.filepond').each(function () {
+            FilePond.create(this, {
+            credits: null,
+            allowImagePreview: true,
+            allowFileTypeValidation: true,
+            acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
+            labelFileTypeNotAllowed: 'Solo se permiten archivos de imagen',
+            fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
+                resolve(type);
+            }),
+            storeAsFile: true,
+            labelIdle: `Arrastra y suelta tu imagen o <span class="filepond--label-action">Buscar</span>`
+        });
+
+
+        })
+
         // Inicializar DataTable
-        new simpleDatatables.DataTable("#platformsTable", {
-            perPage: 10,
-            labels: {
-                placeholder: "Buscar...",
-                perPage: "{select} plataformas por página",
-                noRows: "No se encontraron plataformas",
-                info: "Mostrando {start} a {end} de {rows} plataformas",
-                noResults: "No hay resultados para tu búsqueda"
+        var table = $('#platformsTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
             }
         });
 
@@ -219,25 +276,25 @@
     function savePlatform() {
         const name = document.getElementById('platformName').value;
         const platformTypeId = document.getElementById('platformType').value;
+        const fileItem = FilePond.find(document.getElementById('platformLogo')).getFile();
+
+        const formData = new FormData();
 
         if (!name || !platformTypeId) {
             alert('Por favor, completa todos los campos requeridos');
             return;
         }
 
-        const platformData = {
-            name: name,
-            platformType: {
-                id: platformTypeId
-            }
-        };
+        formData.append("name", name);
+        formData.append("platformType.id", platformTypeId);
+        if (fileItem && fileItem.file) {
+            formData.append("platformLogo", fileItem.file);
+        }
 
         fetch('/api/admin/platforms', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(platformData)
+             credentials: "include",
+            body: formData
         })
         .then(response => {
             if (!response.ok) {
@@ -280,25 +337,24 @@
         const id = document.getElementById('editPlatformId').value;
         const name = document.getElementById('editPlatformName').value;
         const platformTypeId = document.getElementById('editPlatformType').value;
+        const platformLogoEdit = FilePond.find(document.getElementById('platformLogoEdit')).getFile();
 
         if (!name || !platformTypeId) {
             alert('Por favor, completa todos los campos requeridos');
             return;
         }
 
-        const platformData = {
-            name: name,
-            platformType: {
-                id: platformTypeId
-            }
-        };
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("platformType.id", platformTypeId);
+        if(platformLogoEdit && platformLogoEdit.file) {
+            formData.append("platformLogo", platformLogoEdit.file);
+        }
 
         fetch(`/api/admin/platforms/${id}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(platformData)
+            credentials: 'include',
+            body: formData
         })
         .then(response => {
             if (!response.ok) {

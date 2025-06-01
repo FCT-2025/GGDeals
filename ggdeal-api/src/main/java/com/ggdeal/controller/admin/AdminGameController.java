@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ggdeal.model.Feature;
 import com.ggdeal.model.Game;
 import com.ggdeal.model.GameMedia;
+import com.ggdeal.model.Genre;
+import com.ggdeal.repository.GenreRepostiory;
 import com.ggdeal.service.FeatureService;
 import com.ggdeal.service.game.GameService;
 import com.ggdeal.service.gameMedia.GameMediaService;
@@ -26,14 +28,16 @@ public class AdminGameController {
     private final ObjectMapper objectMapper;
     private final FeatureService featureService;
     private final GameMediaService gameMediaService;
+    private final GenreRepostiory genreRepostiory;
 
     @Autowired
     public AdminGameController(GameService gameServiceImpl, ObjectMapper objectMapper,
-                               FeatureService featureService, GameMediaService gameMediaService) {
+                               FeatureService featureService, GameMediaService gameMediaService, GenreRepostiory genreRepostiory) {
         this.gameServiceImpl = gameServiceImpl;
         this.objectMapper = objectMapper;
         this.featureService = featureService;
         this.gameMediaService = gameMediaService;
+        this.genreRepostiory = genreRepostiory;
     }
 
     @GetMapping("")
@@ -41,6 +45,7 @@ public class AdminGameController {
         List<Game> games = gameServiceImpl.findAll();
         List<Feature> features = featureService.getAllFeatures();
         Map<Long, String> thumbnails = new HashMap<>();
+        List<Genre> genres = genreRepostiory.findAll();
 
         games.forEach(game -> {
             game.getGameMedias().stream()
@@ -49,7 +54,9 @@ public class AdminGameController {
                     .ifPresent(media -> thumbnails.put(game.getId(), media.getPath()));
         });
 
+        model.addAttribute("genres", genres);
         model.addAttribute("features", features);
+        model.addAttribute("genreRepostiory", genres);
         model.addAttribute("games", games);
         model.addAttribute("thumbnails", thumbnails);
 
@@ -82,7 +89,7 @@ public class AdminGameController {
     @ResponseBody
     public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody Game game) {
         game.setId(id);
-        return ResponseEntity.ok(gameServiceImpl.save(game));
+        return ResponseEntity.ok(gameServiceImpl.update(game));
     }
 
     @DeleteMapping("/{id}")

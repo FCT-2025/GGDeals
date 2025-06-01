@@ -1,8 +1,9 @@
 package com.ggdeal.controller.api.auth;
 
 import com.ggdeal.configuration.JwtProvider;
-import com.ggdeal.dto.UserDTO;
-import com.ggdeal.model.Role;
+import com.ggdeal.dto.api.UserApiDTO;
+import com.ggdeal.dto.admin.UserDTO;
+import com.ggdeal.enums.Role;
 import com.ggdeal.model.User;
 import com.ggdeal.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,15 +28,14 @@ public class AuthController {
     @Autowired
     private JwtProvider jwtProvider;
 
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Value("${app.base-url}")
-    private String baseUrl;
-
+    @Value("${app.media-url}")
+    private String mediaUrlBase;
 
     @PostMapping("/login")
+    @ResponseBody
     public ResponseEntity<?> login(@RequestBody User loginRequest, HttpServletResponse response) {
         User userByEmail = userRepository.findByEmail(loginRequest.getEmail());
         User userByUsername = userRepository.findByUsername(loginRequest.getUsername());
@@ -63,6 +63,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
+    @ResponseBody
     public ResponseEntity<?> logout(HttpServletResponse response) {
         jwtProvider.deleteTokenCookie(response);
         return ResponseEntity.ok(Map.of("succes", "Has podido cerrar sesion"));
@@ -71,6 +72,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
+    @ResponseBody
     public ResponseEntity<?> register(@Valid @RequestBody User user, HttpServletResponse response) {
 
         if (userRepository.existsByUsername(user.getUsername())) {
@@ -107,17 +109,21 @@ public class AuthController {
     }
 
     @GetMapping("/token")
+    @ResponseBody
     public ResponseEntity<?> getToken(HttpServletRequest request) {
         String token = jwtProvider.getTokenFromCookie(request);
 
         if(token == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "No autorizado"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "No autorizado"));
         }
 
-        UserDTO user = jwtProvider.validateToken(token);
-        if(user.getAvatarPath() != null) {
-            user.setAvatarPath(baseUrl + "/uploads/avatar/" + user.getAvatarPath());
+        UserDTO userSearched = jwtProvider.validateToken(token);
+
+        if(userSearched == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "No autorizado"));
         }
+
+        UserApiDTO user = new UserApiDTO(userSearched, mediaUrlBase);
 
         return ResponseEntity.ok(user);
     }

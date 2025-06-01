@@ -19,14 +19,14 @@ export default function CompanyGames({
           <IconSlideButton className="cursor-pointer rotate-180" />
         </div>
       </div>
-      <div className={`flex w-full space-x-2 justify-center items-center flex-wrap ${ isMain ? "h-full" : "h-[55vh]" }`}>
+      <div className={`flex w-full space-x-2 justify-center items-center flex-wrap ${ isMain ? "h-[100%]" : "h-[400px]" }`}>
         {featuresGames.map((card, index) => (
             <CardPrimary
               className="flex-1 w-full h-full flex flex-col"
               key={`featuresGames-${index}`} 
               src={card.src}
               alt={card.alt}
-              description={card.description}
+              title={card.description}
               prize={card.prize}
               discount={card.discount}
             />

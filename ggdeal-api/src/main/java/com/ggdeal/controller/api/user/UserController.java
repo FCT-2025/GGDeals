@@ -1,10 +1,10 @@
 package com.ggdeal.controller.api.user;
 
 import com.ggdeal.configuration.JwtProvider;
-import com.ggdeal.dto.PasswordChangeDTO;
-import com.ggdeal.dto.UserDTO;
-import com.ggdeal.dto.UserProfileDTO;
-import com.ggdeal.dto.WalletRequestDTO;
+import com.ggdeal.dto.admin.PasswordChangeDTO;
+import com.ggdeal.dto.admin.UserDTO;
+import com.ggdeal.dto.admin.UserProfileDTO;
+import com.ggdeal.dto.api.WalletRequestDTO;
 import com.ggdeal.model.User;
 import com.ggdeal.repository.UserRepository;
 import com.ggdeal.service.storage.StorageService;
@@ -38,6 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/wallet")
+    @ResponseBody
     private ResponseEntity<?> addMoney(@RequestBody WalletRequestDTO walletRequestDTO, HttpServletRequest request) {
 
         if (walletRequestDTO.getAmount() == null || walletRequestDTO.getAmount() <= 0f) {
@@ -68,6 +69,7 @@ public class UserController {
     }
 
     @GetMapping("/wallet")
+    @ResponseBody
     public ResponseEntity<?> getMoney(HttpServletRequest request) {
         String token = jwtProvider.getTokenFromCookie(request);
         if (token == null) {
@@ -91,6 +93,7 @@ public class UserController {
 
 
     @PutMapping("/profile")
+    @ResponseBody
     public ResponseEntity<?> updateProfile(@Valid @ModelAttribute("userProfileDTO") UserProfileDTO userProfileDTO, HttpServletRequest request, HttpServletResponse response) {
         String token = jwtProvider.getTokenFromCookie(request);
         if (token == null) {
