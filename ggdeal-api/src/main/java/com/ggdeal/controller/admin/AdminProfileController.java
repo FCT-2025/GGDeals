@@ -1,9 +1,9 @@
 package com.ggdeal.controller.admin;
 
 import com.ggdeal.configuration.JwtProvider;
-import com.ggdeal.dto.PasswordChangeDTO;
-import com.ggdeal.dto.UserDTO;
-import com.ggdeal.dto.UserProfileDTO;
+import com.ggdeal.dto.admin.PasswordChangeDTO;
+import com.ggdeal.dto.admin.UserDTO;
+import com.ggdeal.dto.admin.UserProfileDTO;
 import com.ggdeal.model.User;
 import com.ggdeal.repository.UserRepository;
 import com.ggdeal.service.storage.StorageService;
@@ -66,7 +66,7 @@ public class AdminProfileController {
             userDTO.setNumberPhone(null);
         }
         if(userDTO.getNumberPhone() != null &&  !userDTO.getNumberPhone().matches("^[0-9]{9}$")) {
-            bindingResult.rejectValue("numberPhone", "numberPhone.invalid", "El número debe tener exactamente 9 dígitos");
+            bindingResult.rejectValue("numberPhone", "error.invalid", "El número debe tener exactamente 9 dígitos");
         }
 
         UserDTO user = (UserDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

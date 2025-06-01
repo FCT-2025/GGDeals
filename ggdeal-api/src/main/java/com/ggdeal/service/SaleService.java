@@ -1,7 +1,7 @@
 package com.ggdeal.service;
 
-import com.ggdeal.dto.PopularGameSalesDTO;
-import com.ggdeal.dto.SalesPerMonthDTO;
+import com.ggdeal.dto.admin.PopularGameSalesDTO;
+import com.ggdeal.dto.admin.SalesPerMonthDTO;
 import com.ggdeal.model.Replica;
 import com.ggdeal.model.Sale;
 import com.ggdeal.model.SaleEvent;

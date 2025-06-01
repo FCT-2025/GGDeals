@@ -1,5 +1,8 @@
 package com.ggdeal.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -17,14 +20,14 @@ public class Replica {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank(message = "The activation key is Mandatory")
-    private String activation_key;
-
+    @NotBlank(message = "La clave de activacion es obligatoria")
+    private String activationKey;
 
     private Boolean isSold;
 
     @ManyToOne
     @JoinColumn(name = "game_id")
+    @JsonManagedReference
     private Game game;
 
     @ManyToOne
@@ -32,15 +35,10 @@ public class Replica {
     private Edition edition;
 
     @ManyToOne
-    @JoinColumn(name = "platform_type")
-    private PlatformType platformType;
-
-    @ManyToOne
-    @JoinColumn(name = "platform_model")
+    @JoinColumn(name = "platform_model_id")
+    @JsonIgnore
     private PlatformModel platformModel;
 
-    @Column(name = "platform_id", nullable = false)
-    private Long platformId;
 
     @OneToOne(mappedBy = "replica")
     private Sale sale;

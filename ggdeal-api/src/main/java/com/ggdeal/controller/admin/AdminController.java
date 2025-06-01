@@ -6,10 +6,12 @@ import com.ggdeal.model.Replica;
 import com.ggdeal.model.User;
 import com.ggdeal.repository.*;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +27,12 @@ public class AdminController {
     private final PlatformTypeRepository platformTypeRepository;
     private final JwtProvider jwtProvider;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final ReplicaRepository replicaRepository;
+
+    private final String LOGIN_VIEW = "admin/login";
+    private final String REGISTER_VIEW = "admin/register";
+    private final String ADMIN_DASHBOARD_VIEW = "admin/dashboard";
+
+    private final String ADMIN_DASHBOARD_REDIRECT = "redirect:/api/admin";
 
     @Autowired
     public AdminController(BCryptPasswordEncoder passwordEncoder, JwtProvider jwtProvider,
@@ -42,7 +49,6 @@ public class AdminController {
         this.salesRepostiory = salesRepostiory;
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
-        this.replicaRepository = replicaRepository;
     }
 
 
@@ -57,34 +63,70 @@ public class AdminController {
         model.addAttribute("popularPlatform", platformTypeRepository.findWithDistributionOfReplica());
         model.addAttribute("salesPerMonth", salesRepostiory.findNumberSalesPerMonth());
 
-        return "admin/dashboard";
+        return ADMIN_DASHBOARD_VIEW;
     }
 
     @GetMapping("/login")
     public String login(Model model) throws JsonProcessingException {
-        return "admin/login";
+        return LOGIN_VIEW;
+    }
+
+    @GetMapping("/register")
+    public String register(Model model) {
+        model.addAttribute("user", new User());
+        return REGISTER_VIEW;
     }
 
     @PostMapping("/login")
     public String login(@RequestParam String emailUsername, @RequestParam String password, HttpServletResponse response, Model model) {
-        User user = userRepository.findByEmail(emailUsername);
+        User userByEmail = userRepository.findByEmail(emailUsername);
+        User user =  null;
+
+        if(userByEmail != null) {
+            user = userByEmail;
+        }
+
+        if(user == null) {
+            user = userRepository.findByUsername(emailUsername);
+        }
+
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             model.addAttribute("error", "Usuario o contraseña incorrectos");
-            return "admin/login";
+            return LOGIN_VIEW;
         }
 
         jwtProvider.setTokenCookie(response, user.getId());
 
-        return "redirect:/api/admin";
+        return ADMIN_DASHBOARD_REDIRECT;
+    }
+
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, HttpServletResponse response, Model model) {
+        if(userRepository.existsByUsername(user.getUsername())) {
+            bindingResult.rejectValue("username", "error.username", "El usuario ya existe");
+        }
+
+        if(userRepository.existsByEmail(user.getEmail())) {
+            bindingResult.rejectValue("email", "error.email", "El email ya existe");
+        }
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("error", bindingResult);
+            return REGISTER_VIEW;
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        user  = userRepository.save(user);
+
+        jwtProvider.setTokenCookie(response, user.getId());
+
+        return ADMIN_DASHBOARD_REDIRECT;
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
         jwtProvider.deleteTokenCookie(response);
         return "redirect:/api/admin/login";
-    }
-
-    public List<Replica> findAvailableReplicas() {
-        return replicaRepository.findByIsSold(false);
     }
 }

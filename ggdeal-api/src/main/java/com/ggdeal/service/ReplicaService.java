@@ -78,20 +78,19 @@ public class ReplicaService {
     public List<Replica> saveBatch(Game game, PlatformModel platformModel, Long editionId,
                                    List<String> activationKeys, boolean isSold) {
         List<Replica> replicas = new ArrayList<>();
-        Optional<Edition> edition = editionService.findById(editionId);
+
+        Optional<Edition> edition = Optional.empty();
+        if (editionId != null) {
+            edition = editionService.findById(editionId);
+        }
 
         for (String key : activationKeys) {
             Replica replica = new Replica();
             replica.setGame(game);
             replica.setPlatformModel(platformModel);
-            replica.setPlatformId(platformModel.getId()); // Asigna explícitamente platform_id
-
-            if (platformModel.getPlatformType() != null) {
-                replica.setPlatformType(platformModel.getPlatformType());
-            }
 
             edition.ifPresent(replica::setEdition);
-            replica.setActivation_key(key);
+            replica.setActivationKey(key);
 
             replica.setIsSold(isSold);
 

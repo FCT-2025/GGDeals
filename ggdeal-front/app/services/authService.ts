@@ -5,15 +5,14 @@ export interface User {
   username: string;
   email: string;
   createdAt: Date;
-  avatarPath: string;
+  avatarPath?: string;
   role: string;
   isVerified: boolean;
-  numberPhones: string;
+  numberPhone?: string;
 }
 
 export async function getUsuario(): Promise<User | null> {
   try {
-    console.log(Config.AUTH.TOKEN);
     const res = await fetch(`${Config.AUTH.TOKEN}`, {
       method: "GET",
       credentials: "include",
@@ -25,8 +24,6 @@ export async function getUsuario(): Promise<User | null> {
       console.warn("No autorizado o sin cookie");
       return null;
     }
-    console.log("Usuario obtenido correctamente");
-    console.log(data)
 
     return data as User;
   } catch (error) {

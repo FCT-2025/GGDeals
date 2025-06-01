@@ -1,5 +1,6 @@
 package com.ggdeal.model;
 
+import com.ggdeal.enums.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

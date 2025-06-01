@@ -22,16 +22,14 @@ export default function CompanyGames({
         </div>
       </div>
       
-      <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 ${
-        isMain ? "h-full" : "md:max-h-[55vh]"
-      }`}>
+      <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4`}>
         {featuresGames.map((card, index) => (
           <CardPrimary
-            className="flex-1 w-full h-full"
+            className={`flex-1 w-full h-[400px] ${isMain ? 'h-full' : 'h-[400px]'}`}
             key={`featuresGames-${index}`} 
             src={card.src}
             alt={card.alt}
-            description={card.description}
+            title={card.description}
             prize={card.prize}
             discount={card.discount}
           />

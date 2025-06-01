@@ -1,6 +1,6 @@
 package com.ggdeal.controller.admin;
 
-import com.ggdeal.dto.SaleDTO;
+import com.ggdeal.dto.admin.SaleDTO;
 import com.ggdeal.model.Replica;
 import com.ggdeal.model.Sale;
 import com.ggdeal.model.SaleEvent;

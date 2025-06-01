@@ -90,7 +90,7 @@ public class GameMediaServiceImpl implements GameMediaService {
         }
 
 
-        if (gameMedias.size() >= 1 && isThumbnail) {
+        if (gameMedias.size() > 1 && Boolean.TRUE.equals(isThumbnail)) {
             gameMedias.stream()
                     .filter(media -> Boolean.TRUE.equals(media.getIsThumbnail()))
                     .findFirst()

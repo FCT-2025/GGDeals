@@ -1,10 +1,8 @@
 package com.ggdeal.configuration;
 
 
-import com.ggdeal.dto.UserDTO;
-import com.ggdeal.model.User;
+import com.ggdeal.dto.admin.UserDTO;
 import jakarta.servlet.*;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
