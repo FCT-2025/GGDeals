@@ -6,55 +6,60 @@ import IconConsole from "../../assets/icons/icon-console.svg?react";
 import IconPCMobile from "../../assets/icons/icon-pc-mobile.svg?react";
 
 export default function GameShowcase({ className }: { className?: string }) {
-  const [categorieIndex, setCategorieIndex] = useState(0);
-  
+  let [currentCategorieIndex, setCategorieIndex] = useState(0);
+
   return (
     <section className={className}>
-      <h2 className="font-epilogue text-2xl sm:text-3xl md:text-4xl font-light text-gray-100 mb-4 sm:mb-6 md:mb-8">
-        Juegos populares por categoría
-      </h2>
-      <div className="flex flex-wrap gap-2 md:gap-3 mb-4">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="font-epilogue text-2xl font-light  text-gray-100">
+          Newest physical listings
+        </h3>
+        <Link to="/categories">
+          <button className="px-1 bg-primary text-black text-bold rounded-lg font-bold cursor-pointer">
+            Show All
+          </button>
+        </Link>
+      </div>
+      <div className="flex">
         {CategoriesLisitng.map(
           (category: { name: string; icon: ReactNode }, index: number) => (
             <div
               key={`category${index}`}
-              className={`flex px-2 sm:px-4 py-2 cursor-pointer mb-2 items-center text-sm sm:text-base ${
-                categorieIndex === index ? "bg-secondary text-black" : "text-gray-300"
+              className={`flex items-center justify-center py-2.5 px-6 transition-all duration-300 cursor-pointer ${
+                currentCategorieIndex === index ? "bg-gray-800" : ""
               }`}
               onClick={(event) => {
                 event.preventDefault();
                 setCategorieIndex(index);
               }}
             >
-              <span className="hidden sm:block">{category.icon}</span>
-              <p className="ml-0 sm:ml-2">{category.name}</p>
+              {category.icon}
+              <p className="ml-2">{category.name}</p>
             </div>
           )
         )}
       </div>
-      
-      <div className="flex flex-col sm:flex-row bg-gray-800 overflow-x-auto">
+      <div className="flex bg-gray-800 space-x-15">
         {plataformListing.map(
           (plataform: { icon: ReactNode; items: number }, index: number) => (
             <div
-              className="flex flex-row sm:flex-col items-center justify-center py-2 px-4 sm:px-3.5 text-xs sm:text-sm border-b sm:border-b-0 sm:border-r border-gray-700 last:border-none"
+              className="flex flex-col items-center justify-center py-2 pl-3.5"
               key={`plataform${index}`}
             >
-              <div className="w-auto sm:w-auto min-w-[50px] flex justify-center">{plataform.icon}</div>
-              <p className="mt-0 sm:mt-2 ml-4 sm:ml-0 whitespace-nowrap">({plataform.items} items)</p>
+              {plataform.icon}
+              <p className="mt-2">({plataform.items} items)</p>
             </div>
           )
         )}
       </div>
-      
-      <div className="flex flex-col lg:flex-row w-full mt-4 sm:mt-6 md:mt-7 gap-4 md:gap-6">
-        <div className="w-full lg:w-2/5 h-48 sm:h-64 md:h-80 lg:h-auto">
-          <img src="/img/gameshowcase-feature.png" className="w-full h-full object-cover object-center rounded-lg" alt="Feature image" />
+      <div className="flex w-full mt-7">
+        <div className="flex-1">
+          <img src="/img/gameshowcase-feature.png" className="h-full object-cover object-center" alt="Feature image" />
         </div>
-        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div className="flex-1 flex flex-wrap gap-4">
           {featuresGame.map((card, index) => (
             <CardSecondary
-             className="w-full"
+             className="flex-1"
               key={`plataform${index}`}
               src={card.src}
               alt={card.alt}
@@ -63,7 +68,7 @@ export default function GameShowcase({ className }: { className?: string }) {
               prize={card.prize}
               discount={card.discount}
               plataforms={card.plataforms}
-            />
+            ></CardSecondary>
           ))}
         </div>
       </div>
