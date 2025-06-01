@@ -60,11 +60,11 @@ export default function Register() {
   return (
     <section className="flex flex-col md:flex-row min-h-screen mt-20">
       <div className="flex-1 order-0 md:order-none md:w-1/2">
-        <div className="h-[30vh] md:h-screen flex items-center justify-center p-4 md:p-8">
+        <div className="min-h-[300px] h-[40vh] md:h-screen flex items-center justify-center p-4 md:p-8">
           <img
             src="/img/img-register.png"
             alt="Register illustration"
-            className="h-full w-full object-cover md:object-contain md:max-h-[80vh]"
+            className="h-auto w-auto max-h-full max-w-full object-contain md:max-h-[80vh] transition-all duration-300"
           />
         </div>
       </div>
@@ -100,7 +100,7 @@ export default function Register() {
                 onChange={handleChange}
                 placeholder={t("register.placeholders.email")}
                 required
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-0 bg-black text-white"
               />
             </div>
 
@@ -119,7 +119,7 @@ export default function Register() {
                 onChange={handleChange}
                 placeholder={t("register.placeholders.username")}
                 required
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-0 bg-black text-white"
               />
             </div>
 
@@ -138,7 +138,7 @@ export default function Register() {
                 onChange={handleChange}
                 placeholder={t("register.placeholders.password")}
                 required
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-0 bg-black text-white"
               />
             </div>
 
@@ -157,7 +157,7 @@ export default function Register() {
                   value={formData.birthdate}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-0 bg-black text-white"
                 />
               </div>
 
@@ -172,10 +172,19 @@ export default function Register() {
 
             <button
               type="submit"
-              className="w-full bg-secondary text-center text-white py-3 text-lg rounded-md border border-transparent hover:bg-transparent hover:border-secondary hover:text-secondary transition duration-300 ease-in-out cursor-pointer"
+              className="w-full bg-secondary text-center text-black font-bold py-3 text-lg rounded-md border border-transparent hover:bg-transparent hover:border-secondary hover:text-secondary transition duration-300 ease-in-out cursor-pointer"
             >
               {t("register.submit")}
             </button>
+
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-400">
+                {t("register.alreadyHaveAccount")} 
+                <a href="/login" className="text-blue-500 ml-1 hover:underline">
+                  {t("login.title")}
+                </a>
+              </p>
+            </div>
           </form>
         </div>
       </div>

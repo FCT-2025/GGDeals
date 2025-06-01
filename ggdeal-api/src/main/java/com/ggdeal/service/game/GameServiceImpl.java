@@ -4,6 +4,7 @@ import com.ggdeal.model.Edition;
 import com.ggdeal.model.Feature;
 import com.ggdeal.model.Game;
 import com.ggdeal.model.GameMedia;
+import com.ggdeal.repository.EditionRepository;
 import com.ggdeal.repository.FeatureRepository;
 import com.ggdeal.repository.GameRepository;
 import com.ggdeal.service.gameMedia.GameMediaService;
@@ -20,11 +21,15 @@ public class GameServiceImpl implements GameService {
 
     private final GameRepository gameRepository;
     private final FeatureRepository featureRepository;
+    private final EditionRepository editionRepository;
 
     @Autowired
-    public GameServiceImpl(GameRepository gameRepository, FeatureRepository featureRepository) {
+    public GameServiceImpl(GameRepository gameRepository,
+                           FeatureRepository featureRepository,
+                           EditionRepository editionRepository) {
         this.gameRepository = gameRepository;
         this.featureRepository = featureRepository;
+        this.editionRepository = editionRepository;
     }
 
     public List<Game> findAll() {
@@ -51,22 +56,42 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public List<Edition> findEditionsByGameId(Long gameId) {
-        return List.of();
+        // Verificar que el juego existe
+        gameRepository.findById(gameId)
+                .orElseThrow(() -> new RuntimeException("Juego no encontrado con ID: " + gameId));
+
+        return editionRepository.findByGameId(gameId);
     }
 
     @Override
+    @Transactional
     public Edition addEdition(Long gameId, Edition edition) {
-        return null;
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new RuntimeException("Juego no encontrado con ID: " + gameId));
+
+        edition.setGame(game);
+        return editionRepository.save(edition);
     }
 
     @Override
+    @Transactional
     public Edition updateEdition(Edition edition) {
-        return null;
+        Edition existingEdition = editionRepository.findById(edition.getId())
+                .orElseThrow(() -> new RuntimeException("Edición no encontrada con ID: " + edition.getId()));
+
+        existingEdition.setName(edition.getName());
+        existingEdition.setDescription(edition.getDescription());
+        existingEdition.setPrice(edition.getPrice());
+        return editionRepository.save(existingEdition);
     }
 
     @Override
+    @Transactional
     public void deleteEdition(Long editionId) {
-
+        if (!editionRepository.existsById(editionId)) {
+            throw new RuntimeException("Edición no encontrada con ID: " + editionId);
+        }
+        editionRepository.deleteById(editionId);
     }
 
     @Override
