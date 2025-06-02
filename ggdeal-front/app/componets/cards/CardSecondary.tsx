@@ -23,10 +23,6 @@ export default function CardSecondary(card: CardsProps) {
               {plataform}
             </div>
           ))}
-        <div className="flex justify-center items-center space-x-2 p-1 border-1 border-t-0 rounded-bl-lg rounded-br-lg cursor-pointer">
-          <img src="/img/cart-white.png" alt="Cart" />
-          <span>Add To Cart</span>
-        </div>
         <div className="flex justify-center items-center space-x-2 p-1">
           <span className="text-primary">{card.prize}$</span>
           <CardPrize discount={card.discount}/>
