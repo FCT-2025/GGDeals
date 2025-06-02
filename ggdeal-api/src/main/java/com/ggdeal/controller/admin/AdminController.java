@@ -79,7 +79,7 @@ public class AdminController {
 
     @PostMapping("/login")
     public String login(@RequestParam String emailUsername, @RequestParam String password, HttpServletResponse response, Model model) {
-        User userByEmail = userRepository.findByEmail(emailUsername).get();
+        User userByEmail = userRepository.findByEmail(emailUsername).orElse(null);
         User user =  null;
 
         if(userByEmail != null) {

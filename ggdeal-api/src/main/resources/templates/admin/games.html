@@ -1378,14 +1378,19 @@
         };
       }
 
-      function generateSlug(name) {
-        return name
-          .trim()
-          .toLowerCase()
-          .split(/\s+/)
-          .map(word => word.replace(/[^a-z0-9-]/g, ''))
-          .join('-');
-      }
+        function generateSlug(text) {
+          if (!text) return '';
+
+          return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')     // Reemplaza espacios con guiones
+            .replace(/[^\w\-]+/g, '') // Elimina caracteres no alfanuméricos
+            .replace(/\-\-+/g, '-')   // Reemplaza múltiples guiones por uno solo
+            .replace(/^-+/, '')       // Elimina guiones del inicio
+            .replace(/-+$/, '');      // Elimina guiones del final
+        }
         // API endpoints
         const gameApi = {
           getAll: () =>
@@ -2016,7 +2021,6 @@
     const name = $('#editionName').val();
     const edition = {
       name: $('#editionName').val(),
-      slug: generateSlug(name),
       description: $('#editionDescription').val(),
       price: parseFloat($('#editionPrice').val())
     };
@@ -2041,7 +2045,6 @@
     const name = $('#editEditionName').val();
     const edition = {
       name: $('#editEditionName').val(),
-      slug: generateSlug(name),
       description: $('#editEditionDescription').val(),
       price: parseFloat($('#editEditionPrice').val())
     };
