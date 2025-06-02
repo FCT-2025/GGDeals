@@ -37,8 +37,8 @@ public class AuthController {
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody User loginRequest, HttpServletResponse response) {
-        User userByEmail = userRepository.findByEmail(loginRequest.getEmail());
-        User userByUsername = userRepository.findByUsername(loginRequest.getUsername());
+        User userByEmail = userRepository.findByEmail(loginRequest.getEmail()).orElse(null);
+        User userByUsername = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
         User user = null;
         if(userByEmail != null) {
             user = userByEmail;

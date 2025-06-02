@@ -43,10 +43,11 @@ export default function Nav() {
   };
 
   const searchGame = (input: string) => {
-    navigate(`/search?query=${input}`);
+    navigate(`/categories?title=${input}`);
   };
 
   const isInputIsEmpty = () => {
+    if(location.pathname === "/categories") return false;
     return query.trim() === "";
   };
 

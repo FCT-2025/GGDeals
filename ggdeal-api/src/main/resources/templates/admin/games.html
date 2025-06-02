@@ -1493,7 +1493,7 @@
                   // Configurar género
                   const genreSelect = document.getElementById("editGameGenre");
                   Array.from(genreSelect.options).forEach((option) => {
-                    option.selected = option.value === game.genre;
+                    option.selected = option.value === `${game.genre.id}`;
                   });
 
                   // Configurar fechas

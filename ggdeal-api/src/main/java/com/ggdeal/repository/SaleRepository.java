@@ -3,6 +3,7 @@ package com.ggdeal.repository;
 import com.ggdeal.dto.admin.PopularGameSalesDTO;
 import com.ggdeal.dto.admin.SalesPerMonthDTO;
 import com.ggdeal.model.Sale;
+import com.ggdeal.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -24,4 +25,5 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             "GROUP BY MONTH(s.purchaseDate) " +
             "ORDER BY MONTH(s.purchaseDate) DESC")
     List<SalesPerMonthDTO> findNumberSalesPerMonth();
+    List<Sale> findByUserOrderByPurchaseDateDesc(User user);
 }

@@ -1,5 +1,8 @@
 package com.ggdeal.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -21,5 +24,6 @@ public class Genre {
     private String name;
 
     @OneToMany(mappedBy = "genre")
+    @JsonIgnore
     private List<Game> games;
 }

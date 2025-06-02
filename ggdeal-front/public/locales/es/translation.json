@@ -136,9 +136,28 @@
     }
   },
   "categories": {
-    "show" : {
+    "show": {
       "less": "Mostrar menos",
       "more": "Mostrar más"
-    }
+    },
+    "filters": "Filtros",
+    "platform": "Plataforma",
+    "price": "Precio",
+    "minPrice": "mín",
+    "maxPrice": "máx",
+    "genre": "Género",
+    "applyFilters": "Aplicar Filtros",
+    "clearFilters": "Limpiar Filtros",
+    "allGames": "Todos los Juegos",
+    "sortBy": "Ordenar por",
+    "bestSelling": "Más Vendidos",
+    "priceLowToHigh": "Precio: Menor a Mayor",
+    "priceHighToLow": "Precio: Mayor a Menor",
+    "releaseDate": "Fecha de Lanzamiento",
+    "popularity": "Popularidad",
+    "applyPriceFilter": "Aplicar Filtro de Precio",
+    "nameAZ": "Nombre: A a Z",
+    "nameZA": "Nombre: Z a A",
+    "ratingHighToLow": "Puntuación: Mayor a Menor"
   }
 }

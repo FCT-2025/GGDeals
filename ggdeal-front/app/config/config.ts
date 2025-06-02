@@ -21,6 +21,15 @@ export const Config = {
     PLATAFORM: buildUrl(getEnvVar('VITE_API_GGDEAL_PLATAFORM')),
     GENRE: buildUrl(getEnvVar('VITE_API_GGDEAL_GENRE'))
   },
+  PURCHARSE: buildUrl(getEnvVar('VITE_API_PURCHARSE')),
+  CART: {
+    GET: buildUrl(getEnvVar('VITE_API_CART_GET')),
+    ADD: buildUrl(getEnvVar('VITE_API_CART_ADD')),
+    REMOVE: buildUrl(getEnvVar('VITE_API_CART_REMOVE')),
+    SUMMARY: buildUrl(getEnvVar('VITE_API_CART_SUMMARY')),
+    UPDATE: buildUrl(getEnvVar('VITE_API_CART_UPDATE')),
+    CLEAR: buildUrl(getEnvVar('VITE_API_CART_CLEAR')),
+  },
   USER: {
     WALLET: buildUrl(getEnvVar("VITE_API_USER_URL_WALLET")),
     PROFILE: buildUrl(getEnvVar("VITE_API_USER_URL_PROFILE")),

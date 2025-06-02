@@ -5,6 +5,7 @@ import com.ggdeal.dto.admin.SalesPerMonthDTO;
 import com.ggdeal.model.Replica;
 import com.ggdeal.model.Sale;
 import com.ggdeal.model.SaleEvent;
+import com.ggdeal.model.User;
 import com.ggdeal.repository.ReplicaRepository;
 import com.ggdeal.repository.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,5 +180,11 @@ public class SaleService {
      */
     public long countAll() {
         return saleRepository.count();
+    }
+
+
+
+    public List<Sale> findByUser(User user) {
+        return saleRepository.findByUserOrderByPurchaseDateDesc(user);
     }
 }

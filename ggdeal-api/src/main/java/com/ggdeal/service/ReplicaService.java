@@ -151,4 +151,8 @@ public class ReplicaService {
     public long countByIsSold(boolean isSold) {
         return replicaRepository.countByIsSold(isSold);
     }
+
+    public List<Replica> findAvailableReplicasByGame(Long gameId, int quantity) {
+        return replicaRepository.findAvailableByGameId(gameId, quantity);
+    }
 }

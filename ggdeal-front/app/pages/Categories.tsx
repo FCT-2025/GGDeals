@@ -3,7 +3,7 @@ import type { Route } from "../+types/root";
 import Breadcrumbs from "~/componets/Breadcrumbs";
 import CardPrimary from "~/componets/cards/CardPrimary";
 import type { PaginationGame } from "~/types/PaginationGame";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation, useSearchParams } from "react-router";
 import { getPlataforms, type Plataform } from "~/services/PlataformService";
 import { type Genre, getGenres } from "~/services/GenreService";
 import FilterGenre from "~/sections/categories/filters/FilterGenre";
@@ -11,6 +11,7 @@ import FilterPlatform from "~/sections/categories/filters/FilterPlatform";
 import Pagination from "~/sections/categories/Pagination";
 import { getPageGames } from "~/services/GameService";
 import { TypeGame } from "~/types/Game";
+import { useTranslation } from "react-i18next";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -20,40 +21,53 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Categories() {
-  const [priceRange, setPriceRange] = useState([0, 100]);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  
+  const [priceRange, setPriceRange] = useState([0, 200]);
   const [pageGamesList, setGamePageListing] = useState<PaginationGame | null>(
     null
   );
   const [sizePagination, setSizePagination] = useState<number | null>(null);
   const [plataformsList, setPlataformsList] = useState<Array<Plataform>>([]);
   const [genreList, setGenreList] = useState<Array<Genre>>([]);
-  const location = useLocation();
+  const [sortBy, setSortBy] = useState('bestSelling');
 
   const fetchGames = async () => {
-    const pageGames = await getPageGames();
-    console.log(pageGames.content[0].platformModels)
+    const pageGames = await getPageGames(location.search);
     setGamePageListing(pageGames);
   };
 
-  /*   useEffect(() => {
-    fetchGames();
-  }, [location.pathname]); */
-
   useEffect(() => {
     const fetchPlataforms = async () => {
-      const platforms = await getPlataforms();
+      const platforms = await getPlataforms(location.search);
       setPlataformsList(platforms);
     };
 
     const fetchGenres = async () => {
-      const genres = await getGenres();
+      const genres = await getGenres(location.search);
       setGenreList(genres);
     };
+
+    // Initialize price range from URL params
+    const minPrice = searchParams.get('minPrice');
+    const maxPrice = searchParams.get('maxPrice');
+    if (minPrice && maxPrice) {
+      setPriceRange([parseInt(minPrice), parseInt(maxPrice)]);
+    }
+
+    // Initialize sort from URL params
+    const sortParam = searchParams.get('sortBy');
+    if (sortParam) {
+      setSortBy(sortParam);
+    }
 
     fetchGames();
     fetchPlataforms();
     fetchGenres();
-  }, []);
+  }, [location.search]);
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
@@ -64,6 +78,44 @@ export default function Categories() {
     }
   };
 
+  const handleApplyPriceFilter = () => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    
+    if (priceRange[0] > 0) {
+      newSearchParams.set('minPrice', priceRange[0].toString());
+    } else {
+      newSearchParams.delete('minPrice');
+    }
+    
+    if (priceRange[1] < 200) {
+      newSearchParams.set('maxPrice', priceRange[1].toString());
+    } else {
+      newSearchParams.delete('maxPrice');
+    }
+
+    navigate(`?${newSearchParams.toString()}`, { replace: true });
+  };
+
+  const handleClearFilters = () => {
+    setPriceRange([0, 200]);
+    setSortBy('bestSelling');
+    navigate('', { replace: true });
+  };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSortBy = e.target.value;
+    setSortBy(newSortBy);
+    
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (newSortBy !== 'bestSelling') {
+      newSearchParams.set('sortBy', newSortBy);
+    } else {
+      newSearchParams.delete('sortBy');
+    }
+    
+    navigate(`?${newSearchParams.toString()}`, { replace: true });
+  };
+
   return (
     <section className="min-h-screen bg-black mt-35">
       <Breadcrumbs className="py-10" />
@@ -71,7 +123,7 @@ export default function Categories() {
       <div className="max-w-[1600px] mx-auto px-4 flex flex-col md:flex-row">
         <aside className="md:w-64 lg:w-72 flex-shrink-0 mb-6 md:mb-0 md:mr-6">
           <div className="md:hidden w-full bg-gray-800 p-4 mb-4 flex justify-between items-center rounded">
-            <span className="text-white font-bold">Filters</span>
+            <span className="text-white font-bold">{t('categories.filters')}</span>
             <button className="text-white">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -87,14 +139,14 @@ export default function Categories() {
 
           <div className="md:block">
             <div className="bg-gray-800 p-4 mb-4 rounded">
-              <h3 className="text-white font-bold mb-3">Platform</h3>
+              <h3 className="text-white font-bold mb-3">{t('categories.platform')}</h3>
               <div className="space-y-2">
                 <FilterPlatform platforms={plataformsList} />
               </div>
             </div>
 
             <div className="bg-gray-800 p-4 mb-4 rounded">
-              <h3 className="text-white font-bold mb-3">Price</h3>
+              <h3 className="text-white font-bold mb-3">{t('categories.price')}</h3>
               <div className="flex justify-between mb-2">
                 <input
                   type="number"
@@ -102,7 +154,7 @@ export default function Categories() {
                   value={priceRange[0]}
                   onChange={handlePriceChange}
                   className="w-[45%] bg-gray-700 p-2 text-white rounded"
-                  placeholder="min"
+                  placeholder={t('categories.minPrice')}
                 />
                 <input
                   type="number"
@@ -110,23 +162,29 @@ export default function Categories() {
                   value={priceRange[1]}
                   onChange={handlePriceChange}
                   className="w-[45%] bg-gray-700 p-2 text-white rounded"
-                  placeholder="max"
+                  placeholder={t('categories.maxPrice')}
                 />
               </div>
               <input
                 type="range"
                 min="0"
-                max="100"
+                max="200"
                 value={priceRange[1]}
                 onChange={(e) =>
                   setPriceRange([priceRange[0], parseInt(e.target.value)])
                 }
-                className="w-full"
+                className="w-full mb-3"
               />
+              <button
+                onClick={handleApplyPriceFilter}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors text-sm"
+              >
+                {t('categories.applyPriceFilter')}
+              </button>
             </div>
 
             <div className="bg-gray-800 p-4 mb-4 rounded">
-              <h3 className="text-white font-bold mb-3">Genre</h3>
+              <h3 className="text-white font-bold mb-3">{t('categories.genre')}</h3>
               <div className="space-y-2">
                 <FilterGenre genres={genreList} />
               </div>
@@ -207,27 +265,42 @@ export default function Categories() {
                 </div>
               </div>
             </div>
+
+            {/* Clear All Filters */}
+            <div>
+              <button
+                onClick={handleClearFilters}
+                className="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors"
+              >
+                {t('categories.clearFilters')}
+              </button>
+            </div>
           </div>
         </aside>
 
         <main className="flex-1">
           <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <h1 className="text-2xl font-bold text-white mb-2 sm:mb-0">
-              All Games
+              {t('categories.allGames')}
             </h1>
             <div className="flex items-center">
               <label htmlFor="sort" className="text-white mr-2">
-                Sort by:
+                {t('categories.sortBy')}:
               </label>
               <select
                 id="sort"
+                value={sortBy}
+                onChange={handleSortChange}
                 className="bg-gray-800 text-white p-2 rounded border border-gray-700"
               >
-                <option>Best Selling</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Release Date</option>
-                <option>Popularity</option>
+                <option value="bestSelling">{t('categories.bestSelling')}</option>
+                <option value="priceLowToHigh">{t('categories.priceLowToHigh')}</option>
+                <option value="priceHighToLow">{t('categories.priceHighToLow')}</option>
+                <option value="releaseDate">{t('categories.releaseDate')}</option>
+                <option value="popularity">{t('categories.popularity')}</option>
+                <option value="nameAZ">{t('categories.nameAZ')}</option>
+                <option value="nameZA">{t('categories.nameZA')}</option>
+                <option value="ratingHighToLow">{t('categories.ratingHighToLow')}</option>
               </select>
             </div>
           </div>

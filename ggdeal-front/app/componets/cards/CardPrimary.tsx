@@ -25,7 +25,7 @@ export default function CardPrimary(card: CardsProps) {
         </p>
 
         {card.plataforms && card.plataforms.length > 0 && (
-          <div className="flex flex-wrap align-center gap-2 mt-auto">
+          <div className="flex flex-wrap justify-between align-center gap-2 mt-auto">
             {card.plataforms.map((platform: Plataform, idx) => (
               <span
                 key={`platform-${idx}`}
@@ -45,7 +45,7 @@ export default function CardPrimary(card: CardsProps) {
       <div className="flex w-full mt-auto">
         <Link
           className="flex-1 bg-primary hover:bg-primary/90 flex items-center justify-center py-3 space-x-2 transition-colors"
-          to={`/game/${card.nameSlug ? card.nameSlug : card.id}`}
+          to={`${card.nameSlug}`}
         >
           <IconCardBlack className="w-5 h-5" />
           <span className="text-black font-nouvel font-bold text-sm sm:text-base whitespace-nowrap">
