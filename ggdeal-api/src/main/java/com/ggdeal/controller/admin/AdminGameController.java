@@ -2,6 +2,7 @@ package com.ggdeal.controller.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ggdeal.exception.DuplicateGameNameException;
 import com.ggdeal.model.Edition;
 import com.ggdeal.model.Feature;
 import com.ggdeal.model.Game;
@@ -13,11 +14,13 @@ import com.ggdeal.service.game.GameService;
 import com.ggdeal.service.gameMedia.GameMediaService;
 import com.ggdeal.service.game.GameServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.*;
 
@@ -82,15 +85,27 @@ public class AdminGameController {
 
     @PostMapping("")
     @ResponseBody
-    public ResponseEntity<Game> createGame(@RequestBody Game game) {
-        return ResponseEntity.ok(gameServiceImpl.save(game));
+    public ResponseEntity<?> createGame(@RequestBody Game game) {
+        try {
+            return ResponseEntity.ok(gameServiceImpl.save(game));
+        } catch (DuplicateGameNameException e) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody Game game) {
+    public ResponseEntity<?> updateGame(@PathVariable Long id, @RequestBody Game game) {
         game.setId(id);
-        return ResponseEntity.ok(gameServiceImpl.update(game));
+        try {
+            return ResponseEntity.ok(gameServiceImpl.update(game));
+        } catch (DuplicateGameNameException e) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")

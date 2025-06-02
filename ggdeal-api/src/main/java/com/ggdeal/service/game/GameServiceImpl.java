@@ -1,9 +1,11 @@
 package com.ggdeal.service.game;
 
+import com.ggdeal.exception.DuplicateGameNameException;
 import com.ggdeal.model.Edition;
 import com.ggdeal.model.Feature;
 import com.ggdeal.model.Game;
 import com.ggdeal.model.GameMedia;
+import com.ggdeal.model.util.ModelUtils;
 import com.ggdeal.repository.EditionRepository;
 import com.ggdeal.repository.FeatureRepository;
 import com.ggdeal.repository.GameRepository;
@@ -97,10 +99,13 @@ public class GameServiceImpl implements GameService {
     @Override
     @Transactional
     public Game update(Game game) {
-        Game gameSearched = gameRepository.findById(game.getId()).get();
+        Game gameSearched = gameRepository.findById(game.getId())
+                .orElseThrow(() -> new RuntimeException("No se ha encontrado el juego"));
 
-        if(gameSearched == null) {
-            throw new RuntimeException("No se ha encontrado en el juego");
+        // Verificar si hay otro juego con el mismo título (excluyendo el actual)
+        if (!gameSearched.getTitle().equalsIgnoreCase(game.getTitle()) &&
+                gameRepository.existsByTitleIgnoreCaseAndIdNot(game.getTitle(), game.getId())) {
+            throw new DuplicateGameNameException("Ya existe un juego con el nombre: " + game.getTitle());
         }
 
         gameSearched.setGenre(game.getGenre());
@@ -113,8 +118,13 @@ public class GameServiceImpl implements GameService {
         return gameRepository.save(gameSearched);
     }
 
+    @Override
     @Transactional
     public Game save(Game game) {
+        if (gameRepository.existsByTitleIgnoreCase(game.getTitle())) {
+            throw new DuplicateGameNameException("Ya existe un juego con el nombre: " + game.getTitle());
+        }
+        game.setNameSlug(ModelUtils.parseSlug(game.getTitle()));
         return gameRepository.save(game);
     }
 
@@ -122,6 +132,17 @@ public class GameServiceImpl implements GameService {
     public void deleteById(Long id) {
         gameRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        return gameRepository.findByTitleIgnoreCase(name).isPresent();
+    }
+
+    @Override
+    public Optional<Game> findByName(String name) {
+        return gameRepository.findByTitleIgnoreCase(name);
+    }
+
 
 
 }

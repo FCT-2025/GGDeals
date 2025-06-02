@@ -64,6 +64,15 @@
                       </div>
                     </div>
                   </div>
+                    <div th:if="${error}" class="alert alert-danger" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+
+                    <div th:if="${mensaje}" class="alert alert-success" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <span th:text="${mensaje}"></span>
+                    </div>
                   <div class="card-body">
                     <div class="table-responsive">
                       <table class="table table-striped" id="gamesTable">
@@ -1234,7 +1243,7 @@
               },
             },
           }
-        
+
 
         // Inicializar instancias de FilePond
         const ponds = document.querySelectorAll(".filepond");
@@ -1360,6 +1369,23 @@
       // ==============================================
 
       function initGameManagement() {
+      if (typeof toastr !== "undefined") {
+        toastr.options = {
+          closeButton: true,
+          progressBar: true,
+          positionClass: "toast-top-right",
+          timeOut: 5000
+        };
+      }
+
+      function generateSlug(name) {
+        return name
+          .trim()
+          .toLowerCase()
+          .split(/\s+/)
+          .map(word => word.replace(/[^a-z0-9-]/g, ''))
+          .join('-');
+      }
         // API endpoints
         const gameApi = {
           getAll: () =>
@@ -1372,14 +1398,24 @@
               headers: { "Content-Type": "application/json" },
               credentials: "include",
               body: JSON.stringify(game),
-            }).then((res) => res.json()),
+            }).then((res) => {
+              if (!res.ok) {
+                return res.json().then(data => Promise.reject(data));
+              }
+              return res.json();
+            }),
           update: (id, game) =>
             fetch(`/api/admin/games/${id}`, {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
               credentials: "include",
               body: JSON.stringify(game),
-            }).then((res) => res.json()),
+            }).then((res) => {
+              if (!res.ok) {
+                return res.json().then(data => Promise.reject(data));
+              }
+              return res.json();
+            }),
           delete: (id) => fetch(`/api/admin/games/${id}`, { method: "DELETE" }),
         };
 
@@ -1410,9 +1446,13 @@
                 showToast("Juego creado correctamente", "success");
                 setTimeout(() => location.reload(), 1500);
               })
-              .catch((error) => {
-                console.error("Error:", error);
-                showToast("Error al crear el juego", "error");
+              .catch((errorData) => {
+                console.error("Error:", errorData);
+                if (errorData && errorData.error) {
+                  showToast(errorData.error, "error");
+                } else {
+                  showToast("Error al crear el juego", "error");
+                }
               });
           });
 
@@ -1423,6 +1463,7 @@
             const id = document.getElementById("editGameId").value;
             const game = {
               title: document.getElementById("editGameTitle").value,
+              slug: generateSlug(document.getElementById("editGameTitle").value),
               development: document.getElementById("editGameDesarrollo").value,
               releaseDate: parseFlatpickrDate(
                 document.getElementById("editGameReleaseDate").value
@@ -1444,9 +1485,13 @@
                 showToast("Juego actualizado correctamente", "success");
                 setTimeout(() => location.reload(), 1500);
               })
-              .catch((error) => {
-                console.error("Error:", error);
-                showToast("Error al actualizar el juego", "error");
+              .catch((errorData) => {
+                console.error("Error:", errorData);
+                if (errorData && errorData.error) {
+                  showToast(errorData.error, "error");
+                } else {
+                  showToast("Error al actualizar el juego", "error");
+                }
               });
           });
 
@@ -1863,11 +1908,40 @@
         );
       }
 
+
       function showToast(message, type = "success") {
         if (typeof toastr !== "undefined") {
           toastr[type](message);
         } else {
           console.log(`${type}: ${message}`);
+
+          // Crear una alerta Bootstrap como alternativa
+          const alertClass = type === "error" ? "danger" : type;
+          const alertHtml = `
+            <div class="alert alert-${alertClass} alert-dismissible fade show" role="alert">
+              <strong>${type === "error" ? "Error" : "Éxito"}:</strong> ${message}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          `;
+
+          // Insertar la alerta al principio de la página
+          const container = document.querySelector('.page-content');
+          if (container) {
+            const alertContainer = document.createElement('div');
+            alertContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+            alertContainer.style.zIndex = '1070';
+            alertContainer.innerHTML = alertHtml;
+            container.prepend(alertContainer);
+
+            // Configurar para que desaparezca automáticamente
+            setTimeout(() => {
+              const alert = alertContainer.querySelector('.alert');
+              if (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+              }
+            }, 5000);
+          }
         }
       }
 
@@ -1939,8 +2013,10 @@
   // Guardar nueva edición
   $('#saveNewEditionBtn').on('click', function() {
     const gameId = $('#newEditionGameId').val();
+    const name = $('#editionName').val();
     const edition = {
       name: $('#editionName').val(),
+      slug: generateSlug(name),
       description: $('#editionDescription').val(),
       price: parseFloat($('#editionPrice').val())
     };
@@ -1962,8 +2038,10 @@
   $('#saveEditEditionBtn').on('click', function() {
     const editionId = $('#editEditionId').val();
     const gameId = $('#editEditionGameId').val();
+    const name = $('#editEditionName').val();
     const edition = {
       name: $('#editEditionName').val(),
+      slug: generateSlug(name),
       description: $('#editEditionDescription').val(),
       price: parseFloat($('#editEditionPrice').val())
     };
