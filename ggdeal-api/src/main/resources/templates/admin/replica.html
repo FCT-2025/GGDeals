@@ -452,6 +452,9 @@
             $.ajax({
                 url: '/api/admin/keys/' + replicaId,
                 type: 'GET',
+                       xhrFields: {
+                        withCredentials: true  // ← Esto incluye cookies y credenciales
+                    },
                 success: function(replica) {
                     $('#viewActivationKey').text(replica.activationKey);
                     $('#viewGameTitle').text(replica.game ? replica.game.title : '-');
@@ -491,6 +494,9 @@
             $.ajax({
                 url: '/api/admin/keys/' + replicaId,
                 type: 'GET',
+                         xhrFields: {
+                        withCredentials: true  // ← Esto incluye cookies y credenciales
+                    },
                 success: function(replica) {
                     $('#editKeyValue').val(replica.activationKey);
                     $('#editGame').val(replica.game ? replica.game.id : '');
@@ -516,6 +522,9 @@
             $.ajax({
                 url: '/api/admin/keys/' + replicaId,
                 type: 'GET',
+                         xhrFields: {
+                        withCredentials: true  // ← Esto incluye cookies y credenciales
+                    },
                 success: function(replica) {
                     $('#deleteActivationKey').text(replica.activationKey);
                     $('#deleteGameTitle').text(replica.game ? replica.game.title : '-');
@@ -553,6 +562,9 @@
             $.ajax({
                 url: '/api/admin/keys/batch',
                 type: 'POST',
+                                    xhrFields: {
+                        withCredentials: true  // ← Esto incluye cookies y credenciales
+                    },
                 contentType: 'application/json',
                 data: JSON.stringify(formData),
                 success: function(response) {
@@ -582,6 +594,9 @@
                 url: '/api/admin/keys/' + id,
                 type: 'PUT',
                 contentType: 'application/json',
+                                    xhrFields: {
+                        withCredentials: true  // ← Esto incluye cookies y credenciales
+                    },
                 data: JSON.stringify(formData),
                 success: function(response) {
                     $('#editKeyModal').modal('hide');
@@ -606,6 +621,9 @@
             $.ajax({
                 url: '/api/admin/keys/' + id,
                 type: 'DELETE',
+                                    xhrFields: {
+                        withCredentials: true  // ← Esto incluye cookies y credenciales
+                    },
                 success: function(response) {
                     $('#deleteKeyModal').modal('hide');
                     // Mostrar mensaje de éxito

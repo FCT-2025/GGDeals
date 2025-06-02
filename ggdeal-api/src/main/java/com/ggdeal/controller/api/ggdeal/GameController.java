@@ -37,6 +37,7 @@ public class GameController {
                                                           @RequestParam(required = false) Integer releasedLastDays,
                                                           @RequestParam(required = false) Boolean isPublished,
                                                           @RequestParam(required = false) List<Long> platformModel,
+                                                          @RequestParam(required = false) List<Long> platformType,
                                                           @RequestParam(required = false) Float minPrice,
                                                           @RequestParam(required = false) Float maxPrice,
                                                           @RequestParam(required = false, defaultValue = "true") Boolean inStock,
@@ -49,7 +50,7 @@ public class GameController {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Specification<Game> spec = GameSpecification.filterBy(id, title, genre, releasedLastDays,
-                isPublished, platformModel, minPrice,
+                isPublished, platformModel, platformType, minPrice,
                 maxPrice, inStock);
         Page<GameListingDTO> games = gameRepository.findAll(spec, pageable)
                 .map(game -> new GameListingDTO(game, mediaUrlBase));

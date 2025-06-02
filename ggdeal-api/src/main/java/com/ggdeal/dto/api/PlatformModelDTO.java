@@ -13,13 +13,15 @@ public class PlatformModelDTO {
     private Long id;
     private String src;
     private String name;
+    private Integer count;
 
     public PlatformModelDTO(PlatformModel platformModel, String mediaBaseUrl) {
         this.id = platformModel.getId();
         this.name = platformModel.getName();
+        this.count = platformModel.getReplicas().size();
         String path = null;
         if(platformModel.getPathLogo() != null) {
-            URI.create(mediaBaseUrl).resolve(platformModel.getPathLogo()).toString();
+            path = URI.create(mediaBaseUrl).resolve(platformModel.getPathLogo()).toString();
         }
         this.src =  path;
     }

@@ -1,4 +1,4 @@
-export default function CardPrize({ discount }: { discount: number | undefined }) {
+export default function CardPrize({ discount }: { discount: number | undefined |  null }) {
   return (
     discount && (
       <span className="text-sm relative">

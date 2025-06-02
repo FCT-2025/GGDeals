@@ -4,6 +4,7 @@ import com.ggdeal.configuration.JwtProvider;
 import com.ggdeal.dto.admin.UserDTO;
 import com.ggdeal.dto.api.ActivationKeyDTO;
 import com.ggdeal.dto.api.PurchaseResponseDTO;
+import com.ggdeal.dto.api.SaleDTO;
 import com.ggdeal.model.*;
 import com.ggdeal.repository.UserRepository;
 import com.ggdeal.service.CartService;
@@ -208,7 +209,9 @@ public class PurchaseController {
 
             List<Sale> purchases = saleService.findByUser(user);
 
-            return ResponseEntity.ok(purchases);
+            List<SaleDTO> purcharsesDTO = purchases.stream().map(SaleDTO::new).toList();
+
+            return ResponseEntity.ok(purcharsesDTO);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

@@ -80,4 +80,13 @@ public class GameDTO {
         this.src = path;
         this.type = game.isPreOrder() ? GameAvailabilityType.PREORDER : GameAvailabilityType.AVAILABLE;
     }
+
+
+    public GameDTO(Game game) {
+        this.id = game.getId();
+        this.title = game.getTitle();
+        this.nameSlug = game.getNameSlug();
+        this.prize = game.getPrice();
+        this.discount = game.getDiscount();
+    }
 }

@@ -38,7 +38,7 @@ public class GameMediaServiceImpl implements GameMediaService {
 
         List<GameMedia> gameMedias = currentGame.getGameMedias();
 
-        if (gameMedias.size() > 6) {
+        if (gameMedias.size() > 7) {
             throw new RuntimeException("No se puede subir mas de 6 imágenes");
         }
 

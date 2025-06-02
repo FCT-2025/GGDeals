@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 import { Config } from "~/config/config";
 
 // Tipos para el carrito
@@ -29,6 +30,7 @@ interface PurchaseResponse {
 }
 
 export default function ShoppingCart() {
+  const { t } = useTranslation();
   const [cart, setCart] = useState<CartDTO | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,11 +59,11 @@ export default function ShoppingCart() {
         // Usuario no autenticado
         window.location.href = '/login';
       } else {
-        setError('Error al cargar el carrito');
+        setError(t('shoppingCart.errors.loadError'));
       }
     } catch (err) {
       console.error('Error fetching cart:', err);
-      setError('Error de conexión');
+      setError(t('shoppingCart.errors.connectionError'));
     } finally {
       setLoading(false);
     }
@@ -98,11 +100,11 @@ export default function ShoppingCart() {
         });
       } else {
         const data = await response.json();
-        alert(data.message || 'Error al actualizar cantidad');
+        alert(data.message || t('shoppingCart.errors.updateQuantityError'));
       }
     } catch (error) {
       console.error('Error updating quantity:', error);
-      alert('Error de conexión');
+      alert(t('shoppingCart.errors.connectionError'));
     } finally {
       setUpdatingItems(prev => {
         const newSet = new Set(prev);
@@ -113,7 +115,7 @@ export default function ShoppingCart() {
   };
 
   const removeItem = async (itemId: number) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+    if (!confirm(t('shoppingCart.confirmations.removeItem'))) {
       return;
     }
 
@@ -136,11 +138,11 @@ export default function ShoppingCart() {
         });
       } else {
         const data = await response.json();
-        alert(data.message || 'Error al eliminar producto');
+        alert(data.message || t('shoppingCart.errors.removeItemError'));
       }
     } catch (error) {
       console.error('Error removing item:', error);
-      alert('Error de conexión');
+      alert(t('shoppingCart.errors.connectionError'));
     } finally {
       setUpdatingItems(prev => {
         const newSet = new Set(prev);
@@ -151,7 +153,7 @@ export default function ShoppingCart() {
   };
 
   const clearCart = async () => {
-    if (!confirm('¿Estás seguro de que quieres vaciar todo el carrito?')) {
+    if (!confirm(t('shoppingCart.confirmations.clearCart'))) {
       return;
     }
 
@@ -165,21 +167,21 @@ export default function ShoppingCart() {
         setCart(prevCart => prevCart ? { ...prevCart, items: [] } : null);
       } else {
         const data = await response.json();
-        alert(data.message || 'Error al vaciar carrito');
+        alert(data.message || t('shoppingCart.errors.clearCartError'));
       }
     } catch (error) {
       console.error('Error clearing cart:', error);
-      alert('Error de conexión');
+      alert(t('shoppingCart.errors.connectionError'));
     }
   };
 
   const proceedToPurchase = async () => {
     if (!cart || cart.items.length === 0) {
-      alert('El carrito está vacío');
+      alert(t('shoppingCart.errors.emptyCart'));
       return;
     }
 
-    if (!confirm('¿Confirmas que quieres proceder con la compra?')) {
+    if (!confirm(t('shoppingCart.confirmations.proceedPurchase'))) {
       return;
     }
 
@@ -205,11 +207,11 @@ export default function ShoppingCart() {
         }
       } else {
         const errorData = await response.json();
-        alert(errorData.message || 'Error al procesar la compra');
+        alert(errorData.message || t('shoppingCart.errors.purchaseError'));
       }
     } catch (error) {
       console.error('Error during purchase:', error);
-      alert('Error de conexión durante la compra');
+      alert(t('shoppingCart.errors.purchaseConnectionError'));
     } finally {
       setPurchasing(false);
     }
@@ -244,7 +246,7 @@ export default function ShoppingCart() {
     return (
       <div className="max-w-[1440px] mx-auto px-4 mt-35 mb-12">
         <div className="text-center">
-          <p>Cargando carrito...</p>
+          <p>{t('shoppingCart.loading')}</p>
         </div>
       </div>
     );
@@ -259,7 +261,7 @@ export default function ShoppingCart() {
             onClick={fetchCart}
             className="mt-4 px-4 py-2 bg-secondary text-white rounded hover:bg-transparent hover:border-secondary hover:text-secondary border border-transparent transition"
           >
-            Reintentar
+            {t('shoppingCart.retry')}
           </button>
         </div>
       </div>
@@ -278,7 +280,7 @@ export default function ShoppingCart() {
           <div className="flex-1 h-[1px] bg-gray-400"></div>
         </div>
         <div className="text-center mt-2">
-          <h2 className="text-lg">Shopping cart</h2>
+          <h2 className="text-lg">{t('shoppingCart.title')}</h2>
         </div>
       </section>
 
@@ -287,13 +289,13 @@ export default function ShoppingCart() {
         <section className="max-w-[1440px] mx-auto px-4 mb-12">
           <div className="bg-gray-800 max-w-2xl mx-auto p-10 rounded flex flex-col items-center justify-center">
             <img src="/img/cart.png" alt="Empty cart" className="w-10 h-10 mb-4" />
-            <h3 className="text-xl mb-2">Your shopping cart is empty</h3>
-            <p className="text-center text-gray-400 mb-6">You haven't added any products to your basket yet. Browse the site and find amazing deals!</p>
+            <h3 className="text-xl mb-2">{t('shoppingCart.empty.title')}</h3>
+            <p className="text-center text-gray-400 mb-6">{t('shoppingCart.empty.description')}</p>
             <Link 
               to="/categories" 
               className="border border-white py-2 px-8 hover:bg-white hover:text-black transition duration-300"
             >
-              Discover our games
+              {t('shoppingCart.empty.discoverGames')}
             </Link>
           </div>
         </section>
@@ -305,12 +307,12 @@ export default function ShoppingCart() {
             <div className="lg:col-span-2">
               <div className="bg-gray-800 rounded p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xl">Productos en tu carrito ({cart.items.length})</h3>
+                  <h3 className="text-xl">{t('shoppingCart.items.title', { count: cart.items.length })}</h3>
                   <button 
                     onClick={clearCart}
                     className="text-red-400 hover:text-red-300 text-sm"
                   >
-                    Vaciar carrito
+                    {t('shoppingCart.items.clearCart')}
                   </button>
                 </div>
 
@@ -325,7 +327,7 @@ export default function ShoppingCart() {
                       {/* Game info */}
                       <div className="flex-1">
                         <h4 className="font-semibold">{item.gameName}</h4>
-                        <p className="text-sm text-gray-400">Clave digital</p>
+                        <p className="text-sm text-gray-400">{t('shoppingCart.items.digitalKey')}</p>
                       </div>
 
                       {/* Quantity controls */}
@@ -350,7 +352,7 @@ export default function ShoppingCart() {
                       {/* Price */}
                       <div className="text-right min-w-[80px]">
                         <p className="font-semibold">{((item.price || 60) * item.quantity).toFixed(2)}€</p>
-                        <p className="text-sm text-gray-400">{(item.price || 60).toFixed(2)}€ c/u</p>
+                        <p className="text-sm text-gray-400">{(item.price || 60).toFixed(2)}€ {t('shoppingCart.items.each')}</p>
                       </div>
 
                       {/* Remove button */}
@@ -372,17 +374,17 @@ export default function ShoppingCart() {
             {/* Summary sidebar */}
             <div className="lg:col-span-1">
               <div className="bg-gray-800 border border-gray-700 p-6 rounded sticky top-4">
-                <h3 className="text-xl mb-4 text-center">Summary</h3>
+                <h3 className="text-xl mb-4 text-center">{t('shoppingCart.summary.title')}</h3>
                 <div className="flex justify-between mb-2 pb-2 border-b border-gray-700">
-                  <span>Official price</span>
+                  <span>{t('shoppingCart.summary.officialPrice')}</span>
                   <span>{subtotal.toFixed(2)}€</span>
                 </div>
                 <div className="flex justify-between mb-2 pb-2 border-b border-gray-700">
-                  <span>Discount</span>
+                  <span>{t('shoppingCart.summary.discount')}</span>
                   <span>-{discount.toFixed(2)}€</span>
                 </div>
                 <div className="flex justify-between mb-4 pb-2 border-b border-gray-700 font-semibold">
-                  <span>Subtotal</span>
+                  <span>{t('shoppingCart.summary.subtotal')}</span>
                   <span>{total.toFixed(2)}€</span>
                 </div>
                 
@@ -391,13 +393,13 @@ export default function ShoppingCart() {
                   disabled={purchasing || isEmpty}
                   className="w-full bg-secondary text-center text-white py-3 rounded-md border border-transparent hover:bg-transparent hover:border-secondary hover:text-secondary transition duration-300 ease-in-out cursor-pointer mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {purchasing ? 'PROCESANDO...' : 'PROCEED TO CHECKOUT'}
+                  {purchasing ? t('shoppingCart.summary.processing') : t('shoppingCart.summary.proceedCheckout')}
                 </button>
                 
                 <div className="flex justify-center items-center mb-4">
                   <div className="flex-1 h-[1px] bg-gray-500"></div>
                   <div className="mx-2">
-                    <span className="text-sm">or</span>
+                    <span className="text-sm">{t('shoppingCart.summary.or')}</span>
                   </div>
                   <div className="flex-1 h-[1px] bg-gray-500"></div>
                 </div>
@@ -406,7 +408,7 @@ export default function ShoppingCart() {
                   to="/categories"
                   className="flex justify-center items-center cursor-pointer hover:text-secondary transition"
                 >
-                  <span className="mr-2">Continue Shopping</span>
+                  <span className="mr-2">{t('shoppingCart.summary.continueShopping')}</span>
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 5H9M9 5L5 1M9 5L5 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
@@ -429,8 +431,8 @@ export default function ShoppingCart() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-semibold text-green-400 mb-2">¡Compra Exitosa!</h3>
-                  <p className="text-gray-300">Tu compra se ha procesado correctamente. Aquí tienes tus claves de activación:</p>
+                  <h3 className="text-2xl font-semibold text-green-400 mb-2">{t('shoppingCart.modal.success.title')}</h3>
+                  <p className="text-gray-300">{t('shoppingCart.modal.success.description')}</p>
                 </>
               ) : (
                 <>
@@ -439,26 +441,26 @@ export default function ShoppingCart() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-semibold text-red-400 mb-2">Error en la Compra</h3>
-                  <p className="text-gray-300">{purchaseResult.message || 'Ha ocurrido un error procesando tu compra.'}</p>
+                  <h3 className="text-2xl font-semibold text-red-400 mb-2">{t('shoppingCart.modal.error.title')}</h3>
+                  <p className="text-gray-300">{purchaseResult.message || t('shoppingCart.modal.error.description')}</p>
                 </>
               )}
             </div>
 
             {purchaseResult.success && purchaseResult.activationKeys && (
               <div className="space-y-4 mb-6">
-                <h4 className="text-lg font-semibold text-center">Claves de Activación:</h4>
+                <h4 className="text-lg font-semibold text-center">{t('shoppingCart.modal.success.activationKeysTitle')}</h4>
                 {purchaseResult.activationKeys.map((keyInfo, index) => (
                   <div key={index} className="bg-gray-700 p-4 rounded">
                     <div className="flex justify-between items-start mb-2">
                       <h5 className="font-semibold text-white">{keyInfo.gameName}</h5>
-                      <span className="text-sm text-gray-400">Cantidad: {keyInfo.quantity}</span>
+                      <span className="text-sm text-gray-400">{t('shoppingCart.modal.success.quantity', { quantity: keyInfo.quantity })}</span>
                     </div>
                     <div className="bg-gray-600 p-3 rounded font-mono text-sm break-all">
                       <code className="text-green-400">{keyInfo.activationKey}</code>
                     </div>
                     <p className="text-xs text-gray-400 mt-2">
-                      Guarda esta clave en un lugar seguro. La necesitarás para activar tu juego.
+                      {t('shoppingCart.modal.success.keyInstructions')}
                     </p>
                   </div>
                 ))}
@@ -470,7 +472,7 @@ export default function ShoppingCart() {
                 onClick={closePurchaseModal}
                 className="bg-secondary hover:bg-transparent hover:border-secondary hover:text-secondary border border-transparent text-white px-6 py-2 rounded transition duration-300"
               >
-                Cerrar
+                {t('shoppingCart.modal.close')}
               </button>
             </div>
           </div>

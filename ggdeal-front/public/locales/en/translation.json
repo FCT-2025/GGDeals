@@ -113,8 +113,38 @@
       "latestGames": "Latest Games Added to Wishlist"
     },
     "orders": {
-      "title": "My Orders",
-      "noOrders": "You don't have any orders yet."
+"title": "My Orders",
+      "noOrders": "You don't have any orders yet",
+      "loading": "Loading orders...",
+      "error": {
+        "unauthorized": "You don't have permission to access this information",
+        "loadOrders": "Error loading orders",
+        "connection": "Connection error"
+      },
+      "retry": "Retry",
+      "orderNumber": "Order #:",
+      "date": "Date:",
+      "paymentMethod": "Payment method:",
+      "status": {
+        "label": "Status:",
+        "completed": "Completed",
+        "pending": "Pending",
+        "failed": "Failed",
+        "unknown": "Unknown"
+      },
+      "activationKey": {
+        "label": "Activation key:",
+        "copy": "Copy"
+      },
+      "paymentMethods": {
+        "balance": "Balance"
+      },
+      "gameNotSpecified": "Game not specified",
+      "summary": {
+        "showing": "Showing",
+        "order": "order",
+        "orders": "orders"
+      }
     },
     "settings": {
       "profileImage": "Profile image",
@@ -164,5 +194,60 @@
             "nameAZ": "Name: A to Z",
       "nameZA": "Name: Z to A",
       "ratingHighToLow": "Rating: High to Low"
+  },
+  "shoppingCart": {
+    "title": "Shopping cart",
+    "loading": "Loading cart...",
+    "retry": "Retry",
+    "empty": {
+      "title": "Your shopping cart is empty",
+      "description": "You haven't added any products to your basket yet. Browse the site and find amazing deals!",
+      "discoverGames": "Discover our games"
+    },
+    "items": {
+      "title": "Products in your cart ({{count}})",
+      "clearCart": "Clear cart",
+      "digitalKey": "Digital key",
+      "each": "each"
+    },
+    "summary": {
+      "title": "Summary",
+      "officialPrice": "Official price",
+      "discount": "Discount",
+      "subtotal": "Subtotal",
+      "processing": "PROCESSING...",
+      "proceedCheckout": "PROCEED TO CHECKOUT",
+      "or": "or",
+      "continueShopping": "Continue Shopping"
+    },
+    "modal": {
+      "close": "Close",
+      "success": {
+        "title": "Purchase Successful!",
+        "description": "Your purchase has been processed successfully. Here are your activation keys:",
+        "activationKeysTitle": "Activation Keys:",
+        "quantity": "Quantity: {{quantity}}",
+        "keyInstructions": "Save this key in a safe place. You will need it to activate your game."
+      },
+      "error": {
+        "title": "Purchase Error",
+        "description": "An error occurred while processing your purchase."
+      }
+    },
+    "confirmations": {
+      "removeItem": "Are you sure you want to remove this product?",
+      "clearCart": "Are you sure you want to empty the entire cart?",
+      "proceedPurchase": "Do you confirm that you want to proceed with the purchase?"
+    },
+    "errors": {
+      "loadError": "Error loading cart",
+      "connectionError": "Connection error",
+      "updateQuantityError": "Error updating quantity",
+      "removeItemError": "Error removing product",
+      "clearCartError": "Error clearing cart",
+      "emptyCart": "The cart is empty",
+      "purchaseError": "Error processing purchase",
+      "purchaseConnectionError": "Connection error during purchase"
+    }
   }
 }

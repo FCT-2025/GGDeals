@@ -3,6 +3,7 @@ package com.ggdeal.specification;
 import com.ggdeal.model.Game;
 import com.ggdeal.model.Genre;
 import com.ggdeal.model.PlatformModel;
+import com.ggdeal.model.PlatformType;
 import com.ggdeal.model.Replica;
 import com.ggdeal.model.Sale;
 import jakarta.persistence.criteria.Join;
@@ -19,8 +20,8 @@ public class GameSpecification {
 
     public static Specification<Game> filterBy(Long id, String title, List<Long> genreIds,
                                                Integer releasedLastDays, Boolean isPublished,
-                                               List<Long> platformModelIds, Float minPrice,
-                                               Float maxPrice, Boolean inStock) {
+                                               List<Long> platformModelIds, List<Long> platformTypeIds,
+                                               Float minPrice, Float maxPrice, Boolean inStock) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -55,6 +56,14 @@ public class GameSpecification {
                 Join<Game, Replica> replicaJoin = root.join("replicas", JoinType.INNER);
                 Join<Replica, PlatformModel> platformJoin = replicaJoin.join("platformModel", JoinType.INNER);
                 predicates.add(platformJoin.get("id").in(platformModelIds));
+            }
+
+            // Filtro por tipos de plataforma (múltiples IDs)
+            if (platformTypeIds != null && !platformTypeIds.isEmpty()) {
+                Join<Game, Replica> replicaJoin = root.join("replicas", JoinType.INNER);
+                Join<Replica, PlatformModel> platformModelJoin = replicaJoin.join("platformModel", JoinType.INNER);
+                Join<PlatformModel, PlatformType> platformTypeJoin = platformModelJoin.join("platformType", JoinType.INNER);
+                predicates.add(platformTypeJoin.get("id").in(platformTypeIds));
             }
 
             // Filtro por precio mínimo

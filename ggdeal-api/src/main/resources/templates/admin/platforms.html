@@ -293,7 +293,7 @@
 
         fetch('/api/admin/platforms', {
             method: 'POST',
-             credentials: "include",
+            credentials: "include",
             body: formData
         })
         .then(response => {
@@ -313,7 +313,9 @@
     }
 
     function editPlatform(id) {
-        fetch(`/api/admin/platforms/${id}`)
+        fetch(`/api/admin/platforms/${id}`, {
+         credentials: "include",
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al cargar datos de la plataforma');
@@ -376,7 +378,8 @@
         const id = document.getElementById('deletePlatformId').value;
 
         fetch(`/api/admin/platforms/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+             credentials: "include",
         })
         .then(response => {
             if (!response.ok) {

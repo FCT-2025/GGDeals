@@ -41,6 +41,7 @@ public class Replica {
 
 
     @OneToOne(mappedBy = "replica")
+    @JsonIgnore
     private Sale sale;
 
     @PrePersist
