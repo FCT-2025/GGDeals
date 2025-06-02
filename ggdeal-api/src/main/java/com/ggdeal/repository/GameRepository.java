@@ -13,9 +13,11 @@ import java.util.Optional;
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long>, JpaSpecificationExecutor<Game> {
     Optional<Game> findByNameSlug(String nameSlug);
-
+    Optional<Game> findByTitleIgnoreCase(String title);
     Page<Game> findAll(Pageable pageable);
 
-        boolean existsByReplicasPlatformModelId(Long platformId);
+    boolean existsByReplicasPlatformModelId(Long platformId);
+    boolean existsByTitleIgnoreCase(String title);
+    boolean existsByTitleIgnoreCaseAndIdNot(String title, Long id);
 
 }

@@ -31,6 +31,7 @@ public class Game {
 
     @NotNull(message = "The game title is required.")
     @Size(min = 3, max = 100, message = "The game title must be between 3 and 100 characters.")
+    @Column(unique = true)
     private String title;
 
     @NotNull(message = "The developer name is required.")
@@ -95,6 +96,11 @@ public class Game {
             this.features =  new ArrayList<>();
         }
 
+        this.nameSlug = ModelUtils.parseSlug(getTitle());
+    }
+
+    @PreUpdate
+    public void preUpdate() {
         this.nameSlug = ModelUtils.parseSlug(getTitle());
     }
 

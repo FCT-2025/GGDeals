@@ -17,4 +17,7 @@ public interface GameService {
     Edition updateEdition(Edition edition);
     void deleteEdition(Long editionId);
     Game update(Game game);
+
+    boolean existsByName(String name);
+    Optional<Game> findByName(String name);
 }
