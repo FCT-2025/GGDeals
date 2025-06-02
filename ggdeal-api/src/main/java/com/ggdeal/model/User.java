@@ -13,7 +13,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
@@ -61,6 +60,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Sale> sales;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
 
     @PrePersist
     public void prePersist() {

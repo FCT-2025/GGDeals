@@ -33,7 +33,7 @@ public class SecurityConf {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/admin/login", "/api/admin/register" ,"/uploads/**", "/assets/**", "/api/ggdeal/**", "/api/auth/**", "/api/user/**").permitAll()
+                        .requestMatchers("/api/admin/login", "/api/cart/**", "/api/purchase/**", "/api/purchase"  ,"/api/admin/register" ,"/uploads/**", "/assets/**", "/api/ggdeal/**", "/api/auth/**", "/api/user/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

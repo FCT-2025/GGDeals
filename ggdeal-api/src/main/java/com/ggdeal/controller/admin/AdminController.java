@@ -79,7 +79,7 @@ public class AdminController {
 
     @PostMapping("/login")
     public String login(@RequestParam String emailUsername, @RequestParam String password, HttpServletResponse response, Model model) {
-        User userByEmail = userRepository.findByEmail(emailUsername);
+        User userByEmail = userRepository.findByEmail(emailUsername).get();
         User user =  null;
 
         if(userByEmail != null) {
@@ -87,7 +87,7 @@ public class AdminController {
         }
 
         if(user == null) {
-            user = userRepository.findByUsername(emailUsername);
+            user = userRepository.findByUsername(emailUsername).orElse(null);
         }
 
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {

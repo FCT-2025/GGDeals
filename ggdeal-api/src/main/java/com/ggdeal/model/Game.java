@@ -2,6 +2,7 @@ package com.ggdeal.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ggdeal.model.util.ModelUtils;
 import jakarta.persistence.*;
@@ -49,7 +50,7 @@ public class Game {
 
     @ManyToOne
     @JoinColumn(name = "genre_id")
-    @JsonIgnore
+    @JsonIgnoreProperties("games")
     private Genre genre;
 
 

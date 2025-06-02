@@ -144,6 +144,25 @@
     "show" : {
       "less": "Show less",
       "more": "Show more"
-    }
+    },
+      "filters": "Filters",
+      "platform": "Platform",
+      "price": "Price",
+      "minPrice": "min",
+      "maxPrice": "max",
+      "genre": "Genre",
+      "applyFilters": "Apply Filters",
+      "clearFilters": "Clear Filters",
+      "allGames": "All Games",
+      "sortBy": "Sort by",
+      "bestSelling": "Best Selling",
+      "priceLowToHigh": "Price: Low to High",
+      "priceHighToLow": "Price: High to Low",
+      "releaseDate": "Release Date",
+      "popularity": "Popularity",
+      "applyPriceFilter": "Apply Price Filter",
+            "nameAZ": "Name: A to Z",
+      "nameZA": "Name: Z to A",
+      "ratingHighToLow": "Rating: High to Low"
   }
 }
