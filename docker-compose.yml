@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./ggdeal-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - gg-network
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=ggdeal-api'
+      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_USER=myuser'
+    ports:
+      - '3306:3306'
+    networks:
+      - gg-network
+  front:
+    build:
+      context: ./ggdeal-front
+    ports:
+      - "3000:3000"
+networks:
+  gg-network:
+    driver: bridge

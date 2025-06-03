@@ -2,13 +2,12 @@ import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 
-export default function Charity({ style }: { style?: React.CSSProperties }) {
+export default function Charity({ className }: { className?: string }) {
 
 
   return (
     <section
-      className="bg-[url('/img/charity-bg.png')] bg-cover bg-no-repeat bg-center w-full rounded-lg p-10"
-      style={style}
+      className={`bg-[url('/img/charity-bg.png')] bg-cover bg-no-repeat bg-center w-full rounded-lg p-10 ${className && className}`}
     >
       <div className="pl-10">
         <h2 className="text-2xl font-bold font-epilogue mb-3">

@@ -1,0 +1,248 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "categories": "Categorías",
+    "contact": "Contacto",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "welcome": "Bienvenido a GGDeal",
+    "profile": "Mira tu perfil",
+    "userProfile": {
+      "title": "Perfil de usuario",
+      "see": "Ver perfil",
+      "logout": "Cerrar sesión"
+    }
+  },
+  "gameShowCase": {
+    "title": "Nuevos listados físicos"
+  },
+  "charity": {
+    "title": "Dedicados a Apoyar la Caridad",
+    "description": "NUESTROS MEJORES DESCUENTOS EN LOS JUEGOS MÁS CALIENTES DEL VERANO",
+    "learnMore": "Aprende Más"
+  },
+  "register": {
+    "title": "Registrarse",
+    "description": "Los campos marcados con <red>*</red> son obligatorios",
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "birthdate": "Fecha de nacimiento",
+    "phone": "Teléfono (opcional)",
+    "submit": "Registrarse",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta? Inicia sesión",
+    "error": {
+      "network": "Error de red o del servidor",
+      "failed": "Registro fallido",
+      "default": "Falla registro"
+    },
+    "placeholders": {
+      "email": "Correo electrónico",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "search": "Buscar un juego..."
+    }
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "metaDescription": "Inicia sesión en GGDeal",
+    "placeholders": {
+      "usernameOrEmail": "Correo electrónico o nombre de usuario",
+      "password": "********"
+    },
+    "submit": "Iniciar sesión",
+    "altImage": "Ilustración de inicio de sesión",
+    "errors": {
+      "default": "Error al iniciar sesión. Inténtalo de nuevo.",
+      "invalid_credentials": "Usuario o contraseña inválidos.",
+      "network": "Error de red. Revisa tu conexión."
+    }
+  },
+
+  "profile": {
+    "title": "Perfil de Usuario",
+    "description": "Gestiona la configuración y preferencias de tu cuenta",
+    "userProfile": "Perfil de Usuario",
+    "memberSince": "Miembro desde",
+    "tabs": {
+      "controlPanel": "Panel de Control",
+      "myOrders": "Mis Pedidos",
+      "wallet": "Monedero",
+      "settings": "Configuración",
+      "languageCurrency": "Idioma y Moneda"
+    },
+    "generalView": {
+      "title": "Vista General",
+      "friends": "Amigos",
+      "reviews": "Reseñas",
+      "wishlist": "Lista de Deseos"
+    },
+    "wallet": {
+      "title": "Monedero",
+      "affiliation": "Afiliación",
+      "currentBalance": "Saldo Actual",
+      "addMoney": "Añadir Dinero",
+      "amount": "Cantidad",
+      "enterAmount": "Introduce la cantidad",
+      "paymentMethod": "Método de Pago",
+      "creditCard": "Tarjeta de Crédito",
+      "bankTransfer": "Transferencia Bancaria",
+      "processing": "Procesando...",
+      "securePayment": "Pago seguro procesado por nuestros socios de confianza",
+      "invalidAmount": "Por favor, introduce una cantidad válida",
+      "topUpSuccess": "Dinero añadido exitosamente a tu monedero",
+      "topUpError": "Error al procesar el pago. Por favor, inténtalo de nuevo."
+    },
+    "ranking": {
+      "title": "Ranking",
+      "level": "Nivel"
+    },
+    "affiliation": {
+      "title": "Enlace de Afiliación",
+      "description": "¡Este es tu enlace de afiliación, compártelo para ganar dinero!"
+    },
+    "totalSaved": {
+      "title": "Total Ahorrado"
+    },
+    "wishlist": {
+      "latestGames": "Últimos Juegos Añadidos a la Lista de Deseos"
+    },
+    "orders": {
+      "title": "Mis Órdenes",
+      "noOrders": "No tienes ninguna orden todavía",
+      "loading": "Cargando órdenes...",
+      "error": {
+        "unauthorized": "No tienes permisos para acceder a esta información",
+        "loadOrders": "Error al cargar las órdenes",
+        "connection": "Error de conexión"
+      },
+      "retry": "Reintentar",
+      "orderNumber": "Orden #:",
+      "date": "Fecha:",
+      "paymentMethod": "Método de pago:",
+      "status": {
+        "label": "Estado:",
+        "completed": "Completado",
+        "pending": "Pendiente",
+        "failed": "Fallido",
+        "unknown": "Desconocido"
+      },
+      "activationKey": {
+        "label": "Clave de activación:",
+        "copy": "Copiar"
+      },
+      "paymentMethods": {
+        "balance": "Saldo"
+      },
+      "gameNotSpecified": "Juego no especificado",
+      "summary": {
+        "showing": "Mostrando",
+        "order": "orden",
+        "orders": "órdenes"
+      }
+    },
+    "settings": {
+      "profileImage": "Imagen de perfil",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "profileInfo": "Información del perfil",
+      "updateProfile": "Actualizar perfil",
+      "changePassword": "Cambiar contraseña",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "confirmNewPassword": "Confirmar nueva contraseña",
+      "send": "Enviar",
+      "accept": "Aceptar",
+      "changeEmail": "Cambiar correo electrónico",
+      "newEmail": "Nuevo correo electrónico",
+      "confirmEmail": "Confirmar correo electrónico",
+      "phone": "Teléfono"
+    },
+    "language": {
+      "title": "Idiomas"
+    },
+    "currency": {
+      "title": "Monedas"
+    }
+  },
+  "categories": {
+    "show": {
+      "less": "Mostrar menos",
+      "more": "Mostrar más"
+    },
+    "filters": "Filtros",
+    "platform": "Plataforma",
+    "price": "Precio",
+    "minPrice": "mín",
+    "maxPrice": "máx",
+    "genre": "Género",
+    "applyFilters": "Aplicar Filtros",
+    "clearFilters": "Limpiar Filtros",
+    "allGames": "Todos los Juegos",
+    "sortBy": "Ordenar por",
+    "bestSelling": "Más Vendidos",
+    "priceLowToHigh": "Precio: Menor a Mayor",
+    "priceHighToLow": "Precio: Mayor a Menor",
+    "releaseDate": "Fecha de Lanzamiento",
+    "popularity": "Popularidad",
+    "applyPriceFilter": "Aplicar Filtro de Precio",
+    "nameAZ": "Nombre: A a Z",
+    "nameZA": "Nombre: Z a A",
+    "ratingHighToLow": "Puntuación: Mayor a Menor"
+  },
+   "shoppingCart": {
+    "title": "Carrito de compras",
+    "loading": "Cargando carrito...",
+    "retry": "Reintentar",
+    "empty": {
+      "title": "Tu carrito de compras está vacío",
+      "description": "Aún no has agregado ningún producto a tu carrito. ¡Navega por el sitio y encuentra ofertas increíbles!",
+      "discoverGames": "Descubre nuestros juegos"
+    },
+    "items": {
+      "title": "Productos en tu carrito ({{count}})",
+      "clearCart": "Vaciar carrito",
+      "digitalKey": "Clave digital",
+      "each": "c/u"
+    },
+    "summary": {
+      "title": "Resumen",
+      "officialPrice": "Precio oficial",
+      "discount": "Descuento",
+      "subtotal": "Subtotal",
+      "processing": "PROCESANDO...",
+      "proceedCheckout": "PROCEDER AL PAGO",
+      "or": "o",
+      "continueShopping": "Continuar Comprando"
+    },
+    "modal": {
+      "close": "Cerrar",
+      "success": {
+        "title": "¡Compra Exitosa!",
+        "description": "Tu compra se ha procesado correctamente. Aquí tienes tus claves de activación:",
+        "activationKeysTitle": "Claves de Activación:",
+        "quantity": "Cantidad: {{quantity}}",
+        "keyInstructions": "Guarda esta clave en un lugar seguro. La necesitarás para activar tu juego."
+      },
+      "error": {
+        "title": "Error en la Compra",
+        "description": "Ha ocurrido un error procesando tu compra."
+      }
+    },
+    "confirmations": {
+      "removeItem": "¿Estás seguro de que quieres eliminar este producto?",
+      "clearCart": "¿Estás seguro de que quieres vaciar todo el carrito?",
+      "proceedPurchase": "¿Confirmas que quieres proceder con la compra?"
+    },
+    "errors": {
+      "loadError": "Error al cargar el carrito",
+      "connectionError": "Error de conexión",
+      "updateQuantityError": "Error al actualizar cantidad",
+      "removeItemError": "Error al eliminar producto",
+      "clearCartError": "Error al vaciar carrito",
+      "emptyCart": "El carrito está vacío",
+      "purchaseError": "Error al procesar la compra",
+      "purchaseConnectionError": "Error de conexión durante la compra"
+    }
+  }
+}

@@ -1,0 +1,253 @@
+{
+  "nav": {
+    "home": "Home",
+    "categories": "Categories",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "welcome": "Welcome to GGDeal",
+    "profile": "View your profile",
+    "userProfile": {
+      "title": "User Profile",
+      "see": "See Profile",
+      "logout": "Log out"
+    }
+  },
+  "gameShowCase": {
+    "title": "Newest physical listings"
+  },
+  "charity": {
+    "title": "Dedicated to Supporting Charity",
+    "description": "OUR BEST DISCOUNTS ON SUMMER’S HOTTEST GAMES",
+    "learnMore": "Learn More"
+  },
+  "register": {
+    "title": "Register",
+    "description": "Fields marked with <red>*</red> are required",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "birthdate": "Birthdate",
+    "phone": "Phone (optional)",
+    "submit": "Register",
+    "alreadyHaveAccount": "Already have an account? Log in",
+    "error": {
+      "network": "Network or server error",
+      "failed": "Registration failed",
+      "default": "Registration error"
+    },
+    "placeholders": {
+      "email": "Email",
+      "username": "Username",
+      "password": "Password",
+      "search": "Search for a game..."
+    }
+  },
+  "login": {
+    "title": "Log in",
+    "metaDescription": "Log in to GGDeal",
+    "placeholders": {
+      "usernameOrEmail": "Email or Username",
+      "password": "********"
+    },
+    "submit": "Log in",
+    "altImage": "Login illustration",
+    "errors": {
+      "default": "Login failed. Please try again.",
+      "invalid_credentials": "Invalid username or password.",
+      "network": "Network error. Please check your connection."
+    }
+  },
+  "placeholders": {
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "search": "Search for a game..."
+  },
+  "profile": {
+    "title": "User Profile",
+    "description": "Manage your account settings and preferences",
+    "userProfile": "User Profile",
+    "memberSince": "Member since",
+    "tabs": {
+      "controlPanel": "Control Panel",
+      "myOrders": "My Orders",
+      "wallet": "Wallet",
+      "settings": "Settings",
+      "languageCurrency": "Language & Currency"
+    },
+    "generalView": {
+      "title": "General View",
+      "friends": "Friends",
+      "reviews": "Reviews",
+      "wishlist": "Wishlist"
+    },
+    "wallet": {
+      "title": "Wallet",
+      "affiliation": "Affiliation",
+      "currentBalance": "Current Balance",
+      "addMoney": "Add Money",
+      "amount": "Amount",
+      "enterAmount": "Enter amount",
+      "paymentMethod": "Payment Method",
+      "creditCard": "Credit Card",
+      "bankTransfer": "Bank Transfer",
+      "processing": "Processing...",
+      "securePayment": "Secure payment processed by our trusted partners",
+      "invalidAmount": "Please enter a valid amount",
+      "topUpSuccess": "Money added successfully to your wallet",
+      "topUpError": "Error processing payment. Please try again."
+    },
+    "ranking": {
+      "title": "Ranking",
+      "level": "Level"
+    },
+    "affiliation": {
+      "title": "Affiliation Link",
+      "description": "This is your affiliation link, share it to earn money!"
+    },
+    "totalSaved": {
+      "title": "Total Saved"
+    },
+    "wishlist": {
+      "latestGames": "Latest Games Added to Wishlist"
+    },
+    "orders": {
+"title": "My Orders",
+      "noOrders": "You don't have any orders yet",
+      "loading": "Loading orders...",
+      "error": {
+        "unauthorized": "You don't have permission to access this information",
+        "loadOrders": "Error loading orders",
+        "connection": "Connection error"
+      },
+      "retry": "Retry",
+      "orderNumber": "Order #:",
+      "date": "Date:",
+      "paymentMethod": "Payment method:",
+      "status": {
+        "label": "Status:",
+        "completed": "Completed",
+        "pending": "Pending",
+        "failed": "Failed",
+        "unknown": "Unknown"
+      },
+      "activationKey": {
+        "label": "Activation key:",
+        "copy": "Copy"
+      },
+      "paymentMethods": {
+        "balance": "Balance"
+      },
+      "gameNotSpecified": "Game not specified",
+      "summary": {
+        "showing": "Showing",
+        "order": "order",
+        "orders": "orders"
+      }
+    },
+    "settings": {
+      "profileImage": "Profile image",
+      "username": "Username",
+      "email": "Email",
+      "profileInfo": "Profile information",
+      "updateProfile": "Update profile",
+      "changePassword": "Change password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password",
+      "send": "Send",
+      "accept": "Accept",
+      "changeEmail": "Change email",
+      "newEmail": "New email",
+      "confirmEmail": "Confirm email",
+      "phone": "Phone"
+    },
+    "language": {
+      "title": "Languages"
+    },
+    "currency": {
+      "title": "Currencies"
+    }
+  },
+  "categories": {
+    "show" : {
+      "less": "Show less",
+      "more": "Show more"
+    },
+      "filters": "Filters",
+      "platform": "Platform",
+      "price": "Price",
+      "minPrice": "min",
+      "maxPrice": "max",
+      "genre": "Genre",
+      "applyFilters": "Apply Filters",
+      "clearFilters": "Clear Filters",
+      "allGames": "All Games",
+      "sortBy": "Sort by",
+      "bestSelling": "Best Selling",
+      "priceLowToHigh": "Price: Low to High",
+      "priceHighToLow": "Price: High to Low",
+      "releaseDate": "Release Date",
+      "popularity": "Popularity",
+      "applyPriceFilter": "Apply Price Filter",
+            "nameAZ": "Name: A to Z",
+      "nameZA": "Name: Z to A",
+      "ratingHighToLow": "Rating: High to Low"
+  },
+  "shoppingCart": {
+    "title": "Shopping cart",
+    "loading": "Loading cart...",
+    "retry": "Retry",
+    "empty": {
+      "title": "Your shopping cart is empty",
+      "description": "You haven't added any products to your basket yet. Browse the site and find amazing deals!",
+      "discoverGames": "Discover our games"
+    },
+    "items": {
+      "title": "Products in your cart ({{count}})",
+      "clearCart": "Clear cart",
+      "digitalKey": "Digital key",
+      "each": "each"
+    },
+    "summary": {
+      "title": "Summary",
+      "officialPrice": "Official price",
+      "discount": "Discount",
+      "subtotal": "Subtotal",
+      "processing": "PROCESSING...",
+      "proceedCheckout": "PROCEED TO CHECKOUT",
+      "or": "or",
+      "continueShopping": "Continue Shopping"
+    },
+    "modal": {
+      "close": "Close",
+      "success": {
+        "title": "Purchase Successful!",
+        "description": "Your purchase has been processed successfully. Here are your activation keys:",
+        "activationKeysTitle": "Activation Keys:",
+        "quantity": "Quantity: {{quantity}}",
+        "keyInstructions": "Save this key in a safe place. You will need it to activate your game."
+      },
+      "error": {
+        "title": "Purchase Error",
+        "description": "An error occurred while processing your purchase."
+      }
+    },
+    "confirmations": {
+      "removeItem": "Are you sure you want to remove this product?",
+      "clearCart": "Are you sure you want to empty the entire cart?",
+      "proceedPurchase": "Do you confirm that you want to proceed with the purchase?"
+    },
+    "errors": {
+      "loadError": "Error loading cart",
+      "connectionError": "Connection error",
+      "updateQuantityError": "Error updating quantity",
+      "removeItemError": "Error removing product",
+      "clearCartError": "Error clearing cart",
+      "emptyCart": "The cart is empty",
+      "purchaseError": "Error processing purchase",
+      "purchaseConnectionError": "Connection error during purchase"
+    }
+  }
+}
