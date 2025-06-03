@@ -23,7 +23,7 @@
 >    - Selecciona edición y plataforma.
 >    - Si hay stock, se te asigna una **clave digital única**.
 > 
->    ![Single](./image/front-single-game.PNG)
+>    ![Single](./image/front-single-game.png)
 >    ![Buy](./image/front-sale.png)
 >   
 > 
