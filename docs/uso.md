@@ -10,8 +10,8 @@
 >    - Accede desde la portada.
 >    - Se almacena un token JWT seguro en cookies.
 > 
->     ![Login](/image/front-login.PNG)
->     ![Register](/image/front-register.PNG)
+>     ![Login](./image/front-login.PNG)
+>     ![Register](./image/front-register.PNG)
 > 
 > 2. **Explorar el catálogo**
 >    - Filtros por plataforma, características y precio.
@@ -42,8 +42,8 @@
 >    - Acceso al panel de gestión (Thymeleaf).
 >      
 >      Front:
->     ![Login](/image/login-back.PNG)
->     ![Register](/image/register-back.PNG)
+>     ![Login](./image/back-login.PNG)
+>     ![Register](./image/back-register.PNG)
 > 
 > 2. **Panel administrativo**
 >    - Añadir videojuegos y ediciones.
