@@ -44,5 +44,3 @@
 >> 
 >> - Contraseña: verysecret
 > 
->> - Base de datos: ggdeal-api
-> ![CAPTURA NAVEGADOR CARGANDO APP]
