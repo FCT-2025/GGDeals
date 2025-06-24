@@ -2,7 +2,7 @@
 > 
 > Bienvenido al repositorio del proyecto final de Desarrollo de Aplicaciones Web.
 > 
-> Este proyecto simula una tienda digital de videojuegos inspirada en plataformas como GG.deals o InstantGaming. Permite a > usuarios explorar un catálogo filtrable, realizar compras de claves digitales, gestionar reservas, y ofrece un panel > administrativo completo.
+> Este proyecto simula una tienda digital de videojuegos inspirada en plataforma InstantGaming. Permite a > usuarios explorar un catálogo filtrable, realizar compras de claves digitales, gestionar reservas, y ofrece un panel > administrativo completo.
 >
 > ![GGDEAL-View](./docs/image/front-view.PNG)
 > ## Secciones
